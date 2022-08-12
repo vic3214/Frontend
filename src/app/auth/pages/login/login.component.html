@@ -1,14 +1,79 @@
 <mat-drawer-container class="example-container" autosize>
-  <mat-drawer #drawer class="example-sidenav" mode="side">
-    <p>Auto-resizing sidenav</p>
-    <p *ngIf="showFiller">Lorem, ipsum dolor sit amet consectetur.</p>
-    <button (click)="showFiller = !showFiller" mat-raised-button>
-      Toggle extra text
-    </button>
+  <mat-drawer #drawer class="example-sidenav" mode="over">
+    <mat-card class="example-card">
+      <mat-card-header>
+        <mat-card-title>Inicio de Sesión</mat-card-title>
+        <mat-card-subtitle
+          >Registrate si no tienes una cuenta!</mat-card-subtitle
+        >
+      </mat-card-header>
+      <mat-card-content>
+        <form
+          autocomplete="off"
+          [formGroup]="loginForm"
+          (ngSubmit)="login()"
+          id="loginForm"
+        >
+          <div class="example-container">
+            <mat-form-field appearance="fill">
+              <mat-label>Introduce tu email</mat-label>
+              <input
+                type="email"
+                formControlName="email"
+                matInput
+                placeholder="tuCorreo@dominio.com"
+                required=""
+              />
+            </mat-form-field>
+          </div>
+          <br />
+          <div class="example-container">
+            <mat-form-field appearance="fill">
+              <mat-label>Introduce tu contraseña</mat-label>
+              <input
+                type="password"
+                formControlName="password"
+                matInput
+                [type]="hide ? 'password' : 'text'"
+                required=""
+              />
+              <button
+                type="button"
+                mat-icon-button
+                matSuffix
+                (click)="hide = !hide"
+                [attr.aria-label]="'Hide password'"
+                [attr.aria-pressed]="hide"
+              >
+                <mat-icon>{{
+                  hide ? "visibility_off" : "visibility"
+                }}</mat-icon>
+              </button>
+            </mat-form-field>
+          </div>
+        </form>
+      </mat-card-content>
+      <mat-card-actions>
+        <button
+          mat-raised-button
+          color="accent"
+          type="submit"
+          (click)="login()"
+        >
+          Iniciar Sesión
+        </button>
+        <button mat-raised-button color="accent">Registrarse</button>
+      </mat-card-actions>
+    </mat-card>
   </mat-drawer>
 
   <div class="example-sidenav-content">
-    <button type="button" mat-button (click)="drawer.toggle()">
+    <button
+      type="button"
+      mat-raised-button
+      color="primary"
+      (click)="drawer.toggle()"
+    >
       Iniciar Sesión
     </button>
   </div>
