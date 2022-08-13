@@ -8,21 +8,17 @@
         >
       </mat-card-header>
       <mat-card-content>
-        <form
-          autocomplete="off"
-          [formGroup]="loginForm"
-          (ngSubmit)="login()"
-          id="loginForm"
-        >
+        <form [formGroup]="loginForm" (ngSubmit)="login()" id="loginForm">
           <div class="example-container">
             <mat-form-field appearance="fill">
               <mat-label>Introduce tu email</mat-label>
               <input
+                autocomplete="off"
                 type="email"
                 formControlName="email"
                 matInput
                 placeholder="tuCorreo@dominio.com"
-                required=""
+                required
               />
             </mat-form-field>
           </div>
@@ -31,11 +27,12 @@
             <mat-form-field appearance="fill">
               <mat-label>Introduce tu contraseña</mat-label>
               <input
+                autocomplete="off"
                 type="password"
                 formControlName="password"
                 matInput
                 [type]="hide ? 'password' : 'text'"
-                required=""
+                required
               />
               <button
                 type="button"

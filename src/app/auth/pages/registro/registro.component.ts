@@ -7,7 +7,17 @@ import { FormBuilder, FormGroup } from '@angular/forms';
   styleUrls: ['./registro.component.css'],
 })
 export class RegistroComponent {
+  hide: boolean = true;
+  hideRepetida: boolean = true;
   constructor(private _formBuilder: FormBuilder) {}
-  firstFormGroup: FormGroup = this._formBuilder.group({ firstCtrl: [''] });
-  secondFormGroup: FormGroup = this._formBuilder.group({ secondCtrl: [''] });
+  datosPersonales: FormGroup = this._formBuilder.group({
+    nombre: [''],
+    fechaNacimiento: [''],
+    fotografia: [''],
+  });
+  inicioSesion: FormGroup = this._formBuilder.group({
+    email: [''],
+    password: [''],
+    passwordRepetida: [''],
+  });
 }

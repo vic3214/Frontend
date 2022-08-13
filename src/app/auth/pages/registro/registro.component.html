@@ -1,43 +1,129 @@
 <mat-vertical-stepper [linear]="false" #stepper class="relleno">
-  <mat-step [stepControl]="firstFormGroup">
-    <form [formGroup]="firstFormGroup">
-      <ng-template matStepLabel>Fill out your name</ng-template>
+  <mat-step [stepControl]="datosPersonales">
+    <form [formGroup]="datosPersonales">
+      <ng-template matStepLabel>Datos personales</ng-template>
       <mat-form-field>
         <input
+          autocomplete="off"
           matInput
-          placeholder="Last name, First name"
-          formControlName="firstCtrl"
+          placeholder="Nombre"
+          formControlName="nombre"
           required
         />
       </mat-form-field>
+      <mat-form-field color="accent" appearance="fill">
+        <mat-label>Selecciona una fecha</mat-label>
+        <input matInput [matDatepicker]="fechaNacimiento" readonly required />
+        <mat-hint>MM/DD/YYYY</mat-hint>
+        <mat-datepicker-toggle
+          matSuffix
+          [for]="fechaNacimiento"
+        ></mat-datepicker-toggle>
+        <mat-datepicker #fechaNacimiento color="primary"></mat-datepicker>
+      </mat-form-field>
+      <mat-form-field>
+        <ngx-mat-file-input
+          formControlName="fotografia"
+          placeholder="Fotografía en formato JPG"
+          [accept]="'.jpg'"
+        ></ngx-mat-file-input>
+        <mat-icon matSuffix class="carpeta">folder_shared</mat-icon>
+        <mat-hint>Opcional</mat-hint>
+      </mat-form-field>
+
       <div>
-        <button mat-button matStepperNext>Next</button>
+        <button mat-raised-button color="primary" matStepperNext>
+          Siguiente
+        </button>
       </div>
     </form>
   </mat-step>
-  <mat-step [stepControl]="secondFormGroup">
-    <form [formGroup]="secondFormGroup">
-      <ng-template matStepLabel>Fill out your address</ng-template>
+  <mat-step [stepControl]="inicioSesion">
+    <form [formGroup]="inicioSesion" class="inicio_sesion">
+      <ng-template matStepLabel>Configuración de inicio de sesión</ng-template>
       <mat-form-field>
         <input
           matInput
-          placeholder="Address"
-          formControlName="secondCtrl"
+          placeholder="tucorreo@dominio.com"
+          formControlName="email"
           required
         />
       </mat-form-field>
+      <mat-form-field appearance="fill">
+        <mat-label>Introduce tu contraseña</mat-label>
+        <input
+          type="password"
+          formControlName="password"
+          matInput
+          [type]="hide ? 'password' : 'text'"
+          required=""
+        />
+        <button
+          type="button"
+          mat-icon-button
+          matSuffix
+          (click)="hide = !hide"
+          [attr.aria-label]="'Hide password'"
+          [attr.aria-pressed]="hide"
+        >
+          <mat-icon>{{ hide ? "visibility_off" : "visibility" }}</mat-icon>
+        </button>
+      </mat-form-field>
+      <mat-form-field appearance="fill">
+        <mat-label>Repite tu contraseña</mat-label>
+        <input
+          type="password"
+          formControlName="passwordRepetida"
+          matInput
+          [type]="hide ? 'password' : 'text'"
+          required=""
+        />
+        <button
+          type="button"
+          mat-icon-button
+          matSuffix
+          (click)="hideRepetida = !hideRepetida"
+          [attr.aria-label]="'Hide password'"
+          [attr.aria-pressed]="hideRepetida"
+        >
+          <mat-icon>{{
+            hideRepetida ? "visibility_off" : "visibility"
+          }}</mat-icon>
+        </button>
+      </mat-form-field>
       <div>
-        <button mat-button matStepperPrevious>Back</button>
-        <button mat-button matStepperNext>Next</button>
+        <button mat-raised-button color="primary" matStepperPrevious>
+          Atrás
+        </button>
+        <button
+          mat-raised-button
+          color="primary"
+          matStepperNext
+          class="boton_derecho"
+        >
+          Siguiente
+        </button>
       </div>
     </form>
   </mat-step>
   <mat-step>
-    <ng-template matStepLabel>Done</ng-template>
-    You are now done.
+    <ng-template matStepLabel>Terminar</ng-template>
+    <h3 class="terminar">
+      ¡Has rellenado todos los datos! Pulsa en continuar para registrar tu
+      cuenta.
+    </h3>
     <div>
-      <button mat-button matStepperPrevious>Back</button>
-      <button mat-button (click)="stepper.reset()">Reset</button>
+      <button mat-raised-button color="primary" matStepperPrevious>
+        Atrás
+      </button>
+      <button
+        mat-raised-button
+        color="primary"
+        (click)="stepper.reset()"
+        class="boton_derecho"
+      >
+        Continuar
+      </button>
     </div>
   </mat-step>
 </mat-vertical-stepper>

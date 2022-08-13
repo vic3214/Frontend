@@ -1,6 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { MaterialFileInputModule } from 'ngx-material-file-input';
 
 import { ComponentsModule } from '../components/components.module';
 import { MaterialModule } from '../material/material.module';
@@ -17,6 +18,7 @@ import { RegistroComponent } from './pages/registro/registro.component';
     FormsModule,
     ComponentsModule,
     MaterialModule,
+    MaterialFileInputModule,
   ],
 })
 export class AuthModule {}
