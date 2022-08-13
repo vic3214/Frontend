@@ -31,7 +31,6 @@ export class AuthService {
   }
 
   login(datosFormulario: any) {
-    console.log(datosFormulario);
     return this.http.post(`${this.baseUrl}/login`, datosFormulario);
   }
 

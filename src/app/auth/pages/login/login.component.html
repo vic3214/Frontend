@@ -4,7 +4,7 @@
       <mat-card-header>
         <mat-card-title>Inicio de Sesión</mat-card-title>
         <mat-card-subtitle
-          >Registrate si no tienes una cuenta!</mat-card-subtitle
+          >Regístrate si no tienes una cuenta!</mat-card-subtitle
         >
       </mat-card-header>
       <mat-card-content>
@@ -62,7 +62,15 @@
         >
           Iniciar Sesión
         </button>
-        <button mat-raised-button color="accent">Registrarse</button>
+        <button
+          mat-raised-button
+          color="accent"
+          routerLink="/auth/registro"
+          routerLinkActive="active"
+          ariaCurrentWhenActive="page"
+        >
+          Registrarse
+        </button>
       </mat-card-actions>
     </mat-card>
   </mat-drawer>
