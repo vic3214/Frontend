@@ -40,9 +40,16 @@ export class LoginComponent {
   }
 
   login() {
-    this.authService.login(this.loginForm.value).subscribe(
+    const { email, password } = this.loginForm.value;
+    this.authService.login(email!, password!).subscribe(
       (resp) => {
-        /*         console.log(resp); */
+        //TODO Abrir página de login con datos del usuario
+        //* Recuperar objeto base de datos y cargar página según datos
+        console.log(resp); // Datos para el inicio de la sesión
+        if (resp) {
+          this.router.navigateByUrl('/dashboard');
+        } else {
+        }
       },
       (err) => {
         let erroresEnviar: any = [];
