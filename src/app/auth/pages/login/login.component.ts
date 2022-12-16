@@ -45,17 +45,24 @@ export class LoginComponent {
       (resp) => {
         //TODO Abrir página de login con datos del usuario
         //* Recuperar objeto base de datos y cargar página según datos
-        console.log(resp); // Datos para el inicio de la sesión
+        console.log(resp);
         if (resp) {
           this.router.navigateByUrl('/dashboard');
-        } else {
         }
       },
       (err) => {
         let erroresEnviar: any = [];
-        Object.entries(err.error.errores).forEach(([key, value]) => {
-          erroresEnviar.push(value);
-        });
+        let formErrors = err.error.errores === undefined;
+        if (!formErrors) {
+          // Errores al checkear si estan vacios email, contraseña y si el email está bien formado
+          Object.entries(err.error.errores).forEach(([key, value]) => {
+            console.log(value);
+            erroresEnviar.push(value);
+          });
+        } else {
+          // Errores del backend: pj usuario o contraseña incorrectos
+          erroresEnviar.push(err.error);
+        }
         this.openDialog(erroresEnviar);
       }
     );

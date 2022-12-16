@@ -12,19 +12,29 @@
         />
       </mat-form-field>
       <mat-form-field color="accent" appearance="fill">
-        <mat-label>Selecciona una fecha</mat-label>
-        <input matInput [matDatepicker]="fechaNacimiento" readonly required />
+        <mat-label>Fecha de nacimiento</mat-label>
+        <input
+          matInput
+          [matDatepicker]="fechaNacimiento"
+          formControlName="fechaNacimiento"
+          datePickerFormat="DD/MM/YYYY"
+          readonly
+          required
+        />
         <mat-hint>MM/DD/YYYY</mat-hint>
         <mat-datepicker-toggle
           matSuffix
           [for]="fechaNacimiento"
         ></mat-datepicker-toggle>
-        <mat-datepicker #fechaNacimiento color="primary"></mat-datepicker>
+        <mat-datepicker #fechaNacimiento></mat-datepicker>
       </mat-form-field>
       <mat-form-field>
         <ngx-mat-file-input
+          type="file"
+          name="fotografia"
+          enctype="multipart/form-data"
           formControlName="fotografia"
-          placeholder="Fotografía en formato JPG"
+          placeholder="Imagen de perfil (JPG)"
           [accept]="'.jpg'"
         ></ngx-mat-file-input>
         <mat-icon matSuffix class="carpeta">folder_shared</mat-icon>
@@ -75,7 +85,7 @@
           type="password"
           formControlName="passwordRepetida"
           matInput
-          [type]="hide ? 'password' : 'text'"
+          [type]="hideRepetida ? 'password' : 'text'"
           required=""
         />
         <button
@@ -119,7 +129,7 @@
       <button
         mat-raised-button
         color="primary"
-        (click)="stepper.reset()"
+        (click)="creaUsuario()"
         class="boton_derecho"
       >
         Continuar
