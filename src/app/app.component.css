@@ -1,0 +1,33 @@
+.spacer {
+    flex: 1 1 auto;
+  }
+
+  .icon{
+    display: inline-flex;
+    background-color: transparent;
+    border-color: transparent;
+    color: black;
+    text-decoration: none;
+  }
+
+  .icon:hover{
+    border-radius: 5%;
+    background-color: white;
+    text-decoration: none;
+  }
+
+  .sesion-icon{
+    margin-top: 5px;
+    color: black;
+    margin-right: 5px;
+  }
+
+  .home-icon{
+    margin-top: 5px;
+    margin-right: 5px;
+  }
+
+  .restaurante-icon{
+    margin-top: 5px;
+    margin-right: 5px;
+  }

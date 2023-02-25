@@ -1,6 +1,12 @@
 import { Component } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import {
+  FormBuilder,
+  FormControl,
+  FormGroup,
+  Validators,
+} from '@angular/forms';
 import { DateAdapter } from '@angular/material/core';
+import { Router } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
 
 @Component({
@@ -11,31 +17,45 @@ import { AuthService } from '../../services/auth.service';
 export class RegistroComponent {
   hide: boolean = true;
   hideRepetida: boolean = true;
+
   constructor(
     private _formBuilder: FormBuilder,
     private date: DateAdapter<Date>,
-    private authService: AuthService
+    private authService: AuthService,
+    private router: Router
   ) {
     // Ponemos en los calendarios el lunes como primer día
     date.getFirstDayOfWeek = () => 1;
   }
   datosPersonales: FormGroup = this._formBuilder.group({
-    nombre: [''],
+    nombre: [],
     fechaNacimiento: [],
     fotografia: [''],
   });
 
   inicioSesion: FormGroup = this._formBuilder.group({
-    email: [''],
-    password: [''],
-    passwordRepetida: [''],
+    email: [],
+    password: new FormControl('', [
+      Validators.required,
+      Validators.minLength(6),
+    ]),
+    passwordRepetida: [],
   });
 
-  creaUsuario() {
-    // 0: Domingo, 1: Lunes ...
-    /*     console.log(
-      this.datosPersonales.controls['fechaNacimiento'].value.getDay()
-    ); */
-    this.authService.registraUsuario(this.datosPersonales, this.inicioSesion);
+  get password() {
+    return this.inicioSesion.get('password');
+  }
+
+  async creaUsuario() {
+    if (this.datosPersonales.valid && this.inicioSesion.valid) {
+      (
+        await this.authService.registraUsuario(
+          this.datosPersonales,
+          this.inicioSesion
+        )
+      ).subscribe((resp) => {
+        this.router.navigateByUrl('auth/login');
+      });
+    }
   }
 }

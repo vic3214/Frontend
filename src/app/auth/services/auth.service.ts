@@ -46,11 +46,14 @@ export class AuthService {
     });
   }
   async registraUsuario(datosPersonales: FormGroup, inicioSesion: FormGroup) {
-    // TODO: Definir correctamente los datos a enviar, comprobar modelo Usuario en bd
     let idImagen;
-    await this.subirImagen(
-      datosPersonales.controls['fotografia'].value._files[0]
-    ).then((resp) => (idImagen = resp.idImagen));
+    if (datosPersonales.controls['fotografia'].value !== null) {
+      await this.subirImagen(
+        datosPersonales.controls['fotografia'].value._files[0]
+      ).then((resp) => (idImagen = resp.idImagen));
+    } else {
+      // TODO: Asignar fotografia predeterminada
+    }
 
     let anio = datosPersonales.controls['fechaNacimiento'].value.getFullYear();
     let dia = datosPersonales.controls['fechaNacimiento'].value.getDay();
@@ -67,10 +70,10 @@ export class AuthService {
       fechaNacimiento: fechaNacimientoParseada,
       google: false,
     };
-    console.log(body);
+
     return this.http
       .post<any>(`${this.baseUrl}/nuevo-usuario`, body)
-      .subscribe((resp) => console.log(resp));
+      .pipe(map((resp) => resp.ok));
   }
 
   verificaAutenticacion(): Observable<boolean> {

@@ -68,6 +68,11 @@
           [type]="hide ? 'password' : 'text'"
           required=""
         />
+        <div *ngIf="password!.invalid && inicioSesion.touched">
+          <h4 class="terminarError">
+            La contraseña debe tener 6 caracteres mínimo.
+          </h4>
+        </div>
         <button
           type="button"
           mat-icon-button
@@ -118,10 +123,21 @@
   </mat-step>
   <mat-step>
     <ng-template matStepLabel>Terminar</ng-template>
-    <h3 class="terminar">
-      ¡Has rellenado todos los datos! Pulsa en continuar para registrar tu
-      cuenta.
-    </h3>
+    <div
+      *ngIf="inicioSesion.valid && datosPersonales.valid; else elementoOculto"
+    >
+      <h3 class="terminar">
+        ¡Has rellenado todos los datos! Pulsa en continuar para registrar tu
+        cuenta.
+      </h3>
+    </div>
+    <ng-template #elementoOculto>
+      <h3 class="terminarError">
+        Faltan campos requeridos por rellenar. Asegurate de que están
+        rellenados.
+      </h3></ng-template
+    >
+
     <div>
       <button mat-raised-button color="primary" matStepperPrevious>
         Atrás
