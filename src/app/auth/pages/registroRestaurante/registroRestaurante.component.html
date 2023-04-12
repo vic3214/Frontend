@@ -1,0 +1,280 @@
+<mat-vertical-stepper [linear]="false" #stepper class="relleno">
+  <mat-step [stepControl]="datosPersonales">
+    <form [formGroup]="datosPersonales">
+      <ng-template matStepLabel>Datos propietario</ng-template>
+      <mat-form-field>
+        <input
+          autocomplete="off"
+          matInput
+          placeholder="Nombre"
+          formControlName="nombrePropietario"
+          required
+        />
+      </mat-form-field>
+      <mat-form-field color="accent" appearance="fill">
+        <mat-label>Fecha de nacimiento</mat-label>
+        <input
+          matInput
+          [matDatepicker]="fechaNacimiento"
+          formControlName="fechaNacimiento"
+          datePickerFormat="DD/MM/YYYY"
+          readonly
+          required
+        />
+        <mat-hint>MM/DD/YYYY</mat-hint>
+        <mat-datepicker-toggle
+          matSuffix
+          [for]="fechaNacimiento"
+        ></mat-datepicker-toggle>
+        <mat-datepicker #fechaNacimiento></mat-datepicker>
+      </mat-form-field>
+      <div>
+        <button mat-raised-button color="primary" matStepperNext>
+          Siguiente
+        </button>
+      </div>
+    </form>
+  </mat-step>
+  <mat-step [stepControl]="datosRestaurante">
+    <form [formGroup]="datosRestaurante">
+      <ng-template matStepLabel>Datos Restaurante</ng-template>
+      <mat-form-field>
+        <input
+          autocomplete="off"
+          matInput
+          placeholder="Nombre"
+          formControlName="nombre"
+          required
+        />
+      </mat-form-field>
+      <mat-form-field>
+        <input
+          autocomplete="off"
+          matInput
+          placeholder="Ciudad"
+          formControlName="ciudad"
+          required
+        />
+      </mat-form-field>
+      <mat-form-field>
+        <input
+          autocomplete="off"
+          matInput
+          placeholder="Calle"
+          formControlName="calle"
+          required
+        />
+      </mat-form-field>
+      <mat-form-field>
+        <input
+          autocomplete="off"
+          matInput
+          placeholder="Número"
+          formControlName="numero"
+          required
+        />
+      </mat-form-field>
+      <mat-form-field>
+        <ngx-mat-file-input
+          type="file"
+          name="fotografia"
+          enctype="multipart/form-data"
+          formControlName="fotografia"
+          placeholder="Imagen de perfil (JPG)"
+          [accept]="'.jpg'"
+        ></ngx-mat-file-input>
+        <mat-icon matSuffix class="carpeta">folder_shared</mat-icon>
+        <mat-hint>Opcional</mat-hint>
+      </mat-form-field>
+      <mat-form-field>
+        <input
+          autocomplete="off"
+          matInput
+          placeholder="Temática"
+          formControlName="tematica"
+          required
+        />
+      </mat-form-field>
+      <mat-form-field>
+        <input
+          autocomplete="off"
+          matInput
+          placeholder="Horario"
+          formControlName="horario"
+          required
+        />
+      </mat-form-field>
+
+      <div>
+        <button mat-raised-button color="primary" matStepperNext>
+          Siguiente
+        </button>
+      </div>
+    </form>
+  </mat-step>
+  <mat-step [stepControl]="carta">
+    <form [formGroup]="carta">
+      <ng-template matStepLabel>Añade tus platos</ng-template>
+      <div formGroupName="platos">
+        <div
+          *ngFor="let plato of getPlatos.controls; let i = index"
+          [formGroupName]="i"
+        >
+          <mat-form-field>
+            <input
+              autocomplete="off"
+              matInput
+              placeholder="Nombre"
+              formControlName="nombrePlato"
+              required
+            />
+          </mat-form-field>
+          <mat-form-field>
+            <input
+              autocomplete="off"
+              matInput
+              placeholder="Precio"
+              formControlName="precio"
+              type="number"
+              step="0.01"
+              pattern="\d+(\.\d{1,2})?"
+              required
+            />
+          </mat-form-field>
+          <mat-form-field>
+            <mat-label>Selecciona una opción</mat-label>
+            <mat-select formControlName="tipo" required>
+              <mat-option *ngFor="let option of options" [value]="option">{{
+                option
+              }}</mat-option>
+            </mat-select>
+          </mat-form-field>
+          <button
+            mat-raised-button
+            color="primary"
+            (click)="eliminarPlato(i)"
+            class="boton_derecho"
+          >
+            Eliminar Plato
+          </button>
+        </div>
+      </div>
+      <button
+        mat-raised-button
+        color="primary"
+        (click)="agregarPlato()"
+        class="boton_derecho"
+      >
+        Agregar Plato
+      </button>
+    </form>
+  </mat-step>
+  <mat-step [stepControl]="inicioSesion">
+    <form [formGroup]="inicioSesion" class="inicio_sesion">
+      <ng-template matStepLabel>Configuración de inicio de sesión</ng-template>
+      <mat-form-field>
+        <input
+          matInput
+          placeholder="tucorreo@dominio.com"
+          formControlName="email"
+          pattern="[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}"
+          required
+        />
+        <div *ngIf="email!.invalid && inicioSesion.touched">
+          <h4 class="terminarError">El correo debe estar bien formado</h4>
+        </div>
+      </mat-form-field>
+      <mat-form-field appearance="fill">
+        <mat-label>Introduce tu contraseña</mat-label>
+        <input
+          type="password"
+          formControlName="password"
+          matInput
+          [type]="hide ? 'password' : 'text'"
+          required=""
+        />
+        <div *ngIf="password!.invalid && inicioSesion.touched">
+          <h4 class="terminarError">
+            La contraseña debe tener 6 caracteres mínimo.
+          </h4>
+        </div>
+        <button
+          type="button"
+          mat-icon-button
+          matSuffix
+          (click)="hide = !hide"
+          [attr.aria-label]="'Hide password'"
+          [attr.aria-pressed]="hide"
+        >
+          <mat-icon>{{ hide ? "visibility_off" : "visibility" }}</mat-icon>
+        </button>
+      </mat-form-field>
+      <mat-form-field appearance="fill">
+        <mat-label>Repite tu contraseña</mat-label>
+        <input
+          type="password"
+          formControlName="passwordRepetida"
+          matInput
+          [type]="hideRepetida ? 'password' : 'text'"
+          required=""
+        />
+        <button
+          type="button"
+          mat-icon-button
+          matSuffix
+          (click)="hideRepetida = !hideRepetida"
+          [attr.aria-label]="'Hide password'"
+          [attr.aria-pressed]="hideRepetida"
+        >
+          <mat-icon>{{
+            hideRepetida ? "visibility_off" : "visibility"
+          }}</mat-icon>
+        </button>
+      </mat-form-field>
+      <div>
+        <button mat-raised-button color="primary" matStepperPrevious>
+          Atrás
+        </button>
+        <button
+          mat-raised-button
+          color="primary"
+          matStepperNext
+          class="boton_derecho"
+        >
+          Siguiente
+        </button>
+      </div>
+    </form>
+  </mat-step>
+  <mat-step>
+    <ng-template matStepLabel>Terminar</ng-template>
+    <!--     <div
+      *ngIf="inicioSesion.valid && datosPersonales.valid; else elementoOculto"
+    > -->
+    <h3 class="terminar">
+      ¡Has rellenado todos los datos! Pulsa en continuar para registrar tu
+      cuenta.
+    </h3>
+    <!--   </div> -->
+    <!--     <ng-template #elementoOculto>
+      <h3 class="terminarError">
+        Faltan campos requeridos por rellenar. Asegurate de que están
+        rellenados.
+      </h3></ng-template
+    > -->
+
+    <div>
+      <button mat-raised-button color="primary" matStepperPrevious>
+        Atrás
+      </button>
+      <button
+        mat-raised-button
+        color="primary"
+        (click)="creaRestaurante()"
+        class="boton_derecho"
+      >
+        Continuar
+      </button>
+    </div>
+  </mat-step>
+</mat-vertical-stepper>

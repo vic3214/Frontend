@@ -1,0 +1,7 @@
+<h1 mat-dialog-title>Errores en formulario</h1>
+<div mat-dialog-content>
+  <li *ngFor="let error of data.err">{{error.msg}}</li>
+</div>
+<div mat-dialog-actions align="end">
+  <button mat-raised-button color="accent" (click)="onNoClick()">Cerrar</button>
+</div>

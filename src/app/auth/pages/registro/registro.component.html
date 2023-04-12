@@ -36,9 +36,14 @@
           formControlName="fotografia"
           placeholder="Imagen de perfil (JPG)"
           [accept]="'.jpg'"
+          maxContentSize="20000"
         ></ngx-mat-file-input>
         <mat-icon matSuffix class="carpeta">folder_shared</mat-icon>
         <mat-hint>Opcional</mat-hint>
+        <mat-error
+          *ngIf="datosPersonales.get('fotografia')?.hasError('maxContentSize')"
+          >La imagen tiene un tamaño superior a 20 KB
+        </mat-error>
       </mat-form-field>
 
       <div>
@@ -56,8 +61,12 @@
           matInput
           placeholder="tucorreo@dominio.com"
           formControlName="email"
+          pattern="[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}"
           required
         />
+        <mat-error *ngIf="email!.invalid && inicioSesion.touched"
+          >El correo debe estar bien formado
+        </mat-error>
       </mat-form-field>
       <mat-form-field appearance="fill">
         <mat-label>Introduce tu contraseña</mat-label>
@@ -68,11 +77,9 @@
           [type]="hide ? 'password' : 'text'"
           required=""
         />
-        <div *ngIf="password!.invalid && inicioSesion.touched">
-          <h4 class="terminarError">
-            La contraseña debe tener 6 caracteres mínimo.
-          </h4>
-        </div>
+        <mat-error *ngIf="password!.invalid && inicioSesion.touched"
+          >La contraseña debe tener 6 caracteres mínimo.
+        </mat-error>
         <button
           type="button"
           mat-icon-button

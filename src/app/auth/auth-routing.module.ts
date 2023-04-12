@@ -1,7 +1,9 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { LoginComponent } from './pages/login/login.component';
+import { LoginRestauranteComponent } from './pages/loginRestaurante/loginRestaurante.component';
 import { RegistroComponent } from './pages/registro/registro.component';
+import { RegistroRestauranteComponent } from './pages/registroRestaurante/registroRestaurante.component';
 
 const routes: Routes = [
   {
@@ -14,6 +16,14 @@ const routes: Routes = [
       {
         path: 'registro',
         component: RegistroComponent,
+      },
+      {
+        path: 'registroRestaurante',
+        component: RegistroRestauranteComponent,
+      },
+      {
+        path: 'loginRestaurante',
+        component: LoginRestauranteComponent,
       },
       {
         path: '**',

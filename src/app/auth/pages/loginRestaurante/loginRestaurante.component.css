@@ -1,0 +1,40 @@
+/*
+Css para el navbar
+*/
+.example-container {
+  width: 100%;
+  height: 100%;
+  border: 1px solid rgba(0, 0, 0, 0.5);
+}
+
+.example-sidenav-content {
+  display: flex;
+  height: 100%;
+  align-items: center;
+  justify-content: center;
+}
+
+.example-sidenav {
+  padding: 100px;
+}
+
+/*
+Css para la card
+*/
+.example-card {
+  max-width: 400px;
+}
+
+/*
+Css para div que contiene el formulario
+*/
+.example-container{
+  border: none
+}
+
+/*
+Css para los campos input 
+*/
+mat-form-field{
+  width: 100%;
+}

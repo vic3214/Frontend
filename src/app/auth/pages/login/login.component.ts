@@ -1,9 +1,9 @@
-import { Component, Inject } from '@angular/core';
+import { Component, Inject, OnInit } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 import {
+  MAT_DIALOG_DATA,
   MatDialog,
   MatDialogRef,
-  MAT_DIALOG_DATA,
 } from '@angular/material/dialog';
 import { Router } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
@@ -13,15 +13,9 @@ import { AuthService } from '../../services/auth.service';
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.css'],
 })
-export class LoginComponent {
+export class LoginComponent implements OnInit {
   registrarUsuario: Boolean = false;
   hide: Boolean = true;
-
-  public loginForm = this.fb.group({
-    email: ['', [Validators.required, Validators.email]],
-    password: ['', [Validators.required]],
-  });
-  submited = false;
 
   constructor(
     private router: Router,
@@ -29,6 +23,18 @@ export class LoginComponent {
     public dialog: MatDialog,
     private authService: AuthService
   ) {}
+
+  ngOnInit(): void {
+    if (this.authService.validarToken()) {
+      this.router.navigateByUrl('/dashboard');
+    }
+  }
+
+  public loginForm = this.fb.group({
+    email: ['', [Validators.required, Validators.email]],
+    password: ['', [Validators.required]],
+  });
+  submited = false;
 
   openDialog(err: any): void {
     const dialogRef = this.dialog.open(DialogComponent, {

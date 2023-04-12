@@ -1,0 +1,47 @@
+.example-input-wrapper {
+    margin-bottom: 16px;
+  }
+  
+  label {
+    margin-right: 4px;
+  }
+
+  .relleno{
+    height: 100%;
+    width: 100%;
+  }
+
+  mat-form-field{
+    margin-left: 5%;
+  }
+
+  .carpeta{
+    transform: scale(1.35);
+    color:white;
+  }
+  mat-icon{
+    color:white;
+  }
+
+  input{
+    color:white;
+  }
+  ngx-mat-file-input{
+    color:white;
+  }
+
+  .boton_derecho{
+    margin-left:10px;
+  }
+
+  button{
+    margin-top: 5px;
+  }
+
+  .terminar{
+    color: white;
+  }
+
+  .terminarError{
+    color: red;
+  }

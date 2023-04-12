@@ -7,6 +7,7 @@ import {
 } from '@angular/forms';
 import { DateAdapter } from '@angular/material/core';
 import { Router } from '@angular/router';
+import { FileValidator } from 'ngx-material-file-input';
 import { AuthService } from '../../services/auth.service';
 
 @Component({
@@ -30,7 +31,7 @@ export class RegistroComponent {
   datosPersonales: FormGroup = this._formBuilder.group({
     nombre: [],
     fechaNacimiento: [],
-    fotografia: [''],
+    fotografia: ['', [FileValidator.maxContentSize(20000)]],
   });
 
   inicioSesion: FormGroup = this._formBuilder.group({
@@ -44,6 +45,10 @@ export class RegistroComponent {
 
   get password() {
     return this.inicioSesion.get('password');
+  }
+
+  get email() {
+    return this.inicioSesion.get('email');
   }
 
   async creaUsuario() {
