@@ -5,6 +5,7 @@
 /tmp
 /out-tsc
 /log
+.angular/cache
 # Only exists if Bazel was run
 /bazel-out
 
