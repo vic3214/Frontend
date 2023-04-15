@@ -1,5 +1,5 @@
 <div class="opciones">
-  <h1 class="color">¡Bienvenido {{ usuario.nombre }}!</h1>
+  <h1 class="color">¡Bienvenido al restaurante {{ restaurante.nombre }}!</h1>
 
   <button mat-fab extended color="warn" (click)="reservasVisibilidad()">
     <mat-icon>calendar_today</mat-icon>
@@ -15,19 +15,19 @@
   </button>
 </div>
 <hr />
-<div *ngIf="favoritos">
+<!-- <div *ngIf="favoritos">
   <h2 class="color">Restaurantes favoritos:</h2>
   <ul>
     <li *ngFor="let fav of usuario.favoritos; index as i">
       {{ i + 1 }}. {{ fav }}
     </li>
   </ul>
-</div>
-<div *ngIf="reservas">
+</div> -->
+<!-- <div *ngIf="reservas">
   <h2 class="color">Reservas efectuadas:</h2>
   <ul>
     <li *ngFor="let reserva of usuario.reservas; index as i">
       {{ i + 1 }}. {{ reserva }}
     </li>
   </ul>
-</div>
+</div> -->

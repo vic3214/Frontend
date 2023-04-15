@@ -4,7 +4,12 @@ import { FormGroup } from '@angular/forms';
 import { Observable, of } from 'rxjs';
 import { catchError, map, tap } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
-import { Auth, AuthResponse, Usuario } from '../interfaces/auth.interfaces';
+import {
+  Auth,
+  AuthResponse,
+  Restaurante,
+  Usuario,
+} from '../interfaces/auth.interfaces';
 
 @Injectable({
   providedIn: 'root',
@@ -13,6 +18,7 @@ export class AuthService {
   private baseUrl: string = environment.baseUrl;
   private _auth!: Auth | undefined;
   private _usuario!: Usuario;
+  private _restaurante!: Restaurante;
 
   constructor(private http: HttpClient) {}
 
@@ -22,6 +28,10 @@ export class AuthService {
 
   get usuario(): Usuario {
     return { ...this._usuario };
+  }
+
+  get restaurante(): Restaurante {
+    return { ...this._restaurante };
   }
 
   async subirImagen(imagen: File): Promise<any> {
@@ -68,7 +78,7 @@ export class AuthService {
       fotografia: idImagen,
       listaOpiniones: [],
       fechaNacimiento: fechaNacimientoParseada,
-      google: false,
+      reservas: [],
     };
 
     return this.http
@@ -88,26 +98,110 @@ export class AuthService {
     );
   }
 
+  editaUsuario(usuario: any) {
+    const headers = new HttpHeaders().set(
+      'x-token',
+      localStorage.getItem('token') || ''
+    );
+    console.log(usuario._id);
+    return this.http
+      .put<any>(`${this.baseUrl}/editar-usuario/${usuario._id}`, usuario, {
+        headers,
+      })
+      .subscribe((res) => {
+        console.log(res);
+      });
+  }
+
   login(email: string, password: string) {
     const body = { email, password };
     return this.http.post<AuthResponse>(`${this.baseUrl}/login`, body).pipe(
       tap((resp) => {
         if (resp.ok) {
           localStorage.setItem('token', resp.token!);
+          console.log('resp', resp);
           this._usuario = {
             nombre: resp.nombre!,
             uid: resp.uid!,
             email: resp.email!,
+            reservas: resp.reservas!,
+            favoritos: resp.favoritos!,
           };
+          console.log('login', this._usuario);
         }
       }),
       map((resp) => resp.ok)
     );
   }
 
+  loginRestaurante(email: string, password: string) {
+    const body = { email, password };
+    return this.http
+      .post<AuthResponse>(`${this.baseUrl}/login-restaurante`, body)
+      .pipe(
+        tap((resp) => {
+          if (resp.ok) {
+            console.log('Respuesta existosa');
+            console.log(resp);
+            localStorage.setItem('token', resp.token!);
+            this._restaurante = {
+              nombre: resp.nombre!,
+              uid: resp.uid!,
+              email: resp.email!,
+            };
+          }
+        }),
+        map((resp) => resp.ok)
+      );
+  }
+
   logOut() {
     localStorage.removeItem('token');
     this._auth = undefined;
+  }
+
+  obtenerDatosToken(): any {
+    const url = `${this.baseUrl}/auth/obtener-datos`;
+    const headers = new HttpHeaders().set(
+      'x-token',
+      localStorage.getItem('token') || ''
+    );
+
+    return this.http.get<AuthResponse>(url, { headers }).pipe(
+      map((resp) => {
+        const respuesta = {
+          nombre: resp.nombre!,
+          uid: resp.uid!,
+          email: resp.email!,
+          reservas: resp.reservas!,
+          favoritos: resp.favoritos!,
+        };
+        return respuesta;
+      }),
+      catchError((err) => of(false))
+    );
+  }
+
+  validarRestauranteToken(): Observable<boolean> {
+    const url = `${this.baseUrl}/auth/renovar-restaurante`;
+    const headers = new HttpHeaders().set(
+      'x-token',
+      localStorage.getItem('token') || ''
+    );
+
+    return this.http.get<AuthResponse>(url, { headers }).pipe(
+      map((resp) => {
+        localStorage.setItem('token', resp.token!);
+        this._restaurante = {
+          nombre: resp.nombre!,
+          uid: resp.uid!,
+          email: resp.email!,
+        };
+        console.log('restauranteValidarToken', this._restaurante);
+        return resp.ok;
+      }),
+      catchError((err) => of(false))
+    );
   }
 
   validarToken(): Observable<boolean> {
@@ -124,7 +218,10 @@ export class AuthService {
           nombre: resp.nombre!,
           uid: resp.uid!,
           email: resp.email!,
+          reservas: resp.reservas!,
+          favoritos: resp.favoritos!,
         };
+        console.log('usuario', this._usuario);
         return resp.ok;
       }),
       catchError((err) => of(false))

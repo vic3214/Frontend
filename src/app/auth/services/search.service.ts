@@ -18,4 +18,12 @@ export class SearchService {
   getUbicacionDesdeCiudad(ciudad: String) {
     return this.http.get(`${this.baseUrl}/restaurantes/${ciudad}`);
   }
+
+  getRestaurantePorId(id: string) {
+    return this.http.get(`${this.baseUrl}/restaurante/${id}`);
+  }
+
+  getUsuarioPorId(id: string) {
+    return this.http.get(`${this.baseUrl}/usuario/${id}`);
+  }
 }

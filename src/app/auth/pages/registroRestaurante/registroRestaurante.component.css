@@ -45,3 +45,15 @@
   .terminarError{
     color: red;
   }
+
+  .horarioItems {
+    display: flex;
+    flex-direction: column;
+  }
+  .horaItems {
+    display: flex;
+  }
+
+  .ngForItems{
+    display: flex;
+  }

@@ -19,8 +19,15 @@ export class RegistroRestauranteComponent {
   hide: boolean = true;
   hideRepetida: boolean = true;
   options = ['Entrante', 'Primero', 'Segundo', 'Postre', 'Bebida'];
-  selectedValue = '';
-  //carta!: FormGroup;
+  dias = [
+    'Lunes',
+    'Martes',
+    'Miércoles',
+    'Jueves',
+    'Viernes',
+    'Sábado',
+    'Domingo',
+  ];
 
   constructor(
     private _formBuilder: FormBuilder,
@@ -43,7 +50,15 @@ export class RegistroRestauranteComponent {
     numero: [],
     fotografia: [''],
     tematica: [],
-    horario: [],
+    horario: this._formBuilder.array([
+      this._formBuilder.group({
+        dias: [[]],
+        horas: this._formBuilder.array([
+          this._formBuilder.control(null),
+          this._formBuilder.control(null),
+        ]),
+      }),
+    ]),
   });
   carta: FormGroup = this._formBuilder.group({
     platos: this._formBuilder.array([
@@ -70,6 +85,21 @@ export class RegistroRestauranteComponent {
     passwordRepetida: [],
   });
 
+  get horarios(): FormArray {
+    return this.datosRestaurante.get('horario') as FormArray;
+  }
+
+  agregarHorario() {
+    this.horarios.push(
+      this._formBuilder.group({
+        dias: [[]],
+        horas: this._formBuilder.array([
+          this._formBuilder.control(null),
+          this._formBuilder.control(null),
+        ]),
+      })
+    );
+  }
   get password() {
     return this.inicioSesion.get('password');
   }

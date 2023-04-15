@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import * as L from 'leaflet';
 import { SearchService } from 'src/app/auth/services/search.service';
+import { AuthService } from '../../auth/services/auth.service';
 
 @Component({
   selector: 'app-home',
@@ -8,7 +9,10 @@ import { SearchService } from 'src/app/auth/services/search.service';
   styleUrls: ['./home.component.css'],
 })
 export class HomeComponent implements OnInit {
-  constructor(private searchService: SearchService) {}
+  constructor(
+    private searchService: SearchService,
+    private authService: AuthService
+  ) {}
 
   ngOnInit(): void {}
 
@@ -25,7 +29,6 @@ export class HomeComponent implements OnInit {
     if (this.searchCityTerm === undefined) {
       this.searchCityTerm = 'Madrid';
     }
-    console.log('Esperate');
     this.searchService
       .getRestaurantesPorCiudadYNombre(this.searchTerm, this.searchCityTerm)
       .subscribe((restaurantes: any) => {
@@ -42,6 +45,7 @@ export class HomeComponent implements OnInit {
             // Añadir el marcador al mapa
             marker.addTo(this.map!);
           });
+          console.log(this.results);
         }
       });
 
@@ -58,7 +62,6 @@ export class HomeComponent implements OnInit {
   iniciarMapa() {
     let latitud: number = 0;
     let longitud: number = 0;
-    console.log('Esperate2');
     this.searchService
       .getUbicacionDesdeCiudad(this.searchCityTerm)
       .subscribe((resp: any) => {
@@ -76,4 +79,21 @@ export class HomeComponent implements OnInit {
         this.mapInitialized = true;
       });
   }
+
+  guardarFavorito(i: number) {
+    // TODO: COmprobar que se haga cuando hay un token, sino mostrar popup para iniciar sesion
+    this.authService.obtenerDatosToken().subscribe((dato: any) => {
+      console.log('datoUsuario', dato);
+      console.log('idRestaurante', this.results[i]._id);
+      this.searchService.getUsuarioPorId(dato.uid).subscribe((usuario: any) => {
+        console.log('usuario', usuario);
+        usuario.usuario.listaRestaurantesFavoritos.push(this.results[i]._id);
+        this.authService.editaUsuario(usuario.usuario);
+      });
+    });
+  }
+
+  verRestaurante(i: number) {}
+
+  reservar(i: number) {}
 }

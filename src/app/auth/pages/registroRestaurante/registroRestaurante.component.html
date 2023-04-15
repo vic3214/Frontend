@@ -95,16 +95,37 @@
           required
         />
       </mat-form-field>
-      <mat-form-field>
-        <input
-          autocomplete="off"
-          matInput
-          placeholder="Horario"
-          formControlName="horario"
-          required
-        />
-      </mat-form-field>
+      <div formArrayName="horario" class="horarioItems">
+        <div
+          *ngFor="let horario of horarios.controls; let i = index"
+          [formGroupName]="i"
+          class="ngForItems"
+        >
+          <mat-form-field>
+            <mat-label>Días de apertura</mat-label>
+            <mat-select formControlName="dias" multiple>
+              <mat-option *ngFor="let dia of dias" [value]="dia">{{
+                dia
+              }}</mat-option>
+            </mat-select>
+          </mat-form-field>
 
+          <div formArrayName="horas" class="horaItems">
+            <mat-form-field>
+              <mat-label>Hora de apertura</mat-label>
+              <input matInput type="time" [formControlName]="0" />
+            </mat-form-field>
+
+            <mat-form-field>
+              <mat-label>Hora de cierre</mat-label>
+              <input matInput type="time" [formControlName]="1" />
+            </mat-form-field>
+          </div>
+        </div>
+      </div>
+      <button mat-raised-button color="primary" (click)="agregarHorario()">
+        Agregar horario
+      </button>
       <div>
         <button mat-raised-button color="primary" matStepperNext>
           Siguiente

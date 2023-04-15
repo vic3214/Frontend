@@ -1,0 +1,30 @@
+.color{
+  color: white;
+}
+
+.opciones {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+
+.opciones button {
+  margin-right: 50px;
+  width: 150px;
+  margin-top: 10px;
+} 
+
+@media (min-width: 600px) {
+  .opciones {
+    flex-direction: row;
+    justify-content: space-between;
+  }
+
+  .opciones button {
+    margin-right: 50px;
+    width: 150px;
+  } 
+}
+
+

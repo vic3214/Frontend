@@ -25,8 +25,8 @@ export class LoginComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    if (this.authService.validarToken()) {
-      this.router.navigateByUrl('/dashboard');
+    if (localStorage.getItem('token') && this.authService.validarToken()) {
+      this.router.navigateByUrl('/dashboard/usuario');
     }
   }
 
@@ -53,7 +53,7 @@ export class LoginComponent implements OnInit {
         //* Recuperar objeto base de datos y cargar página según datos
         console.log(resp);
         if (resp) {
-          this.router.navigateByUrl('/dashboard');
+          this.router.navigateByUrl('/dashboard/usuario');
         }
       },
       (err) => {

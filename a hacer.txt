@@ -1,0 +1,8 @@
+
+  // TODO:
+  // Eliminar restauranes favoritos
+  // Calcelar reserva
+  // Ponerlo mas bonito en un card
+  // Si hay un token en localStorage Permitir reserva y guardar favorito
+  // para el usuario del token
+  // Hacer dashboard parecido con restaurantes

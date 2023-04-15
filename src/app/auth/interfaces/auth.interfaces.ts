@@ -11,9 +11,19 @@ export interface AuthResponse {
   email?: string;
   token?: string;
   msg?: string;
+  reservas?: string[];
+  favoritos?: string[];
 }
 
 export interface Usuario {
+  uid: string;
+  nombre: string;
+  email: string;
+  reservas: string[];
+  favoritos: string[];
+}
+
+export interface Restaurante {
   uid: string;
   nombre: string;
   email: string;

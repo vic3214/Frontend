@@ -28,7 +28,7 @@
   >
     <h2>Resultados</h2>
     <ul>
-      <li *ngFor="let result of results">
+      <li *ngFor="let result of results; index as i">
         <mat-card class="example-card">
           <mat-card-header>
             <div mat-card-avatar class="example-header-image"></div>
@@ -42,9 +42,21 @@
             </li>
           </mat-card-content>
           <mat-card-actions>
-            <button mat-button>Ver Restaurante</button>
-            <button mat-button>Guardar en Favoritos</button>
-            <button mat-button>Reservar</button>
+            <button mat-flat-button color="primary" (click)="verRestaurante(i)">
+              Ver Restaurante
+            </button>
+            <span class="spacer-button"></span>
+            <button
+              mat-flat-button
+              color="primary"
+              (click)="guardarFavorito(i)"
+            >
+              Guardar en Favoritos
+            </button>
+            <span class="spacer-button"></span>
+            <button mat-flat-button color="primary" (click)="reservar(i)">
+              Reservar
+            </button>
           </mat-card-actions>
         </mat-card>
       </li>
