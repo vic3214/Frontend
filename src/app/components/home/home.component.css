@@ -48,6 +48,12 @@ justify-content: center;
   background-color: #2980b9;
 }
 
+@media (max-width: 752px) {
+  .search-button {
+    margin-top: 10px;
+  }
+} 
+
 .spacer{
   padding-left: 10%;
 }
@@ -112,4 +118,14 @@ li {
   min-height: 400px;
   max-height: 700px;
   height: 100%;
+}
+
+@media (max-width: 752px) {
+  mat-card-actions {
+    display: flex;
+    flex-direction: column;
+  }
+  button {
+    margin-bottom: 10px;
+  }
 }

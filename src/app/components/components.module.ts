@@ -4,10 +4,10 @@ import { FormsModule } from '@angular/forms';
 import { MatCardModule } from '@angular/material/card';
 import { AuthRoutingModule } from '../auth/auth-routing.module';
 import { MaterialModule } from '../material/material.module';
-import { HomeComponent } from './home/home.component';
+import { DialogHomeComponent, HomeComponent } from './home/home.component';
 
 @NgModule({
-  declarations: [HomeComponent],
+  declarations: [HomeComponent, DialogHomeComponent],
   imports: [
     CommonModule,
     AuthRoutingModule,

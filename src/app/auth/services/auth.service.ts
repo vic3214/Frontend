@@ -263,6 +263,7 @@ export class AuthService {
       email: inicioSesion.controls['email'].value,
       password: inicioSesion.controls['password'].value,
       comentarios: [],
+      reservas: [],
       valoracion: 0,
     };
 

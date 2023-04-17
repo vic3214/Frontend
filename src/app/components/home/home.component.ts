@@ -1,4 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Inject, OnInit } from '@angular/core';
+import {
+  MAT_DIALOG_DATA,
+  MatDialog,
+  MatDialogRef,
+} from '@angular/material/dialog';
+import { Router } from '@angular/router';
 import * as L from 'leaflet';
 import { SearchService } from 'src/app/auth/services/search.service';
 import { AuthService } from '../../auth/services/auth.service';
@@ -11,9 +17,12 @@ import { AuthService } from '../../auth/services/auth.service';
 export class HomeComponent implements OnInit {
   constructor(
     private searchService: SearchService,
-    private authService: AuthService
+    private authService: AuthService,
+    public dialog: MatDialog,
+    private router: Router
   ) {}
 
+  // TODO: Implementar paginacion en los resultados
   ngOnInit(): void {}
 
   searchTerm!: string;
@@ -80,20 +89,53 @@ export class HomeComponent implements OnInit {
       });
   }
 
-  guardarFavorito(i: number) {
-    // TODO: COmprobar que se haga cuando hay un token, sino mostrar popup para iniciar sesion
-    this.authService.obtenerDatosToken().subscribe((dato: any) => {
-      console.log('datoUsuario', dato);
-      console.log('idRestaurante', this.results[i]._id);
-      this.searchService.getUsuarioPorId(dato.uid).subscribe((usuario: any) => {
-        console.log('usuario', usuario);
-        usuario.usuario.listaRestaurantesFavoritos.push(this.results[i]._id);
-        this.authService.editaUsuario(usuario.usuario);
-      });
+  openDialog(err: any): void {
+    const dialogRef = this.dialog.open(DialogHomeComponent, {
+      width: '300px',
+      data: { err: err },
     });
+
+    dialogRef.afterClosed().subscribe((result) => {});
   }
 
-  verRestaurante(i: number) {}
+  guardarFavorito(i: number) {
+    if (localStorage.getItem('token')) {
+      this.authService.obtenerDatosToken().subscribe((dato: any) => {
+        this.searchService
+          .getUsuarioPorId(dato.uid)
+          .subscribe((usuario: any) => {
+            usuario.usuario.listaRestaurantesFavoritos.push(
+              this.results[i]._id
+            );
+            this.authService.editaUsuario(usuario.usuario);
+          });
+      });
+    } else {
+      const erroresEnviar =
+        'Debes iniciar sesión para guardar restaurantes favoritos';
+      this.openDialog(erroresEnviar);
+    }
+  }
 
-  reservar(i: number) {}
+  verRestaurante(i: number) {
+    console.log(this.results[i]);
+    const id = this.results[i]._id;
+    console.log(id);
+    this.router.navigateByUrl(`/auth/restaurante/${id}`);
+  }
+}
+
+@Component({
+  selector: 'app-dialog',
+  templateUrl: 'dialogHome.html',
+})
+export class DialogHomeComponent {
+  constructor(
+    public dialogRef: MatDialogRef<DialogHomeComponent>,
+    @Inject(MAT_DIALOG_DATA) public data: any
+  ) {}
+
+  onNoClick(): void {
+    this.dialogRef.close();
+  }
 }

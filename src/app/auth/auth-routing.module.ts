@@ -4,6 +4,7 @@ import { LoginComponent } from './pages/login/login.component';
 import { LoginRestauranteComponent } from './pages/loginRestaurante/loginRestaurante.component';
 import { RegistroComponent } from './pages/registro/registro.component';
 import { RegistroRestauranteComponent } from './pages/registroRestaurante/registroRestaurante.component';
+import { RestauranteComponent } from './pages/restaurante/restaurante.component';
 
 const routes: Routes = [
   {
@@ -24,6 +25,10 @@ const routes: Routes = [
       {
         path: 'loginRestaurante',
         component: LoginRestauranteComponent,
+      },
+      {
+        path: 'restaurante/:id',
+        component: RestauranteComponent,
       },
       {
         path: '**',

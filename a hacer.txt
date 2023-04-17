@@ -6,3 +6,4 @@
   // Si hay un token en localStorage Permitir reserva y guardar favorito
   // para el usuario del token
   // Hacer dashboard parecido con restaurantes
+  // Editar carta, cambiar horario, cambiar tematica, etc...
