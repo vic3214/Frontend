@@ -1,0 +1,41 @@
+.contenedor {
+    max-width: 800px;
+    margin: 0 auto;
+  }
+  
+  .titulo {
+    font-size: 36px;
+    text-align: center;
+  }
+  
+  .subtitulo {
+    font-size: 24px;
+    text-align: center;
+  }
+  
+  .menu {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    grid-gap: 20px;
+  }
+  
+  .seccion {
+    background-color: #f4f4f4;
+    padding: 10px;
+  }
+  
+  .seccion h3 {
+    margin-top: 0;
+  }
+
+  .center{
+    justify-content: center;
+  }
+
+  .spacer{
+    margin-left: 10px;
+  }
+
+  .wide-field {
+    width: 500px;
+  }

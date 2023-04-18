@@ -118,7 +118,6 @@ export class HomeComponent implements OnInit {
   }
 
   verRestaurante(i: number) {
-    console.log(this.results[i]);
     const id = this.results[i]._id;
     console.log(id);
     this.router.navigateByUrl(`/auth/restaurante/${id}`);

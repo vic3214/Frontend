@@ -307,6 +307,7 @@ export class AuthService {
       postres: postres,
       bebidas: bebidas,
     };
+    console.log(bodyCarta);
     return bodyCarta;
   }
 

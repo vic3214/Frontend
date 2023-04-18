@@ -27,6 +27,7 @@ export class RegistroRestauranteComponent {
     'Viernes',
     'Sábado',
     'Domingo',
+    'Festivos',
   ];
 
   constructor(
