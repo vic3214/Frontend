@@ -39,3 +39,25 @@
   .wide-field {
     width: 500px;
   }
+
+  form {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+  }
+  
+  mat-form-field {
+    margin: 0 auto;
+    margin-top: 10px;
+    width: 40%;
+  }
+  
+  button {
+    width: 30%;
+    margin: 0 auto;
+    color: white;
+  }
+  

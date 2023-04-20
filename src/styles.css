@@ -2,3 +2,15 @@
 
 html, body { height: 100%; }
 body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; background-color: #303030; }
+
+.snackBar [matSnackBarLabel] {
+    margin-top: 10px;
+    margin-right: 10px;
+  }
+.snackBar {
+    background-color: #303030;
+    color: white;
+    font-size: 15px;
+    padding: 16px;
+  }
+  

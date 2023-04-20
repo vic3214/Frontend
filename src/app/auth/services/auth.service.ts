@@ -272,6 +272,20 @@ export class AuthService {
       .pipe(map((resp) => resp.ok));
   }
 
+  editarRestaurante(restaurante: any) {
+    const headers = new HttpHeaders().set(
+      'x-token',
+      localStorage.getItem('token') || ''
+    );
+    console.log('Restaurante enviado: ', restaurante);
+    return this.http
+      .put<any>(
+        `${this.baseUrl}/editar-restaurante/${restaurante._id}`,
+        restaurante,
+        { headers }
+      )
+      .pipe(map((resp) => resp.ok));
+  }
   // Array de Arrays con valores [nombrePlato,precio,tipo]
   construyeCarta(carta: FormGroup) {
     // Filtrar por tipos y añadirlos al tipo correspondiente en el objeto bodyCarta
