@@ -30,6 +30,15 @@ export class LoginRestauranteComponent {
     private authService: AuthService
   ) {}
 
+  ngOnInit(): void {
+    if (
+      localStorage.getItem('token-restaurante') &&
+      this.authService.validarToken('token-restaurante')
+    ) {
+      this.router.navigateByUrl('/dashboard/restaurante');
+    }
+  }
+
   openDialog(err: any): void {
     const dialogRef = this.dialog.open(DialogRestauranteComponent, {
       width: '300px',

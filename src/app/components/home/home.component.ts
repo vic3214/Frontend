@@ -99,7 +99,7 @@ export class HomeComponent implements OnInit {
   }
 
   guardarFavorito(i: number) {
-    if (localStorage.getItem('token')) {
+    if (localStorage.getItem('token') != null) {
       this.authService.obtenerDatosToken().subscribe((dato: any) => {
         this.searchService
           .getUsuarioPorId(dato.uid)

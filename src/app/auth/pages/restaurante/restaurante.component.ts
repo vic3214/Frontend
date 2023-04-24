@@ -1,6 +1,15 @@
-import { Component, OnInit, inject } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { MatSnackBar, MatSnackBarRef } from '@angular/material/snack-bar';
+import { Component, Inject, OnInit, inject } from '@angular/core';
+import {
+  FormBuilder,
+  FormControl,
+  FormGroup,
+  Validators,
+} from '@angular/forms';
+import {
+  MAT_SNACK_BAR_DATA,
+  MatSnackBar,
+  MatSnackBarRef,
+} from '@angular/material/snack-bar';
 import { ActivatedRoute } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
 import { SearchService } from '../../services/search.service';
@@ -22,6 +31,8 @@ export class RestauranteComponent implements OnInit {
     private _formBuilder: FormBuilder,
     private authService: AuthService
   ) {}
+
+  //TODO: Poder valorar el restaurante y añadir icono estrella
   ngOnInit(): void {
     this.id = this.activatedRoute.snapshot.paramMap.get('id') || '';
 
@@ -32,10 +43,10 @@ export class RestauranteComponent implements OnInit {
   }
 
   reservasGroup: FormGroup = this._formBuilder.group({
-    nombre: '',
-    fecha: '',
-    hora: '',
-    personas: '',
+    nombre: new FormControl([], [Validators.required]),
+    fecha: new FormControl([], [Validators.required]),
+    hora: new FormControl([], [Validators.required]),
+    personas: new FormControl([], [Validators.required]),
   });
 
   comentarioGroup: FormGroup = this._formBuilder.group({
@@ -45,8 +56,8 @@ export class RestauranteComponent implements OnInit {
   addComentario() {
     const comentario = this.comentarioGroup.get('comentario')!.value;
     if (localStorage.getItem('token') === null) {
-      console.log('Debes iniciar sesion para comentar');
-    } else if (comentario != '') {
+      this.openSnackBar('¡Debes iniciar sesión para comentar!');
+    } else if (comentario.length > 0 && comentario.trim() > 0) {
       let usuario;
       this.authService.obtenerDatosToken().subscribe((resp: any) => {
         usuario = resp.nombre;
@@ -61,18 +72,34 @@ export class RestauranteComponent implements OnInit {
           .subscribe((resp) => {});
       });
     } else {
-      this.openSnackBar();
-      console.log('Comentario vacio, no se añade');
+      this.openSnackBar('¡Debes escribir algo en el comentario!');
     }
   }
-  openSnackBar() {
+  openSnackBar(mensaje: string) {
     this._snackBar.openFromComponent(ComentarioAnnotatedComponent, {
-      duration: this.durationInSeconds * 1000,
+      duration: this.durationInSeconds * 500,
       panelClass: ['snackBar'],
+      data: { mensaje: mensaje },
     });
   }
-
-  // TODO: Hacer reservas
+  reservar() {
+    if (this.reservasGroup.valid && localStorage.getItem('token') != null) {
+      const reserva = {
+        usuario: this.reservasGroup.controls['nombre'].value,
+        personas: this.reservasGroup.controls['personas'].value,
+        hora: this.reservasGroup.controls['hora'].value,
+        fecha: this.reservasGroup.controls['fecha'].value,
+      };
+      this.restaurante.reservas.push(reserva);
+      this.authService
+        .editarRestaurante(this.restaurante)
+        .subscribe((resp) => {});
+      //TODO: Lanzar algo reserva exitosa o reserva fallida
+      this.openSnackBar('¡Reserva realizada con éxito!');
+    } else {
+      this.openSnackBar('¡Debes iniciar sesión para hacer una reserva!');
+    }
+  }
 }
 
 @Component({
@@ -92,4 +119,5 @@ export class RestauranteComponent implements OnInit {
 })
 export class ComentarioAnnotatedComponent {
   snackBarRef = inject(MatSnackBarRef);
+  constructor(@Inject(MAT_SNACK_BAR_DATA) public data: any) {}
 }

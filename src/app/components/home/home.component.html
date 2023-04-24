@@ -38,7 +38,7 @@
           <mat-card-content>
             <h3><b>Comentarios de los usuarios:</b></h3>
             <li *ngFor="let comentario of result.comentarios">
-              {{ comentario }}
+              {{ comentario.usuario }} comentó: {{ comentario.comentario }}
             </li>
           </mat-card-content>
           <mat-card-actions>

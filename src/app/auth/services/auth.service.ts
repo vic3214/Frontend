@@ -143,7 +143,7 @@ export class AuthService {
           if (resp.ok) {
             console.log('Respuesta existosa');
             console.log(resp);
-            localStorage.setItem('token', resp.token!);
+            localStorage.setItem('token-restaurante', resp.token!);
             this._restaurante = {
               nombre: resp.nombre!,
               uid: resp.uid!,
@@ -157,6 +157,10 @@ export class AuthService {
 
   logOut() {
     localStorage.removeItem('token');
+    this._auth = undefined;
+  }
+  logOutRestaurante() {
+    localStorage.removeItem('token-restaurante');
     this._auth = undefined;
   }
 
@@ -204,16 +208,16 @@ export class AuthService {
     );
   }
 
-  validarToken(): Observable<boolean> {
+  validarToken(token: string): Observable<boolean> {
     const url = `${this.baseUrl}/auth/renovar`;
     const headers = new HttpHeaders().set(
       'x-token',
-      localStorage.getItem('token') || ''
+      localStorage.getItem(token) || ''
     );
 
     return this.http.get<AuthResponse>(url, { headers }).pipe(
       map((resp) => {
-        localStorage.setItem('token', resp.token!);
+        localStorage.setItem(token, resp.token!);
         this._usuario = {
           nombre: resp.nombre!,
           uid: resp.uid!,
@@ -278,6 +282,9 @@ export class AuthService {
       localStorage.getItem('token') || ''
     );
     console.log('Restaurante enviado: ', restaurante);
+    console.log('Body: ', restaurante);
+    console.log('Headers: ', headers);
+    console.log('idRestaurante', restaurante._id);
     return this.http
       .put<any>(
         `${this.baseUrl}/editar-restaurante/${restaurante._id}`,
@@ -324,6 +331,33 @@ export class AuthService {
     console.log(bodyCarta);
     return bodyCarta;
   }
+
+  /*  reservaRestaurante(
+    idRestaurante: string,
+    idUsuario: string,
+    form: FormGroup
+  ) {
+    console.log('Servicio');
+    console.log(idUsuario);
+    console.log(form);
+    const body = {
+      nombre: form.controls['nombre'].value,
+      fecha: form.controls['fecha'].value,
+      hora: form.controls['hora'].value,
+      personas: form.controls['personas'].value,
+    };
+    const headers = new HttpHeaders().set(
+      'x-token',
+      localStorage.getItem('token') || ''
+    );
+    return this.http
+      .put<any>(`${this.baseUrl}/reserva-restaurante/${idRestaurante}`, body, {
+        headers,
+      })
+      .subscribe((res) => {
+        console.log(res);
+      });
+  } */
 
   async obtenerUbicacion(calle: String, ciudad: String, numero: String) {
     const direccion = `${calle} ${numero}, ${ciudad}`;
