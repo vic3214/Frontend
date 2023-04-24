@@ -104,14 +104,16 @@ li {
   background-color: white;
 }
 
-.mensaje{
-  margin-top: 15%;
-  font-size: 25px;
-  display: flex; 
-  justify-content: center; 
-  align-items: center;
-  color: white;
+.mensaje {
+position: absolute;
+top: 50%;
+left: 50%;
+transform: translate(-50%, -50%);
+margin: 0;
+font-size: 25px;
+color: white;
 }
+
 #map{
   margin: 0 auto;
   width: 40%;
