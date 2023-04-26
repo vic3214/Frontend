@@ -5,9 +5,9 @@
     <mat-icon>calendar_today</mat-icon>
     Reservas
   </button>
-  <button mat-fab extended color="warn" (click)="favoritosVisibilidad()">
-    <mat-icon>favorite</mat-icon>
-    Favoritos
+  <button mat-fab extended color="warn" (click)="editarDatos()">
+    <mat-icon>edit</mat-icon>
+    Editar datos
   </button>
   <button mat-fab extended color="warn" (click)="logout()">
     <mat-icon>exit_to_app</mat-icon>
@@ -15,19 +15,14 @@
   </button>
 </div>
 <hr />
-<!-- <div *ngIf="favoritos">
-  <h2 class="color">Restaurantes favoritos:</h2>
-  <ul>
-    <li *ngFor="let fav of usuario.favoritos; index as i">
-      {{ i + 1 }}. {{ fav }}
-    </li>
-  </ul>
-</div> -->
-<!-- <div *ngIf="reservas">
-  <h2 class="color">Reservas efectuadas:</h2>
-  <ul>
-    <li *ngFor="let reserva of usuario.reservas; index as i">
+<div *ngIf="editar">
+  <h2 class="color">Editar campos:</h2>
+</div>
+<div *ngIf="reservas">
+  <h2 class="color">Reservas de los clientes:</h2>
+  <!--   <ul>
+    <li *ngFor="let reserva of restaurante.; index as i">
       {{ i + 1 }}. {{ reserva }}
     </li>
-  </ul>
-</div> -->
+  </ul> -->
+</div>

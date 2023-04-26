@@ -13,10 +13,7 @@ import {
 } from './pages/loginRestaurante/loginRestaurante.component';
 import { RegistroComponent } from './pages/registro/registro.component';
 import { RegistroRestauranteComponent } from './pages/registroRestaurante/registroRestaurante.component';
-import {
-  ComentarioAnnotatedComponent,
-  RestauranteComponent,
-} from './pages/restaurante/restaurante.component';
+import { RestauranteComponent } from './pages/restaurante/restaurante.component';
 
 @NgModule({
   declarations: [
@@ -27,7 +24,6 @@ import {
     DialogRestauranteComponent,
     RegistroRestauranteComponent,
     RestauranteComponent,
-    ComentarioAnnotatedComponent,
   ],
   imports: [
     CommonModule,

@@ -1,16 +1,13 @@
-import { Component, Inject, OnInit, inject } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import {
   FormBuilder,
   FormControl,
   FormGroup,
   Validators,
 } from '@angular/forms';
-import {
-  MAT_SNACK_BAR_DATA,
-  MatSnackBar,
-  MatSnackBarRef,
-} from '@angular/material/snack-bar';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { ActivatedRoute } from '@angular/router';
+import { ComentarioAnnotatedComponent } from 'src/app/components/home/home.component';
 import { AuthService } from '../../services/auth.service';
 import { SearchService } from '../../services/search.service';
 
@@ -23,6 +20,8 @@ export class RestauranteComponent implements OnInit {
   minDate = new Date();
   id: string = '';
   restaurante: any;
+  valoracion: number = 0;
+  numeroValoraciones: number = 0;
   durationInSeconds = 5;
   constructor(
     private activatedRoute: ActivatedRoute,
@@ -38,10 +37,26 @@ export class RestauranteComponent implements OnInit {
 
     this.searchService.getRestaurantePorId(this.id).subscribe((res: any) => {
       this.restaurante = res.restaurante;
+      if (this.restaurante.valoracion.length !== 0) {
+        let votos = Object.values(this.restaurante.valoracion).map(
+          (obj: any) => obj.voto
+        );
+        this.numeroValoraciones = votos.length;
+        let media = votos.reduce((a, b) => a + b) / votos.length;
+        this.valoracion = media;
+      }
+
       console.log('Restaurante cargado:', res.restaurante);
     });
   }
 
+  get valoracionRestaurante() {
+    return this.valoracion;
+  }
+
+  get numValoracionesRestaurante() {
+    return this.numeroValoraciones;
+  }
   reservasGroup: FormGroup = this._formBuilder.group({
     nombre: new FormControl([], [Validators.required]),
     fecha: new FormControl([], [Validators.required]),
@@ -53,11 +68,47 @@ export class RestauranteComponent implements OnInit {
     comentario: ['', Validators.required],
   });
 
+  valoracionGroup: FormGroup = this._formBuilder.group({
+    valoracion: ['', Validators.required],
+  });
+
+  addValoracion() {
+    const valoracion = this.valoracionGroup.get('valoracion')!.value;
+    if (localStorage.getItem('token') === null) {
+      this.openSnackBar('¡Debes iniciar sesión para valorar!');
+    } else if (
+      valoracion !== '' &&
+      Number(valoracion) <= 5 &&
+      Number(valoracion) >= 0
+    ) {
+      let usuario;
+      this.authService.obtenerDatosToken().subscribe((resp: any) => {
+        usuario = resp.nombre;
+        const valoracionObj = {
+          usuario: usuario,
+          voto: valoracion,
+        };
+        this.restaurante.valoracion.push(valoracionObj);
+        this.valoracionGroup.get('valoracion')!.reset();
+        this.authService
+          .editarRestaurante(this.restaurante)
+          .subscribe((resp) => {
+            let votos = this.restaurante.valoracion.map((obj: any) => obj.voto);
+            this.valoracion =
+              votos.reduce((a: any, b: any) => a + b) / votos.length;
+            this.numeroValoraciones = votos.length;
+          });
+      });
+    } else {
+      this.openSnackBar('¡Debes puntuar el restaurante correctamente!');
+    }
+  }
+
   addComentario() {
     const comentario = this.comentarioGroup.get('comentario')!.value;
     if (localStorage.getItem('token') === null) {
       this.openSnackBar('¡Debes iniciar sesión para comentar!');
-    } else if (comentario.length > 0 && comentario.trim() > 0) {
+    } else if (comentario !== '' && comentario.trim().length > 0) {
       let usuario;
       this.authService.obtenerDatosToken().subscribe((resp: any) => {
         usuario = resp.nombre;
@@ -100,24 +151,4 @@ export class RestauranteComponent implements OnInit {
       this.openSnackBar('¡Debes iniciar sesión para hacer una reserva!');
     }
   }
-}
-
-@Component({
-  selector: 'snack-bar-annotated-component-example-snack',
-  templateUrl: 'snack.html',
-  styles: [
-    `
-      :host {
-        display: flex;
-      }
-
-      .example-pizza-party {
-        color: hotpink;
-      }
-    `,
-  ],
-})
-export class ComentarioAnnotatedComponent {
-  snackBarRef = inject(MatSnackBarRef);
-  constructor(@Inject(MAT_SNACK_BAR_DATA) public data: any) {}
 }

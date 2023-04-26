@@ -3,7 +3,6 @@ export class Usuario {
     public nombre: string,
     public email: string,
     public fechaNacimiento: Date,
-    public google: boolean,
     public password?: string,
     public fotografia?: string,
     public listaRestaurantesFavoritos?: string,

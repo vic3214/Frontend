@@ -61,3 +61,10 @@
     color: white;
   }
   
+  .star-icon {
+    vertical-align: text-bottom;
+  }
+
+  .spacer-icon{
+    margin-right: 5px;
+  }

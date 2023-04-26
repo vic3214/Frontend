@@ -4,10 +4,18 @@ import { FormsModule } from '@angular/forms';
 import { MatCardModule } from '@angular/material/card';
 import { AuthRoutingModule } from '../auth/auth-routing.module';
 import { MaterialModule } from '../material/material.module';
-import { DialogHomeComponent, HomeComponent } from './home/home.component';
+import {
+  ComentarioAnnotatedComponent,
+  DialogHomeComponent,
+  HomeComponent,
+} from './home/home.component';
 
 @NgModule({
-  declarations: [HomeComponent, DialogHomeComponent],
+  declarations: [
+    HomeComponent,
+    DialogHomeComponent,
+    ComentarioAnnotatedComponent,
+  ],
   imports: [
     CommonModule,
     AuthRoutingModule,

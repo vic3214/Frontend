@@ -1,9 +1,14 @@
-import { Component, Inject, OnInit } from '@angular/core';
+import { Component, Inject, OnInit, inject } from '@angular/core';
 import {
   MAT_DIALOG_DATA,
   MatDialog,
   MatDialogRef,
 } from '@angular/material/dialog';
+import {
+  MAT_SNACK_BAR_DATA,
+  MatSnackBar,
+  MatSnackBarRef,
+} from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
 import * as L from 'leaflet';
 import { SearchService } from 'src/app/auth/services/search.service';
@@ -19,18 +24,19 @@ export class HomeComponent implements OnInit {
     private searchService: SearchService,
     private authService: AuthService,
     public dialog: MatDialog,
-    private router: Router
+    private router: Router,
+    private _snackBar: MatSnackBar
   ) {}
 
   // TODO: Implementar paginacion en los resultados
   ngOnInit(): void {}
-
   searchTerm!: string;
   searchCityTerm!: string;
   results: any[] = [];
   map: L.Map | undefined;
   mapInitialized: boolean = false;
   busqueda: boolean = false;
+  durationInSeconds = 3;
 
   search() {
     this.busqueda = true;
@@ -104,10 +110,26 @@ export class HomeComponent implements OnInit {
         this.searchService
           .getUsuarioPorId(dato.uid)
           .subscribe((usuario: any) => {
-            usuario.usuario.listaRestaurantesFavoritos.push(
-              this.results[i]._id
-            );
-            this.authService.editaUsuario(usuario.usuario);
+            if (
+              usuario.usuario.listaRestaurantesFavoritos.includes(
+                this.results[i]._id
+              )
+            ) {
+              this._snackBar.openFromComponent(ComentarioAnnotatedComponent, {
+                duration: this.durationInSeconds * 500,
+                panelClass: ['snackBar'],
+                data: {
+                  mensaje: '¡Ya has guardado ese restaurante en favoritos!',
+                },
+              });
+            } else {
+              usuario.usuario.listaRestaurantesFavoritos.push(
+                this.results[i]._id
+              );
+              this.authService
+                .editaUsuario(usuario.usuario)
+                .subscribe((res) => {});
+            }
           });
       });
     } else {
@@ -137,4 +159,24 @@ export class DialogHomeComponent {
   onNoClick(): void {
     this.dialogRef.close();
   }
+}
+
+@Component({
+  selector: 'snack-bar',
+  templateUrl: 'snack.html',
+  styles: [
+    `
+      :host {
+        display: flex;
+      }
+
+      .example-pizza-party {
+        color: hotpink;
+      }
+    `,
+  ],
+})
+export class ComentarioAnnotatedComponent {
+  snackBarRef = inject(MatSnackBarRef);
+  constructor(@Inject(MAT_SNACK_BAR_DATA) public data: any) {}
 }

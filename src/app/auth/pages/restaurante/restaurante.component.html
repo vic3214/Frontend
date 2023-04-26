@@ -109,11 +109,38 @@
       </mat-tab>
       <mat-tab label="Comentarios y valoración">
         <mat-card>
-          <mat-card-content>
+          <mat-card-content [formGroup]="valoracionGroup">
             <h3>
               Valoración:
-              {{ restaurante?.valoracion }}/5
+              <span class="spacer-icon"></span>
+              {{ valoracionRestaurante | number : "1.0-2" }}/5
+              <span class="spacer-icon"></span>
+              <mat-icon class="star-icon">star</mat-icon>
+              <span class="spacer-icon"></span>
+              de {{ numValoracionesRestaurante }} valoraciones
             </h3>
+
+            <h4 *ngIf="restaurante?.valoracion.length === 0">
+              Nadie ha valorado aún este restaurante
+            </h4>
+            <button mat-flat-button color="primary" (click)="addValoracion()">
+              Añadir valoracion
+            </button>
+            <span class="spacer"></span>
+            <mat-form-field color="accent">
+              <input
+                matInput
+                type="number"
+                placeholder="Valora"
+                formControlName="valoracion"
+                pattern="^[0-5]$"
+                required
+              />
+              <mat-error
+                *ngIf="valoracionGroup.get('valoracion')?.hasError('required')"
+                >Debes escribir tu valoración para añadirla
+              </mat-error>
+            </mat-form-field>
           </mat-card-content>
         </mat-card>
         <mat-card>

@@ -35,7 +35,7 @@ export class LoginRestauranteComponent {
       localStorage.getItem('token-restaurante') &&
       this.authService.validarToken('token-restaurante')
     ) {
-      this.router.navigateByUrl('/dashboard/restaurante');
+      this.router.navigateByUrl('dashboard/restaurante');
     }
   }
 

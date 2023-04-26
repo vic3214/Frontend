@@ -103,14 +103,16 @@ export class AuthService {
       'x-token',
       localStorage.getItem('token') || ''
     );
-    console.log(usuario._id);
-    return this.http
-      .put<any>(`${this.baseUrl}/editar-usuario/${usuario._id}`, usuario, {
+    return this.http.put<any>(
+      `${this.baseUrl}/editar-usuario/${usuario._id}`,
+      usuario,
+      {
         headers,
-      })
-      .subscribe((res) => {
-        console.log(res);
-      });
+      }
+    );
+    /*       .subscribe((res) => {
+        console.log('editar', res);
+      }); */
   }
 
   login(email: string, password: string) {
@@ -119,7 +121,6 @@ export class AuthService {
       tap((resp) => {
         if (resp.ok) {
           localStorage.setItem('token', resp.token!);
-          console.log('resp', resp);
           this._usuario = {
             nombre: resp.nombre!,
             uid: resp.uid!,
@@ -127,7 +128,6 @@ export class AuthService {
             reservas: resp.reservas!,
             favoritos: resp.favoritos!,
           };
-          console.log('login', this._usuario);
         }
       }),
       map((resp) => resp.ok)
@@ -141,8 +141,6 @@ export class AuthService {
       .pipe(
         tap((resp) => {
           if (resp.ok) {
-            console.log('Respuesta existosa');
-            console.log(resp);
             localStorage.setItem('token-restaurante', resp.token!);
             this._restaurante = {
               nombre: resp.nombre!,
@@ -190,18 +188,17 @@ export class AuthService {
     const url = `${this.baseUrl}/auth/renovar-restaurante`;
     const headers = new HttpHeaders().set(
       'x-token',
-      localStorage.getItem('token') || ''
+      localStorage.getItem('token-restaurante') || ''
     );
 
     return this.http.get<AuthResponse>(url, { headers }).pipe(
       map((resp) => {
-        localStorage.setItem('token', resp.token!);
+        localStorage.setItem('token-restaurante', resp.token!);
         this._restaurante = {
           nombre: resp.nombre!,
           uid: resp.uid!,
           email: resp.email!,
         };
-        console.log('restauranteValidarToken', this._restaurante);
         return resp.ok;
       }),
       catchError((err) => of(false))
@@ -225,7 +222,6 @@ export class AuthService {
           reservas: resp.reservas!,
           favoritos: resp.favoritos!,
         };
-        console.log('usuario', this._usuario);
         return resp.ok;
       }),
       catchError((err) => of(false))
@@ -268,7 +264,7 @@ export class AuthService {
       password: inicioSesion.controls['password'].value,
       comentarios: [],
       reservas: [],
-      valoracion: 0,
+      valoracion: [],
     };
 
     return this.http
@@ -281,10 +277,6 @@ export class AuthService {
       'x-token',
       localStorage.getItem('token') || ''
     );
-    console.log('Restaurante enviado: ', restaurante);
-    console.log('Body: ', restaurante);
-    console.log('Headers: ', headers);
-    console.log('idRestaurante', restaurante._id);
     return this.http
       .put<any>(
         `${this.baseUrl}/editar-restaurante/${restaurante._id}`,
@@ -297,7 +289,6 @@ export class AuthService {
   construyeCarta(carta: FormGroup) {
     // Filtrar por tipos y añadirlos al tipo correspondiente en el objeto bodyCarta
     const longitud = carta.controls['platos'].value.length;
-    console.log(longitud);
     let entrantes = [];
     let primerosPlatos = [];
     let segundosPlatos = [];
@@ -328,36 +319,8 @@ export class AuthService {
       postres: postres,
       bebidas: bebidas,
     };
-    console.log(bodyCarta);
     return bodyCarta;
   }
-
-  /*  reservaRestaurante(
-    idRestaurante: string,
-    idUsuario: string,
-    form: FormGroup
-  ) {
-    console.log('Servicio');
-    console.log(idUsuario);
-    console.log(form);
-    const body = {
-      nombre: form.controls['nombre'].value,
-      fecha: form.controls['fecha'].value,
-      hora: form.controls['hora'].value,
-      personas: form.controls['personas'].value,
-    };
-    const headers = new HttpHeaders().set(
-      'x-token',
-      localStorage.getItem('token') || ''
-    );
-    return this.http
-      .put<any>(`${this.baseUrl}/reserva-restaurante/${idRestaurante}`, body, {
-        headers,
-      })
-      .subscribe((res) => {
-        console.log(res);
-      });
-  } */
 
   async obtenerUbicacion(calle: String, ciudad: String, numero: String) {
     const direccion = `${calle} ${numero}, ${ciudad}`;
