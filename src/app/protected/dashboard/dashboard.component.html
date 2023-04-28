@@ -17,39 +17,76 @@
 <hr />
 <div *ngIf="favoritos">
   <h2 class="color">Restaurantes favoritos:</h2>
-  <ul>
-    <li *ngFor="let result of getResult; index as i">
-      <mat-card class="example-card">
-        <mat-card-header>
-          <div mat-card-avatar class="example-header-image"></div>
-          <mat-card-title>{{ result.nombre }}</mat-card-title>
-          <mat-card-subtitle>{{ result.tematica }}</mat-card-subtitle>
-        </mat-card-header>
-        <mat-card-content>
-          <h3><b>Comentarios de los usuarios:</b></h3>
-          <li *ngFor="let comentario of result.comentarios">
-            {{ comentario.usuario }} comentó: {{ comentario.comentario }}
-          </li>
-        </mat-card-content>
-        <mat-card-actions>
-          <button mat-flat-button color="primary" (click)="verRestaurante(i)">
-            Ver Restaurante
-          </button>
-          <span class="spacer-button"></span>
-          <button mat-flat-button color="primary" (click)="eliminarFavorito(i)">
-            Eliminar Favorito
-          </button>
-          <span class="spacer-button"></span>
-        </mat-card-actions>
-      </mat-card>
-    </li>
-  </ul>
+  <div *ngIf="getResult.length > 0; else mensajeVacio">
+    <ul>
+      <li *ngFor="let result of getResult; index as i">
+        <mat-card class="example-card">
+          <mat-card-header>
+            <div mat-card-avatar class="example-header-image"></div>
+            <mat-card-title>{{ result.nombre }}</mat-card-title>
+            <mat-card-subtitle>{{ result.tematica }}</mat-card-subtitle>
+          </mat-card-header>
+          <mat-card-content>
+            <h3><b>Comentarios de los usuarios:</b></h3>
+            <li *ngFor="let comentario of result.comentarios">
+              {{ comentario.usuario }} comentó: {{ comentario.comentario }}
+            </li>
+          </mat-card-content>
+          <mat-card-actions>
+            <button mat-flat-button color="primary" (click)="verRestaurante(i)">
+              Ver Restaurante
+            </button>
+            <span class="spacer-button"></span>
+            <button
+              mat-flat-button
+              color="primary"
+              (click)="eliminarFavorito(i)"
+            >
+              Eliminar Favorito
+            </button>
+            <span class="spacer-button"></span>
+          </mat-card-actions>
+        </mat-card>
+      </li>
+    </ul>
+  </div>
 </div>
 <div *ngIf="reservas">
   <h2 class="color">Reservas efectuadas:</h2>
-  <ul>
-    <li *ngFor="let reserva of usuario.reservas; index as i">
-      {{ i + 1 }}. {{ reserva }}
-    </li>
-  </ul>
+  <div *ngIf="getResultsReservas.length > 0; else mensajeVacio">
+    <ul>
+      <li *ngFor="let result of getResultsReservas; index as i">
+        <mat-card class="example-card">
+          <mat-card-header>
+            <div mat-card-avatar class="example-header-image"></div>
+            <mat-card-title>{{ result.nombre }}</mat-card-title>
+            <mat-card-subtitle>{{ result.tematica }}</mat-card-subtitle>
+          </mat-card-header>
+          <mat-card-content>
+            <h3><b>Comentarios de los usuarios:</b></h3>
+            <li *ngFor="let comentario of result.comentarios">
+              {{ comentario.usuario }} comentó: {{ comentario.comentario }}
+            </li>
+          </mat-card-content>
+          <mat-card-actions>
+            <button mat-flat-button color="primary" (click)="verRestaurante(i)">
+              Ver Restaurante
+            </button>
+            <span class="spacer-button"></span>
+            <button
+              mat-flat-button
+              color="primary"
+              (click)="cancelarReserva(i)"
+            >
+              Cancelar reserva
+            </button>
+            <span class="spacer-button"></span>
+          </mat-card-actions>
+        </mat-card>
+      </li>
+    </ul>
+  </div>
 </div>
+<ng-template #mensajeVacio>
+  <div class="mensaje-vacio">No hay resultados para mostrar.</div>
+</ng-template>

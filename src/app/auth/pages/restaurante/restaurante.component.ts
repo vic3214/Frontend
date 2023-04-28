@@ -23,6 +23,7 @@ export class RestauranteComponent implements OnInit {
   valoracion: number = 0;
   numeroValoraciones: number = 0;
   durationInSeconds = 5;
+  usuario: any;
   constructor(
     private activatedRoute: ActivatedRoute,
     private _snackBar: MatSnackBar,
@@ -47,6 +48,12 @@ export class RestauranteComponent implements OnInit {
       }
 
       console.log('Restaurante cargado:', res.restaurante);
+    });
+    this.authService.obtenerDatosToken().subscribe((res: any) => {
+      this.searchService.getUsuarioPorId(res.uid).subscribe((res: any) => {
+        console.log('resusuario', res.usuario);
+        this.usuario = res.usuario;
+      });
     });
   }
 
@@ -135,16 +142,25 @@ export class RestauranteComponent implements OnInit {
   }
   reservar() {
     if (this.reservasGroup.valid && localStorage.getItem('token') != null) {
-      const reserva = {
+      const reserva: any = {
         usuario: this.reservasGroup.controls['nombre'].value,
         personas: this.reservasGroup.controls['personas'].value,
         hora: this.reservasGroup.controls['hora'].value,
         fecha: this.reservasGroup.controls['fecha'].value,
       };
       this.restaurante.reservas.push(reserva);
-      this.authService
-        .editarRestaurante(this.restaurante)
-        .subscribe((resp) => {});
+      this.authService.editarRestaurante(this.restaurante).subscribe((resp) => {
+        console.log('Res EDitar', resp.restaurante);
+        console.log('Reservas', resp.restaurante.reservas.slice(-1)[0]._id);
+        reserva['uidReserva'] = resp.restaurante.reservas.slice(-1)[0]._id;
+        reserva['uidRestaurante'] = resp.restaurante._id;
+        console.log(reserva);
+        this.usuario.reservas.push(reserva);
+        this.authService.editaUsuario(this.usuario).subscribe((res: any) => {
+          console.log('Respuesta', res);
+        });
+      });
+
       //TODO: Lanzar algo reserva exitosa o reserva fallida
       this.openSnackBar('¡Reserva realizada con éxito!');
     } else {

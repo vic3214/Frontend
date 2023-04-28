@@ -59,3 +59,9 @@
   mat-card-subtitle {
     margin: 0;
   }
+
+  .mensaje-vacio {
+    text-align: center;
+    font-size: 1.2em;
+    color: #777;
+  }

@@ -12,13 +12,14 @@ export class DashboardComponent implements OnInit {
   favoritos: Boolean = false;
   reservas: Boolean = true;
   results: any[] = [];
+  resultsReservas: any[] = [];
   usuario: any = {};
+  indicesOcultar: number[] = [];
 
   ngOnInit(): void {
     this.searchService
       .getUsuarioPorId(this.authService.usuario.uid)
       .subscribe((res: any) => {
-        console.log('resusuario', res.usuario);
         this.usuario = res.usuario;
 
         for (
@@ -32,7 +33,14 @@ export class DashboardComponent implements OnInit {
               this.results.push(res.restaurante);
             });
         }
-        console.log('results', this.results);
+
+        for (let i = 0; i < this.usuario.reservas.length; i++) {
+          this.searchService
+            .getRestaurantePorId(this.usuario.reservas[i].uidRestaurante)
+            .subscribe((res: any) => {
+              this.resultsReservas.push(res.restaurante);
+            });
+        }
       });
   }
 
@@ -50,9 +58,9 @@ export class DashboardComponent implements OnInit {
     return this.results;
   }
 
-  // TODO:
-  // Eliminar restauranes favoritos
-  // Calcelar reserva
+  get getResultsReservas() {
+    return this.resultsReservas;
+  }
 
   logout() {
     this.authService.logOut();
@@ -60,7 +68,6 @@ export class DashboardComponent implements OnInit {
   }
 
   reservasVisibilidad() {
-    console.log(this.authService.usuario);
     this.favoritos = false;
     this.reservas = true;
   }
@@ -71,18 +78,28 @@ export class DashboardComponent implements OnInit {
 
   eliminarFavorito(i: number) {
     this.usuario.listaRestaurantesFavoritos.splice(i, 1);
-    console.log('Usuario', this.usuario);
     this.authService.editaUsuario(this.usuario).subscribe((res) => {
-      console.log('usu', res);
       this.results.splice(i, 1);
-      console.log(i);
-      console.log(this.results);
     });
   }
 
   verRestaurante(i: number) {
     const id = this.results[i]._id;
-    console.log(id);
     this.router.navigateByUrl(`/auth/restaurante/${id}`);
+  }
+
+  cancelarReserva(i: number) {
+    const idReserva = this.usuario.reservas[i].uidReserva;
+    this.usuario.reservas.splice(i, 1);
+    const indiceReservaEliminar = this.resultsReservas[i].reservas.findIndex(
+      (r: any) => r._id === idReserva
+    );
+    this.resultsReservas[i].reservas.splice(indiceReservaEliminar, 1);
+    this.authService.editaUsuario(this.usuario).subscribe((res: any) => {});
+    this.authService
+      .editarRestaurante(this.resultsReservas[i])
+      .subscribe((res: any) => {
+        this.resultsReservas.splice(i, 1);
+      });
   }
 }

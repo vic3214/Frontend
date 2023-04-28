@@ -103,6 +103,7 @@ export class AuthService {
       'x-token',
       localStorage.getItem('token') || ''
     );
+    console.log('Enviar usuario', usuario);
     return this.http.put<any>(
       `${this.baseUrl}/editar-usuario/${usuario._id}`,
       usuario,
@@ -160,6 +161,15 @@ export class AuthService {
   logOutRestaurante() {
     localStorage.removeItem('token-restaurante');
     this._auth = undefined;
+  }
+  obtenerDatosRestauranteToken() {
+    const url = `${this.baseUrl}/auth/obtener-datos-restaurante`;
+    const headers = new HttpHeaders().set(
+      'x-token',
+      localStorage.getItem('token-restaurante') || ''
+    );
+
+    return this.http.get<AuthResponse>(url, { headers });
   }
 
   obtenerDatosToken(): any {
@@ -277,13 +287,11 @@ export class AuthService {
       'x-token',
       localStorage.getItem('token') || ''
     );
-    return this.http
-      .put<any>(
-        `${this.baseUrl}/editar-restaurante/${restaurante._id}`,
-        restaurante,
-        { headers }
-      )
-      .pipe(map((resp) => resp.ok));
+    return this.http.put<any>(
+      `${this.baseUrl}/editar-restaurante/${restaurante._id}`,
+      restaurante,
+      { headers }
+    );
   }
   // Array de Arrays con valores [nombrePlato,precio,tipo]
   construyeCarta(carta: FormGroup) {

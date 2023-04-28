@@ -1,5 +1,5 @@
 <div class="opciones">
-  <h1 class="color">¡Bienvenido al restaurante {{ restaurante.nombre }}!</h1>
+  <h1 class="color">¡Bienvenido {{ getRestaurante.nombre }}!</h1>
 
   <button mat-fab extended color="warn" (click)="reservasVisibilidad()">
     <mat-icon>calendar_today</mat-icon>
@@ -7,7 +7,7 @@
   </button>
   <button mat-fab extended color="warn" (click)="editarDatos()">
     <mat-icon>edit</mat-icon>
-    Editar datos
+    Editar Datos
   </button>
   <button mat-fab extended color="warn" (click)="logout()">
     <mat-icon>exit_to_app</mat-icon>
@@ -15,14 +15,182 @@
   </button>
 </div>
 <hr />
-<div *ngIf="editar">
-  <h2 class="color">Editar campos:</h2>
-</div>
 <div *ngIf="reservas">
-  <h2 class="color">Reservas de los clientes:</h2>
-  <!--   <ul>
-    <li *ngFor="let reserva of restaurante.; index as i">
-      {{ i + 1 }}. {{ reserva }}
-    </li>
-  </ul> -->
+  <h2 class="color">Restaurantes favoritos:</h2>
+  <div *ngIf="reservasRestaurante.length > 0; else mensajeVacio">
+    <ul>
+      <li *ngFor="let result of reservasRestaurante; index as i">
+        <mat-card class="example-card">
+          <mat-card-header class="header">
+            <mat-card-title>Reserva de {{ result.usuario }}</mat-card-title>
+            <mat-card-subtitle><h3>Datos de la reserva:</h3></mat-card-subtitle>
+          </mat-card-header>
+          <mat-card-content class="content">
+            <h4>Día de la reserva: {{ result.fecha | formateoFechas }}</h4>
+            <h4>Hora de la reserva: {{ result.hora }}</h4>
+            <h4>Comensales: {{ result.personas }}</h4>
+          </mat-card-content>
+        </mat-card>
+      </li>
+    </ul>
+  </div>
 </div>
+<div *ngIf="editar">
+  <mat-tab-group>
+    <mat-tab label="Carta y temática">
+      <form [formGroup]="carta">
+        <ng-template matStepLabel>Añade tus platos</ng-template>
+        <div formGroupName="platos">
+          <div
+            *ngFor="let plato of getPlatos.controls; let i = index"
+            [formGroupName]="i"
+          >
+            <mat-form-field>
+              <input
+                autocomplete="off"
+                matInput
+                placeholder="Nombre"
+                formControlName="nombrePlato"
+                required
+              />
+            </mat-form-field>
+            <mat-form-field>
+              <input
+                autocomplete="off"
+                matInput
+                placeholder="Precio"
+                formControlName="precio"
+                type="number"
+                step="0.01"
+                pattern="\d+(\.\d{1,2})?"
+                required
+              />
+            </mat-form-field>
+            <mat-form-field>
+              <mat-label>Selecciona una opción</mat-label>
+              <mat-select formControlName="tipo" required>
+                <mat-option *ngFor="let option of options" [value]="option">{{
+                  option
+                }}</mat-option>
+              </mat-select>
+            </mat-form-field>
+            <button
+              mat-raised-button
+              color="primary"
+              (click)="eliminarPlato(i)"
+              class="boton_derecho"
+            >
+              Eliminar Plato
+            </button>
+          </div>
+        </div>
+        <button
+          mat-raised-button
+          color="primary"
+          (click)="agregarPlato()"
+          class="boton_derecho"
+        >
+          Agregar Plato
+        </button>
+      </form></mat-tab
+    >
+    <mat-tab label="Ubicación">
+      <form [formGroup]="ubicacion">
+        <mat-form-field>
+          <input
+            autocomplete="off"
+            matInput
+            placeholder="Ciudad"
+            formControlName="ciudad"
+            required
+          />
+        </mat-form-field>
+        <mat-form-field>
+          <input
+            autocomplete="off"
+            matInput
+            placeholder="Calle"
+            formControlName="calle"
+            required
+          />
+        </mat-form-field>
+        <mat-form-field>
+          <input
+            autocomplete="off"
+            matInput
+            placeholder="Número"
+            formControlName="numero"
+            required
+          />
+        </mat-form-field>
+      </form>
+    </mat-tab>
+    <mat-tab label="Horario" [formGroup]="horario">
+      <div formArrayName="horario" class="horarioItems">
+        <div
+          *ngFor="let horario of horarios.controls; let i = index"
+          [formGroupName]="i"
+          class="ngForItems"
+        >
+          <mat-form-field>
+            <mat-label>Días de apertura</mat-label>
+            <mat-select formControlName="dias" multiple>
+              <mat-option *ngFor="let dia of dias" [value]="dia">{{
+                dia
+              }}</mat-option>
+            </mat-select>
+          </mat-form-field>
+
+          <div formArrayName="horas" class="horaItems">
+            <mat-form-field>
+              <mat-label>Hora de apertura</mat-label>
+              <input matInput type="time" [formControlName]="0" />
+            </mat-form-field>
+
+            <mat-form-field>
+              <mat-label>Hora de cierre</mat-label>
+              <input matInput type="time" [formControlName]="1" />
+            </mat-form-field>
+          </div>
+        </div>
+      </div>
+      <button mat-raised-button color="primary" (click)="agregarHorario()">
+        Agregar horario
+      </button>
+      <div></div
+    ></mat-tab>
+    <mat-tab label="Inicio de sesión">
+      <form [formGroup]="inicioSesion">
+        <mat-form-field>
+          <input
+            autocomplete="off"
+            matInput
+            placeholder="Nombre"
+            formControlName="nombre"
+            required
+          />
+        </mat-form-field>
+        <mat-form-field>
+          <input
+            autocomplete="off"
+            matInput
+            placeholder="ejemplo@gmail.com"
+            formControlName="correo"
+            required
+          />
+        </mat-form-field>
+        <mat-form-field>
+          <input
+            autocomplete="off"
+            matInput
+            placeholder="Contraseña"
+            formControlName="password"
+            required
+          />
+        </mat-form-field></form
+    ></mat-tab>
+  </mat-tab-group>
+</div>
+<ng-template #mensajeVacio>
+  <div class="mensaje-vacio">No hay resultados para mostrar.</div>
+</ng-template>
