@@ -111,9 +111,6 @@ export class AuthService {
         headers,
       }
     );
-    /*       .subscribe((res) => {
-        console.log('editar', res);
-      }); */
   }
 
   login(email: string, password: string) {
@@ -258,8 +255,14 @@ export class AuthService {
     const ciudad = datosRestaurante.controls['ciudad'].value;
     const calle = datosRestaurante.controls['calle'].value;
     const numero = datosRestaurante.controls['numero'].value;
+    const codigoPostal = datosRestaurante.controls['codigoPostal'].value;
 
-    const ubicacion = await this.obtenerUbicacion(ciudad, calle, numero);
+    const ubicacion = await this.obtenerUbicacion(
+      calle,
+      ciudad,
+      numero,
+      codigoPostal
+    );
 
     let body: any = {
       nombrePropietario: datosPersonales.controls['nombrePropietario'].value,
@@ -329,15 +332,43 @@ export class AuthService {
     };
     return bodyCarta;
   }
-
-  async obtenerUbicacion(calle: String, ciudad: String, numero: String) {
-    const direccion = `${calle} ${numero}, ${ciudad}`;
-    const url = `https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(
-      direccion
-    )}&format=json`;
+  /*   async buscarCiudadDesdeUbicacion(latitud: string, longitud: string) {
+    const url = `https://nominatim.openstreetmap.org/reverse?format=json&lat=${latitud}&lon=${longitud}`;
 
     const response = await fetch(url);
     const data = await response.json();
+
+    if (data.address) {
+      return {
+        ciudad: data.address.city || data.address.town || data.address.village,
+        calle: data.address.road,
+        numero: data.address.house_number,
+        nombre: data.display_name,
+      };
+    } else {
+      return {
+        ciudad: '',
+        calle: '',
+        numero: '',
+        nombre: '',
+      };
+    }
+  } */
+  async obtenerUbicacion(
+    calle: String,
+    ciudad: String,
+    numero: String,
+    codigoPostal: String
+  ) {
+    const direccion = `${calle} ${numero}, ${ciudad}`;
+    const url = `https://nominatim.openstreetmap.org/search?street=${encodeURIComponent(
+      `${numero} ${calle}`
+    )}&city=${ciudad}&country=España&postalcode=${codigoPostal}&format=json`;
+
+    const response = await fetch(url);
+    const data = await response.json();
+
+    console.log('datos', data);
 
     if (data.length > 0) {
       const location = data[0];
@@ -347,7 +378,7 @@ export class AuthService {
       return [latitud, longitud];
     } else {
       throw new Error(
-        `No se encontró la ubicación para la dirección: ${direccion}`
+        `No se encontró la ubicación para la dirección: ${direccion} con código postal ${codigoPostal}`
       );
     }
   }

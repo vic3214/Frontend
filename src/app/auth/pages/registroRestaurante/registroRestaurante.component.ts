@@ -49,6 +49,7 @@ export class RegistroRestauranteComponent {
     ciudad: [],
     calle: [],
     numero: [],
+    codigoPostal: [],
     fotografia: [''],
     tematica: [],
     horario: this._formBuilder.array([

@@ -1,5 +1,5 @@
-.color{
-  color: white;
+*{
+  color:white;
 }
 
 .opciones {
@@ -72,3 +72,61 @@ mat-card-subtitle {
 .content{
   margin-left: 2rem;
 }
+
+.formCarta{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.fieldCarta {
+  width: 80%;
+  margin-bottom: 20px;
+}
+
+.formInicioSesion {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 80%;
+  max-width: 400px;
+  margin: 0 auto;
+  margin-top: 7%;
+}
+.fieldInicioSesion {
+  width: 100%;
+  margin-bottom: 20px;
+}
+
+.horarioItems {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 80%;
+  max-width: 400px;
+  margin: 0 auto;
+}
+.ngForItems {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+}
+.horaItems {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.margen{
+  margin-bottom: 10px;
+}
+
+.button-row {
+  display: flex;
+  justify-content: space-between;
+  width: 80%;
+  max-width: 400px;
+  margin: 0 auto;
+}
+
