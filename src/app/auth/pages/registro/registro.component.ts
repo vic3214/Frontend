@@ -51,6 +51,7 @@ export class RegistroComponent {
     return this.inicioSesion.get('email');
   }
 
+  // TODO: COmprobar que ambas contraseñas sean iguales
   async creaUsuario() {
     if (this.datosPersonales.valid && this.inicioSesion.valid) {
       (

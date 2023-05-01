@@ -102,4 +102,6 @@ export class DashboardComponent implements OnInit {
         this.resultsReservas.splice(i, 1);
       });
   }
+
+  eliminaCuenta() {}
 }

@@ -1,32 +1,42 @@
 *{
   color:white;
 }
-
-.opciones {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-
-
-.opciones button {
-  margin-right: 50px;
-  width: 150px;
-  margin-top: 10px;
-} 
-
-@media (min-width: 600px) {
-  .opciones {
-    flex-direction: row;
-    justify-content: space-between;
+.toolbar{
+  background-color: #93A3B1;
   }
-
-  .opciones button {
-    margin-right: 50px;
-    width: 150px;
-  } 
+.toolbar_spacer {
+  flex: 1 1 auto;
 }
 
+.toolbar_button{
+  color:black;
+  width: 10%;
+  background-color: transparent;
+  box-shadow: none;
+  border-radius: 50%;
+}
+mat-icon{
+  color: black;
+}
+.toolbar_button:hover{
+  background-color: #2F4858;
+}
+@media (max-width: 600px) {
+  .toolbar {
+    flex-direction: column;
+    height: 230px;
+  }
+  .toolbar_button {
+    width: 100%;
+    margin: 5px 0;
+  }
+  .toolbar_spacer {
+    display: none;
+  }
+}
+.toolbar_spacer {
+  flex: 1 1 auto;
+}
 ul {
   display: flex;
   flex-wrap: wrap;
@@ -46,11 +56,6 @@ li {
   box-shadow: 0px 3px 15px rgba(0,0,0,0.2);
 }
 
-/*   .example-header-image {
-  background-image: url('tu-imagen-aqui.jpg');
-  background-size: cover;
-}
- */
 .spacer-button {
   margin-left: 5px;
   flex: 1 1 auto;
@@ -77,11 +82,7 @@ mat-card-subtitle {
   display: flex;
   flex-direction: column;
   align-items: center;
-}
-
-.fieldCarta {
-  width: 80%;
-  margin-bottom: 20px;
+  margin-top: 20px;
 }
 
 .formInicioSesion {
@@ -98,6 +99,10 @@ mat-card-subtitle {
   margin-bottom: 20px;
 }
 
+.fieldCarta{
+  margin-right: 10px;
+}
+
 .horarioItems {
   display: flex;
   flex-direction: column;
@@ -105,6 +110,7 @@ mat-card-subtitle {
   width: 80%;
   max-width: 400px;
   margin: 0 auto;
+  margin-top: 20px;
 }
 .ngForItems {
   display: flex;

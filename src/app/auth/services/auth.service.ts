@@ -288,7 +288,7 @@ export class AuthService {
   editarRestaurante(restaurante: any) {
     const headers = new HttpHeaders().set(
       'x-token',
-      localStorage.getItem('token') || ''
+      localStorage.getItem('token-restaurante') || ''
     );
     return this.http.put<any>(
       `${this.baseUrl}/editar-restaurante/${restaurante._id}`,
@@ -300,60 +300,32 @@ export class AuthService {
   construyeCarta(carta: FormGroup) {
     // Filtrar por tipos y añadirlos al tipo correspondiente en el objeto bodyCarta
     const longitud = carta.controls['platos'].value.length;
-    let entrantes = [];
-    let primerosPlatos = [];
-    let segundosPlatos = [];
-    let postres = [];
-    let bebidas = [];
+    const bodyCarta: any = {
+      entrantes: [],
+      primerosPlatos: [],
+      segundosPlatos: [],
+      postres: [],
+      bebidas: [],
+    };
+
+    const tipoMapeo: any = {
+      Entrante: 'entrantes',
+      Primero: 'primerosPlatos',
+      Segundo: 'segundosPlatos',
+      Postre: 'postres',
+      Bebida: 'bebidas',
+    };
+
     for (let index = 0; index < longitud; index++) {
-      if (carta.controls['platos'].value[index].tipo === 'Entrante') {
-        entrantes.push(carta.controls['platos'].value[index]);
-      }
-      if (carta.controls['platos'].value[index].tipo === 'Primero') {
-        primerosPlatos.push(carta.controls['platos'].value[index]);
-      }
-      if (carta.controls['platos'].value[index].tipo === 'Segundo') {
-        segundosPlatos.push(carta.controls['platos'].value[index]);
-      }
-      if (carta.controls['platos'].value[index].tipo === 'Postre') {
-        postres.push(carta.controls['platos'].value[index]);
-      }
-      if (carta.controls['platos'].value[index].tipo === 'Bebida') {
-        bebidas.push(carta.controls['platos'].value[index]);
+      const plato = carta.controls['platos'].value[index];
+      const tipo = tipoMapeo[plato.tipo];
+      if (tipo && bodyCarta.hasOwnProperty(tipo)) {
+        bodyCarta[tipo].push(plato);
       }
     }
-
-    const bodyCarta = {
-      entrantes: entrantes,
-      primerosPlatos: primerosPlatos,
-      segundosPlatos: segundosPlatos,
-      postres: postres,
-      bebidas: bebidas,
-    };
     return bodyCarta;
   }
-  /*   async buscarCiudadDesdeUbicacion(latitud: string, longitud: string) {
-    const url = `https://nominatim.openstreetmap.org/reverse?format=json&lat=${latitud}&lon=${longitud}`;
 
-    const response = await fetch(url);
-    const data = await response.json();
-
-    if (data.address) {
-      return {
-        ciudad: data.address.city || data.address.town || data.address.village,
-        calle: data.address.road,
-        numero: data.address.house_number,
-        nombre: data.display_name,
-      };
-    } else {
-      return {
-        ciudad: '',
-        calle: '',
-        numero: '',
-        nombre: '',
-      };
-    }
-  } */
   async obtenerUbicacion(
     calle: String,
     ciudad: String,
@@ -381,5 +353,26 @@ export class AuthService {
         `No se encontró la ubicación para la dirección: ${direccion} con código postal ${codigoPostal}`
       );
     }
+  }
+
+  cambiaPasswordRestaurante(restaurante: any) {
+    const headers = new HttpHeaders().set(
+      'x-token',
+      localStorage.getItem('token-restaurante') || ''
+    );
+    return this.http
+      .put<any>(
+        `${this.baseUrl}/editar-password-restaurante/${restaurante._id}`,
+        restaurante,
+        { headers }
+      )
+      .pipe(
+        catchError((error) => {
+          return of({
+            ok: false,
+            msg: 'Error al conectar con la base de datos para actualizar los datos',
+          });
+        })
+      );
   }
 }

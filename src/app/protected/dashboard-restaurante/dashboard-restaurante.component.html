@@ -1,22 +1,36 @@
-<div class="opciones">
-  <h1>¡Bienvenido {{ getRestaurante.nombre }}!</h1>
-
-  <button mat-fab extended color="warn" (click)="reservasVisibilidad()">
+<mat-toolbar class="toolbar">
+  <span>
+    <h1>¡Bienvenido {{ getRestaurante.nombre }}!</h1></span
+  >
+  <span class="toolbar_spacer"></span>
+  <button
+    mat-fab
+    extended
+    class="toolbar_button"
+    (click)="reservasVisibilidad()"
+  >
     <mat-icon>calendar_today</mat-icon>
     Reservas
   </button>
-  <button mat-fab extended color="warn" (click)="editarDatos()">
+  <span class="toolbar_spacer"></span>
+  <button mat-fab extended class="toolbar_button" (click)="editarDatos()">
     <mat-icon>edit</mat-icon>
     Editar Datos
   </button>
-  <button mat-fab extended color="warn" (click)="logout()">
+  <span class="toolbar_spacer"></span>
+  <button mat-fab extended class="toolbar_button" (click)="logout()">
     <mat-icon>exit_to_app</mat-icon>
     Cerrar Sesión
   </button>
-</div>
-<hr />
+  <span class="toolbar_spacer"></span>
+  <button mat-fab extended class="toolbar_button" (click)="eliminaCuenta()">
+    <mat-icon>delete</mat-icon>
+    Eliminar Cuenta
+  </button>
+</mat-toolbar>
+
 <div *ngIf="reservas">
-  <h2>Restaurantes favoritos:</h2>
+  <h2>Reservas de los usuarios:</h2>
   <div *ngIf="reservasRestaurante.length > 0; else mensajeVacio">
     <ul>
       <li *ngFor="let result of reservasRestaurante; index as i">
@@ -55,7 +69,7 @@
             *ngFor="let plato of getPlatos.controls; let i = index"
             [formGroupName]="i"
           >
-            <h3>Plato {{ i }}</h3>
+            <h3>Plato {{ i + 1 }}</h3>
             <mat-form-field class="fieldCarta">
               <input
                 autocomplete="off"
@@ -95,14 +109,24 @@
             </button>
           </div>
         </div>
-        <button
-          mat-raised-button
-          color="primary"
-          (click)="agregarPlato()"
-          class="boton_derecho"
-        >
-          Agregar Plato
-        </button>
+        <div class="button-row">
+          <button
+            mat-raised-button
+            color="primary"
+            (click)="agregarPlato()"
+            class="boton_derecho"
+          >
+            Agregar Plato
+          </button>
+          <button
+            mat-raised-button
+            color="primary"
+            (click)="guardarCarta()"
+            class="boton_derecho"
+          >
+            Guardar Carta
+          </button>
+        </div>
       </form></mat-tab
     >
     <mat-tab label="Horario" [formGroup]="horario">
@@ -112,7 +136,7 @@
           [formGroupName]="i"
           class="ngForItems"
         >
-          <h3>Horario {{ i }}</h3>
+          <h3>Horario {{ i + 1 }}</h3>
           <mat-form-field>
             <mat-label>Días de apertura</mat-label>
             <mat-select formControlName="dias" multiple>
@@ -157,31 +181,69 @@
     <mat-tab label="Inicio de sesión">
       <form [formGroup]="inicioSesion" class="formInicioSesion">
         <mat-form-field class="fieldInicioSesion">
-          <mat-label>Correo</mat-label>
           <input
-            autocomplete="off"
             matInput
-            placeholder="ejemplo@gmail.com"
-            formControlName="correo"
+            placeholder="tucorreo@dominio.com"
+            formControlName="email"
+            pattern="[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}"
             required
           />
+          <mat-error *ngIf="email!.invalid && inicioSesion.touched"
+            >El correo debe estar bien formado
+          </mat-error>
         </mat-form-field>
-        <mat-form-field class="fieldInicioSesion">
-          <mat-label>Contraseña</mat-label>
+        <mat-form-field appearance="fill" class="fieldInicioSesion">
+          <mat-label>Introduce tu contraseña</mat-label>
           <input
-            autocomplete="off"
-            matInput
-            placeholder="Contraseña"
+            autocomplete="new-password"
+            type="password"
             formControlName="password"
+            matInput
+            [type]="hide ? 'password' : 'text'"
             required
           />
+          <mat-error *ngIf="password!.invalid && inicioSesion.touched"
+            >La contraseña debe tener 6 caracteres mínimo.
+          </mat-error>
+          <button
+            type="button"
+            mat-icon-button
+            matSuffix
+            (click)="hide = !hide"
+            [attr.aria-label]="'Hide password'"
+            [attr.aria-pressed]="hide"
+          >
+            <mat-icon>{{ hide ? "visibility_off" : "visibility" }}</mat-icon>
+          </button>
+        </mat-form-field>
+        <mat-form-field appearance="fill" class="fieldInicioSesion">
+          <mat-label>Repite tu contraseña</mat-label>
+          <input
+            type="password"
+            formControlName="passwordRepetida"
+            matInput
+            [type]="hideRepetida ? 'password' : 'text'"
+            required
+          />
+          <button
+            type="button"
+            mat-icon-button
+            matSuffix
+            (click)="hideRepetida = !hideRepetida"
+            [attr.aria-label]="'Hide password'"
+            [attr.aria-pressed]="hideRepetida"
+          >
+            <mat-icon>{{
+              hideRepetida ? "visibility_off" : "visibility"
+            }}</mat-icon>
+          </button>
         </mat-form-field>
         <button
           mat-raised-button
           color="primary"
           (click)="cambiarInicioSesion()"
         >
-          Cambiar inicio de sesión
+          Cambiar Inicio de Sesión
         </button>
       </form></mat-tab
     >

@@ -7,7 +7,6 @@ import { environment } from 'src/environments/environment';
 })
 export class SearchService {
   private baseUrl: string = environment.baseUrl;
-  // http://localhost:4000/api/restaurantes
 
   constructor(private http: HttpClient) {}
 

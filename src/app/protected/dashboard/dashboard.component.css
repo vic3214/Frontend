@@ -1,67 +1,92 @@
-  .color{
-    color: white;
-  }
+.toolbar{
+background-color: #93A3B1;
+}
 
-  .opciones {
-    display: flex;
+.toolbar_button{
+  width: 10%;
+  background-color: transparent;
+  box-shadow: none;
+  border-radius: 50%;
+}
+.toolbar_button:hover{
+  background-color: #2F4858;
+}
+
+@media (max-width: 600px) {
+  .toolbar {
     flex-direction: column;
-    align-items: center;
+    height: 230px;
+  }
+  .toolbar_button {
+    width: 100%;
+    margin: 5px 0;
+  }
+  .toolbar_spacer {
+    display: none;
+  }
+}
+
+.color{
+  color: white;
+}
+
+.opciones {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.toolbar_spacer {
+  flex: 1 1 auto;
+}
+
+.opciones button {
+  margin-right: 50px;
+  width: 150px;
+  margin-top: 10px;
+} 
+
+@media (min-width: 600px) {
+  .opciones {
+    flex-direction: row;
+    justify-content: space-between;
   }
 
-  
   .opciones button {
     margin-right: 50px;
     width: 150px;
-    margin-top: 10px;
   } 
-  
-  @media (min-width: 600px) {
-    .opciones {
-      flex-direction: row;
-      justify-content: space-between;
-    }
+}
 
-    .opciones button {
-      margin-right: 50px;
-      width: 150px;
-    } 
-  }
+ul {
+  display: flex;
+  flex-wrap: wrap;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
 
-  ul {
-    display: flex;
-    flex-wrap: wrap;
-    list-style: none;
-    padding: 0;
-    margin: 0;
-  }
-  
-  li {
-    flex-basis: calc(33.33% - 20px);
-    margin: 10px;
-  }
-  
-  .example-card {
-    max-width: 300px;
-    box-shadow: 0px 3px 15px rgba(0,0,0,0.2);
-  }
-  
-/*   .example-header-image {
-    background-image: url('tu-imagen-aqui.jpg');
-    background-size: cover;
-  }
-   */
-  .spacer-button {
-    margin-left: 5px;
-    flex: 1 1 auto;
-  }
-  
-  mat-card-title,
-  mat-card-subtitle {
-    margin: 0;
-  }
+li {
+  flex-basis: calc(33.33% - 20px);
+  margin: 10px;
+}
 
-  .mensaje-vacio {
-    text-align: center;
-    font-size: 1.2em;
-    color: #777;
-  }
+.example-card {
+  max-width: 300px;
+  box-shadow: 0px 3px 15px rgba(0,0,0,0.2);
+}
+
+.spacer-button {
+  margin-left: 5px;
+  flex: 1 1 auto;
+}
+
+mat-card-title,
+mat-card-subtitle {
+  margin: 0;
+}
+
+.mensaje-vacio {
+  text-align: center;
+  font-size: 1.2em;
+  color: #777;
+}

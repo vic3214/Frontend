@@ -67,7 +67,6 @@ export class HomeComponent implements OnInit {
     if (!this.mapInitialized) {
       this.iniciarMapa();
     } else {
-      //TODO: Reinicializar el mapa
       this.map?.remove();
       this.map = undefined;
       this.iniciarMapa();
@@ -89,6 +88,7 @@ export class HomeComponent implements OnInit {
             attribution:
               'Map data © <a href="https://openstreetmap.org">OpenStreetMap</a> contributors',
             maxZoom: 18,
+            minZoom: 5,
           }
         ).addTo(this.map);
         this.mapInitialized = true;

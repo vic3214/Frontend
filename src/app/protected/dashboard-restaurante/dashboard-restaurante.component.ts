@@ -1,7 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup } from '@angular/forms';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
 import { AuthService } from 'src/app/auth/services/auth.service';
+import { ComentarioAnnotatedComponent } from 'src/app/components/home/home.component';
 
 @Component({
   selector: 'app-dashboard-restaurante',
@@ -48,8 +50,10 @@ export class DashboardRestauranteComponent implements OnInit {
     ]),
   });
 
+  hide: boolean = true;
+  hideRepetida: boolean = true;
+
   ngOnInit(): void {
-    console.log('horariosIni', this.horario);
     if (
       localStorage.getItem('token-restaurante') &&
       this.authService.validarRestauranteToken()
@@ -57,8 +61,6 @@ export class DashboardRestauranteComponent implements OnInit {
       this.authService.obtenerDatosRestauranteToken().subscribe((res: any) => {
         this.restaurante = res.restaurante;
         this.reservasRestaurante = res.restaurante.reservas;
-        console.log('reservas', this.reservasRestaurante);
-        console.log('restaurante', this.restaurante);
 
         let horarios: any[] = [];
 
@@ -76,79 +78,26 @@ export class DashboardRestauranteComponent implements OnInit {
         this.horario = this._formBuilder.group({
           horario: this._formBuilder.array(horarios),
         });
-        console.log('horario', this.horario);
 
         let platos: any[] = [];
 
-        for (let i = 0; i < this.restaurante.carta.bebidas.length; i++) {
-          const formCarta = this._formBuilder.group({
-            nombrePlato: this._formBuilder.control(
-              this.restaurante.carta.bebidas[i].nombrePlato
-            ),
-            precio: this._formBuilder.control(
-              this.restaurante.carta.bebidas[i].precio
-            ),
-            tipo: this._formBuilder.control(
-              this.restaurante.carta.bebidas[i].tipo
-            ),
-          });
-          platos.push(formCarta);
-        }
-        for (let i = 0; i < this.restaurante.carta.entrantes.length; i++) {
-          const formCarta = this._formBuilder.group({
-            nombrePlato: this._formBuilder.control(
-              this.restaurante.carta.entrantes[i].nombrePlato
-            ),
-            precio: this._formBuilder.control(
-              this.restaurante.carta.entrantes[i].precio
-            ),
-            tipo: this._formBuilder.control(
-              this.restaurante.carta.entrantes[i].tipo
-            ),
-          });
-          platos.push(formCarta);
-        }
-        for (let i = 0; i < this.restaurante.carta.primerosPlatos.length; i++) {
-          const formCarta = this._formBuilder.group({
-            nombrePlato: this._formBuilder.control(
-              this.restaurante.carta.primerosPlatos[i].nombrePlato
-            ),
-            precio: this._formBuilder.control(
-              this.restaurante.carta.primerosPlatos[i].precio
-            ),
-            tipo: this._formBuilder.control(
-              this.restaurante.carta.primerosPlatos[i].tipo
-            ),
-          });
-          platos.push(formCarta);
-        }
-        for (let i = 0; i < this.restaurante.carta.segundosPlatos.length; i++) {
-          const formCarta = this._formBuilder.group({
-            nombrePlato: this._formBuilder.control(
-              this.restaurante.carta.segundosPlatos[i].nombrePlato
-            ),
-            precio: this._formBuilder.control(
-              this.restaurante.carta.segundosPlatos[i].precio
-            ),
-            tipo: this._formBuilder.control(
-              this.restaurante.carta.segundosPlatos[i].tipo
-            ),
-          });
-          platos.push(formCarta);
-        }
-        for (let i = 0; i < this.restaurante.carta.postres.length; i++) {
-          const formCarta = this._formBuilder.group({
-            nombrePlato: this._formBuilder.control(
-              this.restaurante.carta.postres[i].nombrePlato
-            ),
-            precio: this._formBuilder.control(
-              this.restaurante.carta.postres[i].precio
-            ),
-            tipo: this._formBuilder.control(
-              this.restaurante.carta.postres[i].tipo
-            ),
-          });
-          platos.push(formCarta);
+        const categorias = [
+          this.restaurante.carta.bebidas,
+          this.restaurante.carta.entrantes,
+          this.restaurante.carta.primerosPlatos,
+          this.restaurante.carta.segundosPlatos,
+          this.restaurante.carta.postres,
+        ];
+
+        for (let categoria of categorias) {
+          for (let i = 0; i < categoria.length; i++) {
+            const formCarta = this._formBuilder.group({
+              nombrePlato: this._formBuilder.control(categoria[i].nombrePlato),
+              precio: this._formBuilder.control(categoria[i].precio),
+              tipo: this._formBuilder.control(categoria[i].tipo),
+            });
+            platos.push(formCarta);
+          }
         }
 
         this.carta = this._formBuilder.group({
@@ -167,6 +116,14 @@ export class DashboardRestauranteComponent implements OnInit {
 
   get horarios(): FormArray {
     return this.horario.get('horario') as FormArray;
+  }
+
+  get email() {
+    return this.inicioSesion.get('email');
+  }
+
+  get password() {
+    return this.inicioSesion.get('password');
   }
 
   agregarHorario() {
@@ -194,9 +151,9 @@ export class DashboardRestauranteComponent implements OnInit {
   }
 
   inicioSesion: FormGroup = this._formBuilder.group({
-    nombre: [],
-    correo: [],
-    password: [],
+    email: [''],
+    password: [''],
+    passwordRepetida: [''],
   });
 
   get getRestaurante() {
@@ -206,7 +163,8 @@ export class DashboardRestauranteComponent implements OnInit {
   constructor(
     private router: Router,
     private authService: AuthService,
-    private _formBuilder: FormBuilder
+    private _formBuilder: FormBuilder,
+    private _snackBar: MatSnackBar
   ) {}
 
   logout() {
@@ -228,7 +186,96 @@ export class DashboardRestauranteComponent implements OnInit {
     control.removeAt(index);
   }
 
-  cambiarInicioSesion() {}
+  cambiarInicioSesion() {
+    if (
+      this.inicioSesion.valid &&
+      this.inicioSesion.controls['password'].value ===
+        this.inicioSesion.controls['passwordRepetida'].value
+    ) {
+      console.log('Cambio');
+      console.log(this.restaurante);
+      this.restaurante.email = this.inicioSesion.controls['email'].value;
+      this.restaurante.password = this.inicioSesion.controls['password'].value;
+      console.log(this.restaurante);
+      this.authService
+        .cambiaPasswordRestaurante(this.restaurante)
+        .subscribe((resp) => {
+          console.log('respuesta', resp);
+          if (resp.ok) {
+            this._snackBar.openFromComponent(ComentarioAnnotatedComponent, {
+              duration: 3 * 500,
+              panelClass: ['snackBar'],
+              data: {
+                mensaje: 'Datos editados correctamente',
+              },
+            });
+          } else {
+            this._snackBar.openFromComponent(ComentarioAnnotatedComponent, {
+              duration: 3 * 500,
+              panelClass: ['snackBar'],
+              data: {
+                mensaje: resp.msg,
+              },
+            });
+          }
+        });
+    } else if (
+      this.inicioSesion.controls['password'].value !==
+      this.inicioSesion.controls['passwordRepetida'].value
+    ) {
+      this._snackBar.openFromComponent(ComentarioAnnotatedComponent, {
+        duration: 3 * 500,
+        panelClass: ['snackBar'],
+        data: {
+          mensaje: 'Las contraseñas no son iguales',
+        },
+      });
+    } else {
+      this._snackBar.openFromComponent(ComentarioAnnotatedComponent, {
+        duration: 3 * 500,
+        panelClass: ['snackBar'],
+        data: {
+          mensaje: '¡Debes rellenar el formulario correctamente!',
+        },
+      });
+    }
+  }
 
-  editarHorario() {}
+  editarHorario() {
+    if (this.horario.valid) {
+      console.log(this.restaurante);
+      this.restaurante.horario = this.horario.controls['horario'].value;
+      this.authService
+        .editarRestaurante(this.restaurante)
+        .subscribe((resp) => {});
+    } else {
+      this._snackBar.openFromComponent(ComentarioAnnotatedComponent, {
+        duration: 3 * 500,
+        panelClass: ['snackBar'],
+        data: {
+          mensaje: '¡Debes rellenar el formulario correctamente!',
+        },
+      });
+    }
+  }
+
+  guardarCarta() {
+    if (this.carta.valid) {
+      const bodyCarta = this.authService.construyeCarta(this.carta);
+      this.restaurante.carta = bodyCarta;
+      this.authService
+        .editarRestaurante(this.restaurante)
+        .subscribe((resp) => {});
+    } else {
+      this._snackBar.openFromComponent(ComentarioAnnotatedComponent, {
+        duration: 3 * 500,
+        panelClass: ['snackBar'],
+        data: {
+          mensaje: '¡Debes rellenar el formulario correctamente!',
+        },
+      });
+    }
+  }
+
+  eliminaCuenta() {}
 }

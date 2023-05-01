@@ -31,3 +31,15 @@
     margin-top: 5px;
     margin-right: 5px;
   }
+
+  @media (max-width: 600px) {
+    mat-toolbar{
+      flex-direction: column;
+      height: 170px;
+    }
+    .icon {
+      display: block;
+      text-align: center;
+      margin: 5px 0;
+    }
+  }

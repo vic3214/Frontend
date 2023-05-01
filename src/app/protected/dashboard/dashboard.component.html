@@ -1,20 +1,39 @@
-<div class="opciones">
-  <h1 class="color">¡Bienvenido {{ getUsuario.nombre }}!</h1>
-
-  <button mat-fab extended color="warn" (click)="reservasVisibilidad()">
+<mat-toolbar class="toolbar">
+  <span>
+    <h1 class="color">¡Bienvenido {{ getUsuario.nombre }}!</h1></span
+  >
+  <span class="toolbar_spacer"></span>
+  <button
+    mat-fab
+    extended
+    class="toolbar_button"
+    (click)="reservasVisibilidad()"
+  >
     <mat-icon>calendar_today</mat-icon>
     Reservas
   </button>
-  <button mat-fab extended color="warn" (click)="favoritosVisibilidad()">
+  <span class="toolbar_spacer"></span>
+  <button
+    mat-fab
+    extended
+    class="toolbar_button"
+    (click)="favoritosVisibilidad()"
+  >
     <mat-icon>favorite</mat-icon>
     Favoritos
   </button>
-  <button mat-fab extended color="warn" (click)="logout()">
+  <span class="toolbar_spacer"></span>
+  <button mat-fab extended class="toolbar_button" (click)="logout()">
     <mat-icon>exit_to_app</mat-icon>
     Cerrar Sesión
   </button>
-</div>
-<hr />
+  <span class="toolbar_spacer"></span>
+  <button mat-fab extended class="toolbar_button" (click)="eliminaCuenta()">
+    <mat-icon>delete</mat-icon>
+    Eliminar Cuenta
+  </button>
+</mat-toolbar>
+
 <div *ngIf="favoritos">
   <h2 class="color">Restaurantes favoritos:</h2>
   <div *ngIf="getResult.length > 0; else mensajeVacio">
