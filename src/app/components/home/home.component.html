@@ -31,7 +31,15 @@
       <li *ngFor="let result of results; index as i">
         <mat-card class="example-card">
           <mat-card-header>
-            <div mat-card-avatar class="example-header-image"></div>
+            <div mat-card-avatar class="header-image">
+              <img
+                [src]="imagenUrl[i]"
+                *ngIf="imagenUrl[i]; else defaultImage"
+              />
+              <ng-template #defaultImage class="header-image">
+                <img src="assets/default-user.jfif" />
+              </ng-template>
+            </div>
             <mat-card-title>{{ result.nombre }}</mat-card-title>
             <mat-card-subtitle>{{ result.tematica }}</mat-card-subtitle>
           </mat-card-header>

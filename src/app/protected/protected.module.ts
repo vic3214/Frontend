@@ -4,7 +4,10 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MaterialModule } from '../material/material.module';
 import { FormateoFechasPipe } from '../pipes/formateo-fechas.pipe';
 import { DashboardRestauranteComponent } from './dashboard-restaurante/dashboard-restaurante.component';
-import { DashboardComponent } from './dashboard/dashboard.component';
+import {
+  DashboardComponent,
+  DialogOverviewExampleDialog,
+} from './dashboard/dashboard.component';
 import { ProtectedRoutingModule } from './protected-routing.module';
 
 @NgModule({
@@ -12,6 +15,7 @@ import { ProtectedRoutingModule } from './protected-routing.module';
     DashboardComponent,
     DashboardRestauranteComponent,
     FormateoFechasPipe,
+    DialogOverviewExampleDialog,
   ],
   imports: [
     CommonModule,

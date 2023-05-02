@@ -8,6 +8,13 @@
   flex: 1 1 auto;
 }
 
+.toolbar img {
+  margin-left: 10px;
+  max-height: 80%;
+  width: auto;
+  border-radius: 40%;
+}
+
 .toolbar_button{
   color:black;
   width: 10%;

@@ -34,6 +34,19 @@ export class AuthService {
     return { ...this._restaurante };
   }
 
+  async recuperarImagen(id: string): Promise<Blob> {
+    const response = await fetch(`${this.baseUrl}/recuperar-imagen/${id}`);
+    const data = await response.json();
+    const imagen_base64 = data.imagen;
+    const imagen_binaria = atob(imagen_base64);
+    const array = new Uint8Array(imagen_binaria.length);
+    for (let i = 0; i < imagen_binaria.length; i++) {
+      array[i] = imagen_binaria.charCodeAt(i);
+    }
+    const blob = new Blob([array], { type: 'image/jpeg' });
+
+    return blob;
+  }
   async subirImagen(imagen: File): Promise<any> {
     return new Promise((resolve, reject) => {
       const reader = new FileReader();
@@ -55,6 +68,7 @@ export class AuthService {
       };
     });
   }
+
   async registraUsuario(datosPersonales: FormGroup, inicioSesion: FormGroup) {
     let idImagen;
     if (datosPersonales.controls['fotografia'].value !== '') {
@@ -271,7 +285,7 @@ export class AuthService {
       ubicacion: ubicacion,
       tematica: datosRestaurante.controls['tematica'].value,
       horario: datosRestaurante.controls['horario'].value,
-      fotografias: idImagen,
+      fotografia: idImagen,
       carta: bodyCarta,
       email: inicioSesion.controls['email'].value,
       password: inicioSesion.controls['password'].value,
@@ -374,5 +388,28 @@ export class AuthService {
           });
         })
       );
+  }
+
+  eliminarUsuario(usuario: any) {
+    const headers = new HttpHeaders().set(
+      'x-token',
+      localStorage.getItem('token') || ''
+    );
+    return this.http.delete(`${this.baseUrl}/borrar-usuario/${usuario._id}`, {
+      headers,
+    });
+  }
+
+  eliminarRestaurante(restaurante: any) {
+    const headers = new HttpHeaders().set(
+      'x-token',
+      localStorage.getItem('token-restaurante') || ''
+    );
+    return this.http.delete(
+      `${this.baseUrl}/borrar-restaurante/${restaurante._id}`,
+      {
+        headers,
+      }
+    );
   }
 }

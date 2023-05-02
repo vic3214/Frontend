@@ -1,4 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Inject, OnInit } from '@angular/core';
+import {
+  MAT_DIALOG_DATA,
+  MatDialog,
+  MatDialogRef,
+} from '@angular/material/dialog';
 import { Router } from '@angular/router';
 import { AuthService } from 'src/app/auth/services/auth.service';
 import { SearchService } from 'src/app/auth/services/search.service';
@@ -15,12 +20,25 @@ export class DashboardComponent implements OnInit {
   resultsReservas: any[] = [];
   usuario: any = {};
   indicesOcultar: number[] = [];
+  imagenUrl: any = '';
 
   ngOnInit(): void {
     this.searchService
       .getUsuarioPorId(this.authService.usuario.uid)
       .subscribe((res: any) => {
         this.usuario = res.usuario;
+
+        this.authService
+          .recuperarImagen(this.usuario.fotografia)
+          .then((resp) => {
+            console.log('foto', this.usuario.fotografia);
+            console.log('respuesta', resp);
+            const reader = new FileReader();
+            reader.onload = (e) => {
+              this.imagenUrl = e.target!.result;
+            };
+            reader.readAsDataURL(resp);
+          });
 
         for (
           let i = 0;
@@ -47,7 +65,8 @@ export class DashboardComponent implements OnInit {
   constructor(
     private router: Router,
     private authService: AuthService,
-    private searchService: SearchService
+    private searchService: SearchService,
+    public dialog: MatDialog
   ) {}
 
   get getUsuario() {
@@ -103,5 +122,41 @@ export class DashboardComponent implements OnInit {
       });
   }
 
-  eliminaCuenta() {}
+  eliminaCuenta() {
+    const dialogRef = this.dialog.open(DialogOverviewExampleDialog, {
+      width: '400px',
+      data: { mensaje: '¿Estás seguro de que quieres eliminar tu cuenta?' },
+    });
+
+    dialogRef.afterClosed().subscribe((result: any) => {
+      if (result) {
+        this.authService.eliminarUsuario(this.usuario).subscribe((resp) => {});
+        localStorage.removeItem('token');
+        this.router.navigateByUrl('auth/login');
+      }
+    });
+  }
+}
+@Component({
+  selector: 'dialog-overview-example-dialog',
+  template: `
+    <h1 mat-dialog-title>Confirmación</h1>
+    <div mat-dialog-content>
+      <p>{{ data.mensaje }}</p>
+    </div>
+    <div mat-dialog-actions>
+      <button mat-button (click)="onNoClick()">No</button>
+      <button mat-button [mat-dialog-close]="true" cdkFocusInitial>Sí</button>
+    </div>
+  `,
+})
+export class DialogOverviewExampleDialog {
+  constructor(
+    public dialogRef: MatDialogRef<DialogOverviewExampleDialog>,
+    @Inject(MAT_DIALOG_DATA) public data: any
+  ) {}
+
+  onNoClick(): void {
+    this.dialogRef.close();
+  }
 }

@@ -37,6 +37,7 @@ export class HomeComponent implements OnInit {
   mapInitialized: boolean = false;
   busqueda: boolean = false;
   durationInSeconds = 3;
+  imagenUrl: any[] = [];
 
   search() {
     this.busqueda = true;
@@ -50,6 +51,21 @@ export class HomeComponent implements OnInit {
         if (restaurantes.ok) {
           restaurantes.restaurantes.forEach((element: any) => {
             this.results.push(element);
+            console.log(element.fotografia);
+            if (element.fotografia) {
+              this.authService
+                .recuperarImagen(element.fotografia)
+                .then((resp) => {
+                  console.log('foto', element.fotografia);
+                  console.log('respuesta', resp);
+                  const reader = new FileReader();
+                  reader.onload = (e) => {
+                    this.imagenUrl.push(e.target!.result);
+                  };
+                  reader.readAsDataURL(resp);
+                });
+            }
+
             // Crear el marcador para el restaurante
             const marker = L.marker([
               element.ubicacion[0],

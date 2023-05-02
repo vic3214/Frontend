@@ -78,9 +78,11 @@ li {
   max-width: 400px;
 }
 
-.example-header-image {
-  background-image: url('https://material.angular.io/assets/img/examples/shiba1.jpg');
-  background-size: cover;
+.header-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 50%;
 }
 
 .contenedor {
@@ -99,10 +101,10 @@ li {
   width: 50%;
   /* Para permitir que el contenido crezca y se desborde si es necesario */
   overflow-y: scroll;
-  border: 1px solid lightgray;
+  border: 1px solid #605454;
   border-radius: 5px;
   box-shadow: 2px 2px 5px gray;
-  background-color: white;
+  background-color: #605454;
 }
 
 .mensaje {

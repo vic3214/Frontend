@@ -1,9 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup } from '@angular/forms';
+import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
 import { AuthService } from 'src/app/auth/services/auth.service';
 import { ComentarioAnnotatedComponent } from 'src/app/components/home/home.component';
+import { DialogOverviewExampleDialog } from '../dashboard/dashboard.component';
 
 @Component({
   selector: 'app-dashboard-restaurante',
@@ -52,6 +54,7 @@ export class DashboardRestauranteComponent implements OnInit {
 
   hide: boolean = true;
   hideRepetida: boolean = true;
+  imagenUrl: any = '';
 
   ngOnInit(): void {
     if (
@@ -61,6 +64,17 @@ export class DashboardRestauranteComponent implements OnInit {
       this.authService.obtenerDatosRestauranteToken().subscribe((res: any) => {
         this.restaurante = res.restaurante;
         this.reservasRestaurante = res.restaurante.reservas;
+        this.authService
+          .recuperarImagen(this.restaurante.fotografia)
+          .then((resp) => {
+            console.log('foto', this.restaurante.fotografia);
+            console.log('respuesta', resp);
+            const reader = new FileReader();
+            reader.onload = (e) => {
+              this.imagenUrl = e.target!.result;
+            };
+            reader.readAsDataURL(resp);
+          });
 
         let horarios: any[] = [];
 
@@ -164,7 +178,8 @@ export class DashboardRestauranteComponent implements OnInit {
     private router: Router,
     private authService: AuthService,
     private _formBuilder: FormBuilder,
-    private _snackBar: MatSnackBar
+    private _snackBar: MatSnackBar,
+    public dialog: MatDialog
   ) {}
 
   logout() {
@@ -277,5 +292,20 @@ export class DashboardRestauranteComponent implements OnInit {
     }
   }
 
-  eliminaCuenta() {}
+  eliminaCuenta() {
+    const dialogRef = this.dialog.open(DialogOverviewExampleDialog, {
+      width: '400px',
+      data: { mensaje: '¿Estás seguro de que quieres eliminar tu cuenta?' },
+    });
+
+    dialogRef.afterClosed().subscribe((result: any) => {
+      if (result) {
+        this.authService
+          .eliminarRestaurante(this.restaurante)
+          .subscribe((resp) => {});
+        localStorage.removeItem('token-restaurante');
+        this.router.navigateByUrl('auth/loginRestaurante');
+      }
+    });
+  }
 }

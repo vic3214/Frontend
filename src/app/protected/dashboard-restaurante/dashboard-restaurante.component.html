@@ -2,6 +2,7 @@
   <span>
     <h1>¡Bienvenido {{ getRestaurante.nombre }}!</h1></span
   >
+  <img [src]="imagenUrl" *ngIf="imagenUrl" />
   <span class="toolbar_spacer"></span>
   <button
     mat-fab
