@@ -38,6 +38,8 @@ export class HomeComponent implements OnInit {
   busqueda: boolean = false;
   durationInSeconds = 3;
   imagenUrl: any[] = [];
+  valoracion: number[] = [];
+  numeroValoraciones: number[] = [];
 
   search() {
     this.busqueda = true;
@@ -50,6 +52,17 @@ export class HomeComponent implements OnInit {
       .subscribe((restaurantes: any) => {
         if (restaurantes.ok) {
           restaurantes.restaurantes.forEach((element: any) => {
+            if (element.valoracion.length !== 0) {
+              let votos = Object.values(element.valoracion).map(
+                (obj: any) => obj.voto
+              );
+              this.numeroValoraciones.push(votos.length);
+              let media = votos.reduce((a, b) => a + b) / votos.length;
+              this.valoracion.push(media);
+            } else {
+              this.valoracion.push(0);
+              this.numeroValoraciones.push(0);
+            }
             this.results.push(element);
             console.log(element.fotografia);
             if (element.fotografia) {
@@ -87,6 +100,14 @@ export class HomeComponent implements OnInit {
       this.map = undefined;
       this.iniciarMapa();
     }
+  }
+
+  valoracionRestaurante(i: number) {
+    return this.valoracion[i];
+  }
+
+  numValoracionesRestaurante(i: number) {
+    return this.numeroValoraciones[i];
   }
 
   iniciarMapa() {

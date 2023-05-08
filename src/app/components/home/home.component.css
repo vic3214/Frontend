@@ -134,3 +134,11 @@ color: white;
     margin-bottom: 10px;
   }
 }
+
+.star-icon {
+  vertical-align: text-bottom;
+}
+
+.spacer-icon{
+  margin-right: 5px;
+}

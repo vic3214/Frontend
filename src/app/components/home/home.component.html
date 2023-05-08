@@ -44,7 +44,16 @@
             <mat-card-subtitle>{{ result.tematica }}</mat-card-subtitle>
           </mat-card-header>
           <mat-card-content>
-            <h3><b>Comentarios de los usuarios:</b></h3>
+            <h3>
+              Valoración:
+              <span class="spacer-icon"></span>
+              {{ valoracionRestaurante(i) | number : "1.0-2" }}/5
+              <span class="spacer-icon"></span>
+              <mat-icon class="star-icon">star</mat-icon>
+              <span class="spacer-icon"></span>
+              de {{ numValoracionesRestaurante(i) }} valoraciones
+            </h3>
+
             <li *ngFor="let comentario of result.comentarios">
               {{ comentario.usuario }} comentó: {{ comentario.comentario }}
             </li>

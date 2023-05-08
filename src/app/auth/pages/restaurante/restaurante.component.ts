@@ -24,6 +24,7 @@ export class RestauranteComponent implements OnInit {
   numeroValoraciones: number = 0;
   durationInSeconds = 5;
   usuario: any;
+  sesionIniciada!: boolean;
   constructor(
     private activatedRoute: ActivatedRoute,
     private _snackBar: MatSnackBar,
@@ -55,6 +56,15 @@ export class RestauranteComponent implements OnInit {
         this.usuario = res.usuario;
       });
     });
+  }
+
+  get getSesionIniciada() {
+    if (localStorage.getItem('token') === null) {
+      this.sesionIniciada = false;
+    } else {
+      this.sesionIniciada = true;
+    }
+    return this.sesionIniciada;
   }
 
   get valoracionRestaurante() {
