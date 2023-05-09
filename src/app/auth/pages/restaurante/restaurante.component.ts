@@ -159,16 +159,13 @@ export class RestauranteComponent implements OnInit {
         fecha: this.reservasGroup.controls['fecha'].value,
       };
       this.restaurante.reservas.push(reserva);
+      this.restaurante.vecesReservado += 1;
       this.authService.editarRestaurante(this.restaurante).subscribe((resp) => {
-        console.log('Res EDitar', resp.restaurante);
-        console.log('Reservas', resp.restaurante.reservas.slice(-1)[0]._id);
         reserva['uidReserva'] = resp.restaurante.reservas.slice(-1)[0]._id;
         reserva['uidRestaurante'] = resp.restaurante._id;
         console.log(reserva);
         this.usuario.reservas.push(reserva);
-        this.authService.editaUsuario(this.usuario).subscribe((res: any) => {
-          console.log('Respuesta', res);
-        });
+        this.authService.editaUsuario(this.usuario).subscribe((res: any) => {});
       });
 
       //TODO: Lanzar algo reserva exitosa o reserva fallida

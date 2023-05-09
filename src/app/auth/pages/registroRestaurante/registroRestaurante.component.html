@@ -104,6 +104,31 @@
           required
         />
       </mat-form-field>
+      <mat-form-field>
+        <mat-label>Número máximo personas por hora</mat-label>
+        <input
+          autocomplete="off"
+          matInput
+          placeholder="Numero de personas"
+          formControlName="maxPersonas"
+          type="number"
+          step="1"
+          required
+        />
+      </mat-form-field>
+      <mat-form-field style="width: 200px">
+        <mat-label>Número máximo personas por reserva</mat-label>
+        <input
+          autocomplete="off"
+          matInput
+          placeholder="Numero de personas"
+          formControlName="maxReservas"
+          type="number"
+          step="1"
+          required
+        />
+      </mat-form-field>
+
       <div [formGroup]="datosRestaurante">
         <div formArrayName="horario" class="horarioItems">
           <div
@@ -131,12 +156,21 @@
                 <input matInput type="time" [formControlName]="1" />
               </mat-form-field>
             </div>
+            <button
+              mat-raised-button
+              color="primary"
+              (click)="eliminarHorario(i)"
+              class="boton_eliminar"
+            >
+              Eliminar horario
+            </button>
           </div>
         </div>
       </div>
       <button mat-raised-button color="primary" (click)="agregarHorario()">
         Agregar horario
       </button>
+
       <div>
         <button mat-raised-button color="primary" matStepperNext>
           Siguiente
@@ -180,6 +214,18 @@
                 option
               }}</mat-option>
             </mat-select>
+          </mat-form-field>
+          <mat-form-field>
+            <ngx-mat-file-input
+              type="file"
+              name="fotografiaPlato"
+              enctype="multipart/form-data"
+              formControlName="fotografiaPlato"
+              placeholder="Fotografia del Plato (JPG)"
+              [accept]="'.jpg'"
+            ></ngx-mat-file-input>
+            <mat-icon matSuffix class="carpeta">folder_shared</mat-icon>
+            <mat-hint>Opcional</mat-hint>
           </mat-form-field>
           <button
             mat-raised-button

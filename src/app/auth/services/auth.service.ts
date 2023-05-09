@@ -292,6 +292,10 @@ export class AuthService {
       comentarios: [],
       reservas: [],
       valoracion: [],
+      maximoPersonasPorHora: datosRestaurante.controls['maxPersonas'],
+      maximoPersonasPorReserva: datosRestaurante.controls['maxReservas'],
+      vecesReservado: 0,
+      vecesVisitado: 0,
     };
 
     return this.http

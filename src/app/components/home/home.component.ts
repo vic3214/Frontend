@@ -179,7 +179,12 @@ export class HomeComponent implements OnInit {
   verRestaurante(i: number) {
     const id = this.results[i]._id;
     console.log(id);
-    this.router.navigateByUrl(`/auth/restaurante/${id}`);
+    this.results[i].vecesVisitado += 1;
+    this.authService
+      .editarRestaurante(this.results[i])
+      .subscribe((resp: any) => {
+        this.router.navigateByUrl(`/auth/restaurante/${id}`);
+      });
   }
 }
 

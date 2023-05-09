@@ -2,8 +2,7 @@
   // TODO:
 
 Pulir buscador
-Presentacion datos carta
-Franja horaria reservas contorl, numero maximo de personas
+Presentacion datos carta card con imagen
 Filtrar reservas restaurante
-reserva confirmada, anular
+reserva confirmada, anular por parte del restaurante
 Mostrar estadisticas gráficamente

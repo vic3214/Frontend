@@ -104,7 +104,12 @@ export class DashboardComponent implements OnInit {
 
   verRestaurante(i: number) {
     const id = this.results[i]._id;
-    this.router.navigateByUrl(`/auth/restaurante/${id}`);
+    this.results[i].vecesVisitado += 1;
+    this.authService
+      .editarRestaurante(this.results[i])
+      .subscribe((resp: any) => {
+        this.router.navigateByUrl(`/auth/restaurante/${id}`);
+      });
   }
 
   cancelarReserva(i: number) {

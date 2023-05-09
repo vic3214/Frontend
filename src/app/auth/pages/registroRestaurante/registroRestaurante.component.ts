@@ -52,6 +52,8 @@ export class RegistroRestauranteComponent {
     codigoPostal: [],
     fotografia: [''],
     tematica: [],
+    maxPersonas: [],
+    maxReservas: [],
     horario: this._formBuilder.array([
       this._formBuilder.group({
         dias: [[]],
@@ -68,6 +70,7 @@ export class RegistroRestauranteComponent {
         nombrePlato: [],
         precio: [],
         tipo: [],
+        fotografiaPlato: [''],
       }),
     ]),
   });
@@ -118,6 +121,11 @@ export class RegistroRestauranteComponent {
 
   eliminarPlato(index: number) {
     const control = <FormArray>this.carta.controls['platos'];
+    control.removeAt(index);
+  }
+
+  eliminarHorario(index: number) {
+    const control = <FormArray>this.datosRestaurante.controls['horario'];
     control.removeAt(index);
   }
 
