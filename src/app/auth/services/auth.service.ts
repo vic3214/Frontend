@@ -48,6 +48,7 @@ export class AuthService {
     return blob;
   }
   async subirImagen(imagen: File): Promise<any> {
+    console.log('File', imagen);
     return new Promise((resolve, reject) => {
       const reader = new FileReader();
       reader.readAsArrayBuffer(imagen);
@@ -255,6 +256,7 @@ export class AuthService {
     carta: FormGroup,
     inicioSesion: FormGroup
   ) {
+    console.log('imagen');
     let idImagen;
     if (datosRestaurante.controls['fotografia'].value !== '') {
       await this.subirImagen(
@@ -264,13 +266,15 @@ export class AuthService {
       // TODO: Asignar fotografia predeterminada
       idImagen = 'Prueba';
     }
-    const bodyCarta = this.construyeCarta(carta);
+    console.log('carta');
+    const bodyCarta = await this.construyeCarta(carta);
 
     const ciudad = datosRestaurante.controls['ciudad'].value;
     const calle = datosRestaurante.controls['calle'].value;
     const numero = datosRestaurante.controls['numero'].value;
     const codigoPostal = datosRestaurante.controls['codigoPostal'].value;
 
+    console.log('ubicacion');
     const ubicacion = await this.obtenerUbicacion(
       calle,
       ciudad,
@@ -278,6 +282,7 @@ export class AuthService {
       codigoPostal
     );
 
+    console.log('body');
     let body: any = {
       nombrePropietario: datosPersonales.controls['nombrePropietario'].value,
       fechaNacimiento: datosPersonales.controls['fechaNacimiento'].value,
@@ -292,12 +297,13 @@ export class AuthService {
       comentarios: [],
       reservas: [],
       valoracion: [],
-      maximoPersonasPorHora: datosRestaurante.controls['maxPersonas'],
-      maximoPersonasPorReserva: datosRestaurante.controls['maxReservas'],
+      maximoPersonasPorHora: datosRestaurante.controls['maxPersonas'].value,
+      maximoPersonasPorReserva: datosRestaurante.controls['maxReservas'].value,
       vecesReservado: 0,
       vecesVisitado: 0,
     };
-
+    console.log('body', body);
+    console.log('return');
     return this.http
       .post<any>(`${this.baseUrl}/nuevo-restaurante`, body)
       .pipe(map((resp) => resp.ok));
@@ -315,7 +321,7 @@ export class AuthService {
     );
   }
   // Array de Arrays con valores [nombrePlato,precio,tipo]
-  construyeCarta(carta: FormGroup) {
+  async construyeCarta(carta: FormGroup) {
     // Filtrar por tipos y añadirlos al tipo correspondiente en el objeto bodyCarta
     const longitud = carta.controls['platos'].value.length;
     const bodyCarta: any = {
@@ -336,11 +342,24 @@ export class AuthService {
 
     for (let index = 0; index < longitud; index++) {
       const plato = carta.controls['platos'].value[index];
+      console.log('plato', plato);
+      if (
+        plato.fotografiaPlato !== null &&
+        plato.fotografiaPlato._files.length > 0
+      ) {
+        let idImagen;
+        await this.subirImagen(plato.fotografiaPlato._files[0]).then(
+          (resp) => (idImagen = resp.idImagen)
+        );
+        plato.fotografiaPlato = idImagen;
+      }
+
       const tipo = tipoMapeo[plato.tipo];
       if (tipo && bodyCarta.hasOwnProperty(tipo)) {
         bodyCarta[tipo].push(plato);
       }
     }
+    console.log('BodyCarta', bodyCarta);
     return bodyCarta;
   }
 

@@ -1,8 +1,16 @@
 
   // TODO:
 
-Pulir buscador
+Pulir buscador (añadir resultados y que elija el usuario)
+Filtros al buscar restaurante
 Presentacion datos carta card con imagen
 Filtrar reservas restaurante
 reserva confirmada, anular por parte del restaurante
 Mostrar estadisticas gráficamente
+Varias tematicas
+
+// Hecho
+
+Añadidas fotos a platos
+Añadidas estadisticas del restaurante
+Añadidas dos propiedades restaurante para controlar reservas

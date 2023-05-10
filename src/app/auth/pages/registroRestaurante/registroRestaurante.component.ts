@@ -115,7 +115,12 @@ export class RegistroRestauranteComponent {
   agregarPlato() {
     const control = <FormArray>this.carta.controls['platos'];
     control.push(
-      this._formBuilder.group({ nombrePlato: [], precio: [], tipo: [] })
+      this._formBuilder.group({
+        nombrePlato: [],
+        precio: [],
+        tipo: [],
+        fotografiaPlato: [],
+      })
     );
   }
 
@@ -147,7 +152,8 @@ export class RegistroRestauranteComponent {
           this.carta,
           this.inicioSesion
         )
-      ).subscribe((resp) => {
+      ).subscribe((res) => {
+        console.log('res', res);
         this.router.navigateByUrl('auth/loginRestaurante');
       });
     }

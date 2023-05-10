@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
 import {
   FormBuilder,
   FormControl,
@@ -6,6 +6,7 @@ import {
   Validators,
 } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { MatTabGroup } from '@angular/material/tabs';
 import { ActivatedRoute } from '@angular/router';
 import { ComentarioAnnotatedComponent } from 'src/app/components/home/home.component';
 import { AuthService } from '../../services/auth.service';
@@ -16,7 +17,8 @@ import { SearchService } from '../../services/search.service';
   templateUrl: './restaurante.component.html',
   styleUrls: ['./restaurante.component.css'],
 })
-export class RestauranteComponent implements OnInit {
+export class RestauranteComponent implements OnInit, AfterViewInit {
+  @ViewChild('myTabGroup') myTabGroup!: MatTabGroup;
   minDate = new Date();
   id: string = '';
   restaurante: any;
@@ -25,6 +27,11 @@ export class RestauranteComponent implements OnInit {
   durationInSeconds = 5;
   usuario: any;
   sesionIniciada!: boolean;
+  imagenUrlPostres: any[] = [];
+  imagenUrlBebidas: any[] = [];
+  imagenUrlEntrantes: any[] = [];
+  imagenUrlPrimeros: any[] = [];
+  imagenUrlSegundos: any[] = [];
   constructor(
     private activatedRoute: ActivatedRoute,
     private _snackBar: MatSnackBar,
@@ -33,7 +40,6 @@ export class RestauranteComponent implements OnInit {
     private authService: AuthService
   ) {}
 
-  //TODO: Poder valorar el restaurante y añadir icono estrella
   ngOnInit(): void {
     this.id = this.activatedRoute.snapshot.paramMap.get('id') || '';
 
@@ -49,6 +55,75 @@ export class RestauranteComponent implements OnInit {
       }
 
       console.log('Restaurante cargado:', res.restaurante);
+      for (let i = 0; i < this.restaurante.carta.entrantes.length; i++) {
+        this.authService
+          .recuperarImagen(this.restaurante.carta.entrantes[i].fotografiaPlato)
+          .then((resp) => {
+            console.log('respuesta', resp);
+            const reader = new FileReader();
+            reader.onload = (e) => {
+              this.imagenUrlEntrantes.push(e.target!.result);
+            };
+            reader.readAsDataURL(resp);
+          });
+      }
+      for (let i = 0; i < this.restaurante.carta.primerosPlatos.length; i++) {
+        this.authService
+          .recuperarImagen(
+            this.restaurante.carta.primerosPlatos[i].fotografiaPlato
+          )
+          .then((resp) => {
+            console.log('respuesta', resp);
+            const reader = new FileReader();
+            reader.onload = (e) => {
+              this.imagenUrlPrimeros.push(e.target!.result);
+            };
+            reader.readAsDataURL(resp);
+          });
+      }
+      for (let i = 0; i < this.restaurante.carta.segundosPlatos.length; i++) {
+        this.authService
+          .recuperarImagen(
+            this.restaurante.carta.segundosPlatos[i].fotografiaPlato
+          )
+          .then((resp) => {
+            console.log('respuesta', resp);
+            const reader = new FileReader();
+            reader.onload = (e) => {
+              this.imagenUrlSegundos.push(e.target!.result);
+            };
+            reader.readAsDataURL(resp);
+          });
+      }
+
+      for (let i = 0; i < this.restaurante.carta.bebidas.length; i++) {
+        this.authService
+          .recuperarImagen(this.restaurante.carta.bebidas[i].fotografiaPlato)
+          .then((resp) => {
+            console.log('respuesta', resp);
+            const reader = new FileReader();
+            reader.onload = (e) => {
+              this.imagenUrlBebidas.push(e.target!.result);
+            };
+            reader.readAsDataURL(resp);
+          });
+      }
+      for (let i = 0; i < this.restaurante.carta.postres.length; i++) {
+        this.authService
+          .recuperarImagen(this.restaurante.carta.postres[i].fotografiaPlato)
+          .then((resp) => {
+            console.log(
+              'foto',
+              this.restaurante.carta.postres[0].fotografiaPlato
+            );
+            console.log('respuesta', resp);
+            const reader = new FileReader();
+            reader.onload = (e) => {
+              this.imagenUrlPostres.push(e.target!.result);
+            };
+            reader.readAsDataURL(resp);
+          });
+      }
     });
     this.authService.obtenerDatosToken().subscribe((res: any) => {
       this.searchService.getUsuarioPorId(res.uid).subscribe((res: any) => {
@@ -56,6 +131,10 @@ export class RestauranteComponent implements OnInit {
         this.usuario = res.usuario;
       });
     });
+  }
+
+  ngAfterViewInit() {
+    console.log('Pestaña seleccionada:', this.myTabGroup.selectedIndex);
   }
 
   get getSesionIniciada() {
