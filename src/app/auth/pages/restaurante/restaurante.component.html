@@ -64,39 +64,34 @@
               <mat-tab label="Segundos platos">
                 <mat-card>
                   <mat-card-content>
-                    <ul>
-                      <li
-                        *ngFor="
-                          let plato of restaurante?.carta.segundosPlatos;
-                          index as i
-                        "
-                      >
-                        {{ plato.nombrePlato }} -
-                        {{ plato.precio | currency : "EUR" }}
-                        <mat-card class="example-card">
-                          <mat-card-header>
-                            <div mat-card-avatar class="header-image">
-                              <img
-                                [src]="imagenUrlSegundos[i]"
-                                *ngIf="imagenUrlSegundos[i]; else defaultImage"
-                              />
-                              <ng-template #defaultImage class="header-image">
-                                <img src="assets/default-user.jfif" />
-                              </ng-template>
-                            </div>
-                            <mat-card-title>{{ plato.nombre }}</mat-card-title>
-                            <mat-card-subtitle>{{
-                              plato.tipo
-                            }}</mat-card-subtitle>
-                          </mat-card-header>
-                          <mat-card-content>
-                            <h2>
-                              Precio: {{ plato.precio | currency : "EUR" }}
-                            </h2>
-                          </mat-card-content>
-                        </mat-card>
-                      </li>
-                    </ul>
+                    <div
+                      *ngFor="
+                        let plato of restaurante?.carta.segundosPlatos;
+                        index as i
+                      "
+                    >
+                      <mat-card class="example-card">
+                        <mat-card-header>
+                          <mat-card-title
+                            >{{ plato.nombrePlato }}
+                          </mat-card-title>
+                          <mat-card-subtitle>{{
+                            plato.tipo
+                          }}</mat-card-subtitle>
+                        </mat-card-header>
+                        <img
+                          mat-card-image
+                          [src]="imagenUrlPostres[i]"
+                          *ngIf="imagenUrlPostres[i]; else defaultImage"
+                        />
+                        <ng-template #defaultImage class="header-image">
+                          <img src="assets/default-user.jfif" />
+                        </ng-template>
+                        <mat-card-content>
+                          <p>Descripcion</p>
+                        </mat-card-content>
+                      </mat-card>
+                    </div>
                   </mat-card-content>
                 </mat-card>
               </mat-tab>

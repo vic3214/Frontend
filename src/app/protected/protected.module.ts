@@ -1,6 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { MaterialFileInputModule } from 'ngx-material-file-input';
 import { MaterialModule } from '../material/material.module';
 import { FormateoFechasPipe } from '../pipes/formateo-fechas.pipe';
 import { DashboardRestauranteComponent } from './dashboard-restaurante/dashboard-restaurante.component';
@@ -23,6 +24,7 @@ import { ProtectedRoutingModule } from './protected-routing.module';
     MaterialModule,
     FormsModule,
     ReactiveFormsModule,
+    MaterialFileInputModule,
   ],
 })
 export class ProtectedModule {}

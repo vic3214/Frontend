@@ -63,7 +63,7 @@
             required
           />
         </mat-form-field>
-        <div formGroupName="platos">
+        <div formArrayName="platos">
           <ng-template matStepLabel>Añade tus platos</ng-template>
 
           <div
@@ -71,43 +71,67 @@
             [formGroupName]="i"
           >
             <h3>Plato {{ i + 1 }}</h3>
-            <mat-form-field class="fieldCarta">
-              <input
-                autocomplete="off"
-                matInput
-                placeholder="Nombre del plato"
-                formControlName="nombrePlato"
-                required
-              />
-            </mat-form-field>
-            <mat-form-field class="fieldCarta">
-              <input
-                autocomplete="off"
-                matInput
-                placeholder="Precio del plato"
-                formControlName="precio"
-                type="number"
-                step="0.01"
-                pattern="\d+(\.\d{1,2})?"
-                required
-              />
-            </mat-form-field>
-            <mat-form-field class="fieldCarta">
-              <mat-label>Selecciona una opción</mat-label>
-              <mat-select formControlName="tipo" required>
-                <mat-option *ngFor="let option of options" [value]="option">{{
-                  option
-                }}</mat-option>
-              </mat-select>
-            </mat-form-field>
-            <button
-              mat-raised-button
-              color="primary"
-              (click)="eliminarPlato(i)"
-              class="boton_derecho"
-            >
-              Eliminar Plato
-            </button>
+            <div class="contenedorCarta">
+              <mat-form-field class="fieldCarta">
+                <input
+                  autocomplete="off"
+                  matInput
+                  placeholder="Nombre del plato"
+                  formControlName="nombrePlato"
+                  required
+                />
+              </mat-form-field>
+              <mat-form-field class="fieldCarta">
+                <input
+                  autocomplete="off"
+                  matInput
+                  placeholder="Precio del plato"
+                  formControlName="precio"
+                  type="number"
+                  step="0.01"
+                  pattern="\d+(\.\d{1,2})?"
+                  required
+                />
+              </mat-form-field>
+              <mat-form-field class="fieldCarta">
+                <mat-label>Selecciona una opción</mat-label>
+                <mat-select formControlName="tipo" required>
+                  <mat-option *ngFor="let option of options" [value]="option">{{
+                    option
+                  }}</mat-option>
+                </mat-select>
+              </mat-form-field>
+              <div class="contenedorImagen">
+                <mat-form-field>
+                  <ngx-mat-file-input
+                    (change)="onFileChange($event, i)"
+                    (mouseover)="showImage[i] = true"
+                    (mouseout)="showImage[i] = false"
+                    type="file"
+                    enctype="multipart/form-data"
+                    formControlName="fotografiaPlato"
+                    [placeholder]="placeholder[i]"
+                    [accept]="'.jpg'"
+                  ></ngx-mat-file-input>
+                  <mat-icon matSuffix class="carpeta">folder_shared</mat-icon>
+                  <mat-hint>Previsualiza pasando el ratón</mat-hint>
+                </mat-form-field>
+                <div
+                  class="previsualizacion"
+                  *ngIf="showImage[i] && checkValue(i)"
+                >
+                  <img class="tamImagen" [src]="imageSrc[i]" />
+                </div>
+              </div>
+              <button
+                mat-raised-button
+                color="primary"
+                (click)="eliminarPlato(i)"
+                class="boton_derecho"
+              >
+                Eliminar Plato
+              </button>
+            </div>
           </div>
         </div>
         <div class="button-row">

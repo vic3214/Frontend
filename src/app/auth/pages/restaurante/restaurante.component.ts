@@ -56,73 +56,87 @@ export class RestauranteComponent implements OnInit, AfterViewInit {
 
       console.log('Restaurante cargado:', res.restaurante);
       for (let i = 0; i < this.restaurante.carta.entrantes.length; i++) {
-        this.authService
-          .recuperarImagen(this.restaurante.carta.entrantes[i].fotografiaPlato)
-          .then((resp) => {
-            console.log('respuesta', resp);
-            const reader = new FileReader();
-            reader.onload = (e) => {
-              this.imagenUrlEntrantes.push(e.target!.result);
-            };
-            reader.readAsDataURL(resp);
-          });
+        if (this.restaurante.carta.entrantes[i].fotografiaPlato !== undefined) {
+          this.authService
+            .recuperarImagen(
+              this.restaurante.carta.entrantes[i].fotografiaPlato
+            )
+            .then((resp) => {
+              console.log('respuesta', resp);
+              const reader = new FileReader();
+              reader.onload = (e) => {
+                this.imagenUrlEntrantes.push(e.target!.result);
+              };
+              reader.readAsDataURL(resp);
+            });
+        }
       }
       for (let i = 0; i < this.restaurante.carta.primerosPlatos.length; i++) {
-        this.authService
-          .recuperarImagen(
-            this.restaurante.carta.primerosPlatos[i].fotografiaPlato
-          )
-          .then((resp) => {
-            console.log('respuesta', resp);
-            const reader = new FileReader();
-            reader.onload = (e) => {
-              this.imagenUrlPrimeros.push(e.target!.result);
-            };
-            reader.readAsDataURL(resp);
-          });
+        if (
+          this.restaurante.carta.primerosPlatos[i].fotografiaPlato !== undefined
+        ) {
+          this.authService
+            .recuperarImagen(
+              this.restaurante.carta.primerosPlatos[i].fotografiaPlato
+            )
+            .then((resp) => {
+              console.log('respuesta', resp);
+              const reader = new FileReader();
+              reader.onload = (e) => {
+                this.imagenUrlPrimeros.push(e.target!.result);
+              };
+              reader.readAsDataURL(resp);
+            });
+        }
       }
       for (let i = 0; i < this.restaurante.carta.segundosPlatos.length; i++) {
-        this.authService
-          .recuperarImagen(
-            this.restaurante.carta.segundosPlatos[i].fotografiaPlato
-          )
-          .then((resp) => {
-            console.log('respuesta', resp);
-            const reader = new FileReader();
-            reader.onload = (e) => {
-              this.imagenUrlSegundos.push(e.target!.result);
-            };
-            reader.readAsDataURL(resp);
-          });
+        if (this.restaurante.carta.segundosPlatos[i].fotografiaPlato) {
+          this.authService
+            .recuperarImagen(
+              this.restaurante.carta.segundosPlatos[i].fotografiaPlato
+            )
+            .then((resp) => {
+              console.log('respuesta', resp);
+              const reader = new FileReader();
+              reader.onload = (e) => {
+                this.imagenUrlSegundos.push(e.target!.result);
+              };
+              reader.readAsDataURL(resp);
+            });
+        }
       }
 
       for (let i = 0; i < this.restaurante.carta.bebidas.length; i++) {
-        this.authService
-          .recuperarImagen(this.restaurante.carta.bebidas[i].fotografiaPlato)
-          .then((resp) => {
-            console.log('respuesta', resp);
-            const reader = new FileReader();
-            reader.onload = (e) => {
-              this.imagenUrlBebidas.push(e.target!.result);
-            };
-            reader.readAsDataURL(resp);
-          });
+        if (this.restaurante.carta.segundosPlatos[i].fotografiaPlato) {
+          this.authService
+            .recuperarImagen(this.restaurante.carta.bebidas[i].fotografiaPlato)
+            .then((resp) => {
+              console.log('respuesta', resp);
+              const reader = new FileReader();
+              reader.onload = (e) => {
+                this.imagenUrlBebidas.push(e.target!.result);
+              };
+              reader.readAsDataURL(resp);
+            });
+        }
       }
       for (let i = 0; i < this.restaurante.carta.postres.length; i++) {
-        this.authService
-          .recuperarImagen(this.restaurante.carta.postres[i].fotografiaPlato)
-          .then((resp) => {
-            console.log(
-              'foto',
-              this.restaurante.carta.postres[0].fotografiaPlato
-            );
-            console.log('respuesta', resp);
-            const reader = new FileReader();
-            reader.onload = (e) => {
-              this.imagenUrlPostres.push(e.target!.result);
-            };
-            reader.readAsDataURL(resp);
-          });
+        if (this.restaurante.carta.segundosPlatos[i].fotografiaPlato) {
+          this.authService
+            .recuperarImagen(this.restaurante.carta.postres[i].fotografiaPlato)
+            .then((resp) => {
+              console.log(
+                'foto',
+                this.restaurante.carta.postres[0].fotografiaPlato
+              );
+              console.log('respuesta', resp);
+              const reader = new FileReader();
+              reader.onload = (e) => {
+                this.imagenUrlPostres.push(e.target!.result);
+              };
+              reader.readAsDataURL(resp);
+            });
+        }
       }
     });
     this.authService.obtenerDatosToken().subscribe((res: any) => {

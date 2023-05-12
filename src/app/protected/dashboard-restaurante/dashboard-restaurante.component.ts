@@ -28,6 +28,9 @@ export class DashboardRestauranteComponent implements OnInit {
     'Festivos',
   ];
   options = ['Entrante', 'Primero', 'Segundo', 'Postre', 'Bebida'];
+  imageSrc: string[] = [];
+  showImage: boolean[] = [];
+  placeholder: string[] = [];
 
   horario: FormGroup = this._formBuilder.group({
     horario: this._formBuilder.array([
@@ -48,6 +51,7 @@ export class DashboardRestauranteComponent implements OnInit {
         nombrePlato: [],
         precio: [],
         tipo: [],
+        fotografiaPlato: [''],
       }),
     ]),
   });
@@ -61,69 +65,97 @@ export class DashboardRestauranteComponent implements OnInit {
       localStorage.getItem('token-restaurante') &&
       this.authService.validarRestauranteToken()
     ) {
-      this.authService.obtenerDatosRestauranteToken().subscribe((res: any) => {
-        this.restaurante = res.restaurante;
-        this.reservasRestaurante = res.restaurante.reservas;
-        this.authService
-          .recuperarImagen(this.restaurante.fotografia)
-          .then((resp) => {
-            console.log('foto', this.restaurante.fotografia);
-            console.log('respuesta', resp);
-            const reader = new FileReader();
-            reader.onload = (e) => {
-              this.imagenUrl = e.target!.result;
-            };
-            reader.readAsDataURL(resp);
-          });
-
-        let horarios: any[] = [];
-
-        for (let i = 0; i < this.restaurante.horario.length; i++) {
-          const formBuilder = this._formBuilder.group({
-            dias: this._formBuilder.control(this.restaurante.horario[i].dias),
-            horas: this._formBuilder.array([
-              this._formBuilder.control(this.restaurante.horario[i].horas[0]),
-              this._formBuilder.control(this.restaurante.horario[i].horas[1]),
-            ]),
-          });
-          horarios.push(formBuilder);
-        }
-
-        this.horario = this._formBuilder.group({
-          horario: this._formBuilder.array(horarios),
-        });
-
-        let platos: any[] = [];
-
-        const categorias = [
-          this.restaurante.carta.bebidas,
-          this.restaurante.carta.entrantes,
-          this.restaurante.carta.primerosPlatos,
-          this.restaurante.carta.segundosPlatos,
-          this.restaurante.carta.postres,
-        ];
-
-        for (let categoria of categorias) {
-          for (let i = 0; i < categoria.length; i++) {
-            const formCarta = this._formBuilder.group({
-              nombrePlato: this._formBuilder.control(categoria[i].nombrePlato),
-              precio: this._formBuilder.control(categoria[i].precio),
-              tipo: this._formBuilder.control(categoria[i].tipo),
+      this.authService
+        .obtenerDatosRestauranteToken()
+        .subscribe(async (res: any) => {
+          this.restaurante = res.restaurante;
+          this.reservasRestaurante = res.restaurante.reservas;
+          this.authService
+            .recuperarImagen(this.restaurante.fotografia)
+            .then((resp) => {
+              const reader = new FileReader();
+              reader.onload = (e) => {
+                this.imagenUrl = e.target!.result;
+              };
+              reader.readAsDataURL(resp);
             });
-            platos.push(formCarta);
-          }
-        }
 
-        this.carta = this._formBuilder.group({
-          tematica: [this.restaurante.tematica],
-          platos: this._formBuilder.array(platos),
+          let horarios: any[] = [];
+
+          for (let i = 0; i < this.restaurante.horario.length; i++) {
+            const formBuilder = this._formBuilder.group({
+              dias: this._formBuilder.control(this.restaurante.horario[i].dias),
+              horas: this._formBuilder.array([
+                this._formBuilder.control(this.restaurante.horario[i].horas[0]),
+                this._formBuilder.control(this.restaurante.horario[i].horas[1]),
+              ]),
+            });
+            horarios.push(formBuilder);
+          }
+
+          this.horario = this._formBuilder.group({
+            horario: this._formBuilder.array(horarios),
+          });
+
+          let platos: any[] = [];
+
+          const categorias = [
+            this.restaurante.carta.bebidas,
+            this.restaurante.carta.entrantes,
+            this.restaurante.carta.primerosPlatos,
+            this.restaurante.carta.segundosPlatos,
+            this.restaurante.carta.postres,
+          ];
+
+          console.log('categorias', categorias);
+
+          for (let categoria of categorias) {
+            for (let i = 0; i < categoria.length; i++) {
+              let imagen: any;
+              this.showImage.push(false);
+              console.log('Categoria', categoria[i]);
+              if (categoria[i].fotografiaPlato) {
+                this.placeholder.push('ImagenPrecargada.jpg');
+                console.log('show', this.showImage);
+                await this.authService
+                  .recuperarImagen(categoria[i].fotografiaPlato)
+                  .then((resp) => {
+                    console.log('respuesta', resp);
+                    const reader = new FileReader();
+                    reader.onload = (e) => {
+                      imagen = e.target!.result;
+                      this.imageSrc.push(imagen);
+                    };
+                    reader.readAsDataURL(resp);
+                  });
+              } else {
+                imagen = '';
+              }
+
+              const formCarta = this._formBuilder.group({
+                nombrePlato: this._formBuilder.control(
+                  categoria[i].nombrePlato
+                ),
+                precio: this._formBuilder.control(categoria[i].precio),
+                tipo: this._formBuilder.control(categoria[i].tipo),
+                fotografiaPlato: this._formBuilder.control(
+                  categoria[i].fotografiaPlato
+                ),
+              });
+              platos.push(formCarta);
+            }
+          }
+
+          this.carta = this._formBuilder.group({
+            tematica: [this.restaurante.tematica],
+            platos: this._formBuilder.array(platos),
+          });
+          console.log('carta', this.carta);
         });
-      });
     } else if (!this.authService.validarRestauranteToken()) {
       this.router.navigateByUrl('auth/loginRestaurante');
     }
   }
-
   get getPlatos() {
     return this.carta.get('platos') as FormArray;
   }
@@ -153,15 +185,24 @@ export class DashboardRestauranteComponent implements OnInit {
   }
 
   agregarPlato() {
+    this.placeholder.push('Fotografia del Plato (JPG)');
+    this.showImage.push(false);
     const control = <FormArray>this.carta.controls['platos'];
     control.push(
-      this._formBuilder.group({ nombrePlato: [], precio: [], tipo: [] })
+      this._formBuilder.group({
+        nombrePlato: [],
+        precio: [],
+        tipo: [],
+        fotografiaPlato: [],
+      })
     );
   }
 
   eliminarPlato(index: number) {
     const control = <FormArray>this.carta.controls['platos'];
     control.removeAt(index);
+    this.imageSrc.splice(index, 1);
+    this.showImage.slice(index, 1);
   }
 
   inicioSesion: FormGroup = this._formBuilder.group({
@@ -274,13 +315,14 @@ export class DashboardRestauranteComponent implements OnInit {
     }
   }
 
-  guardarCarta() {
+  async guardarCarta() {
     if (this.carta.valid) {
-      const bodyCarta = this.authService.construyeCarta(this.carta);
+      const bodyCarta = await this.authService.construyeCarta(this.carta);
       this.restaurante.carta = bodyCarta;
-      this.authService
-        .editarRestaurante(this.restaurante)
-        .subscribe((resp) => {});
+      console.log('restEnvi', this.restaurante);
+      this.authService.editarRestaurante(this.restaurante).subscribe((resp) => {
+        console.log(resp);
+      });
     } else {
       this._snackBar.openFromComponent(ComentarioAnnotatedComponent, {
         duration: 3 * 500,
@@ -307,5 +349,31 @@ export class DashboardRestauranteComponent implements OnInit {
         this.router.navigateByUrl('auth/loginRestaurante');
       }
     });
+  }
+
+  checkValue(i: number) {
+    const fotografiaPlatoValue = this.carta.get([
+      'platos',
+      i,
+      'fotografiaPlato',
+    ])!.value;
+    if (fotografiaPlatoValue === null) {
+      return false;
+    } else {
+      return true;
+    }
+  }
+
+  onFileChange(event: any, index: number) {
+    const reader = new FileReader();
+
+    if (event.target.files && event.target.files.length) {
+      const [file] = event.target.files;
+      reader.readAsDataURL(file);
+
+      reader.onload = () => {
+        this.imageSrc[index] = reader.result as string;
+      };
+    }
   }
 }
