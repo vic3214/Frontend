@@ -25,4 +25,10 @@ export class SearchService {
   getUsuarioPorId(id: string) {
     return this.http.get(`${this.baseUrl}/usuario/${id}`);
   }
+
+  getCiudades(ciudad: string) {
+    return this.http.get(
+      `https://nominatim.openstreetmap.org/search?format=json&q=${ciudad}&countrycodes=es&featuretype=city&limit=10`
+    );
+  }
 }

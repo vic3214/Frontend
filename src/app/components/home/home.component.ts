@@ -11,6 +11,8 @@ import {
 } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
 import * as L from 'leaflet';
+import { Subject } from 'rxjs';
+import { debounceTime } from 'rxjs/operators';
 import { SearchService } from 'src/app/auth/services/search.service';
 import { AuthService } from '../../auth/services/auth.service';
 
@@ -29,7 +31,7 @@ export class HomeComponent implements OnInit {
   ) {}
 
   // TODO: Implementar paginacion en los resultados
-  ngOnInit(): void {}
+
   searchTerm!: string;
   searchCityTerm!: string;
   results: any[] = [];
@@ -40,6 +42,31 @@ export class HomeComponent implements OnInit {
   imagenUrl: any[] = [];
   valoracion: number[] = [];
   numeroValoraciones: number[] = [];
+  private debouncer: Subject<string> = new Subject<string>();
+  res: any[] = [];
+
+  ngOnInit(): void {
+    this.debouncer.pipe(debounceTime(300)).subscribe((value) => {
+      console.log('deb', value);
+      this.searchService
+        .getCiudades(this.searchCityTerm)
+        .subscribe((resp: any) => {
+          this.res = [];
+          this.res = [...resp];
+          console.log(resp);
+          console.log(this.res);
+        });
+    });
+  }
+
+  asignaValor(ciudad: any) {
+    this.searchCityTerm = ciudad;
+    this.res = [];
+  }
+
+  mostrarSugerencias(event: any) {
+    this.debouncer.next();
+  }
 
   search() {
     this.busqueda = true;

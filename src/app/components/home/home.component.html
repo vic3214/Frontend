@@ -5,6 +5,7 @@
       [(ngModel)]="searchCityTerm"
       type="text"
       placeholder="¿Dónde quieres comer?"
+      (keyup)="mostrarSugerencias($event)"
     />
   </div>
   <span class="spacer"></span>
@@ -19,6 +20,19 @@
       <i class="fas fa-search"></i>
     </button>
   </div>
+</div>
+
+<div class="resCont" *ngIf="res.length > 0">
+  <ul>
+    <li
+      *ngFor="let item of res; index as i"
+      class="res"
+      (click)="asignaValor(item.display_name)"
+    >
+      {{ item.display_name }}
+      <hr *ngIf="res[i] !== res[res.length - 1]" />
+    </li>
+  </ul>
 </div>
 
 <div class="contenedor">
