@@ -12,6 +12,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatListModule } from '@angular/material/list';
 import { MatSelectModule } from '@angular/material/select';
 import { MatSidenavModule } from '@angular/material/sidenav';
+import { MatSliderModule } from '@angular/material/slider';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatStepperModule } from '@angular/material/stepper';
 import { MatTabsModule } from '@angular/material/tabs';
@@ -36,6 +37,7 @@ import { MatToolbarModule } from '@angular/material/toolbar';
     MatExpansionModule,
     MatSnackBarModule,
     MatTabsModule,
+    MatSliderModule,
   ],
 })
 export class MaterialModule {}

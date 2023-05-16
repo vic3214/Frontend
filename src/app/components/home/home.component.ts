@@ -1,4 +1,5 @@
 import { Component, Inject, OnInit, inject } from '@angular/core';
+import { FormBuilder, FormGroup } from '@angular/forms';
 import {
   MAT_DIALOG_DATA,
   MatDialog,
@@ -27,7 +28,8 @@ export class HomeComponent implements OnInit {
     private authService: AuthService,
     public dialog: MatDialog,
     private router: Router,
-    private _snackBar: MatSnackBar
+    private _snackBar: MatSnackBar,
+    private _formBuilder: FormBuilder
   ) {}
 
   // TODO: Implementar paginacion en los resultados
@@ -44,6 +46,14 @@ export class HomeComponent implements OnInit {
   numeroValoraciones: number[] = [];
   private debouncer: Subject<string> = new Subject<string>();
   res: any[] = [];
+  ordenado = [
+    'Mejor valorados',
+    'Peor valorados',
+    'Precio más bajo',
+    'Precio más alto',
+    'Más visitados',
+    'Menos visitados',
+  ];
 
   ngOnInit(): void {
     this.debouncer.pipe(debounceTime(300)).subscribe((value) => {
@@ -68,7 +78,18 @@ export class HomeComponent implements OnInit {
     this.debouncer.next();
   }
 
+  busquedaForm: FormGroup = this._formBuilder.group({
+    fecha: [],
+    hora: [],
+    personas: [],
+    tematica: [],
+    precioMin: [],
+    precioMax: [],
+    ordenado: [],
+  });
+
   search() {
+    this.res = [];
     this.busqueda = true;
     this.results = [];
     if (this.searchCityTerm === undefined) {
