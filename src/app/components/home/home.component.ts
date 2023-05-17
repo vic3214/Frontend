@@ -69,6 +69,132 @@ export class HomeComponent implements OnInit {
     });
   }
 
+  aplicarFiltros() {
+    console.log(this.busquedaForm);
+    console.log(this.results);
+    this.authService
+      .obtenerFestivos(this.busquedaForm.controls['fecha'].value)
+      .subscribe((resp) => {
+        console.log('fes', resp);
+        const festivos = resp;
+        const filteredResults = this.results.filter((result) => {
+          const precioMedio = this.calculaPrecioMedioCarta(result);
+          let comprobacionFechaYHora = this.compruebaFecha(festivos, result);
+
+          return (
+            comprobacionFechaYHora &&
+            (this.busquedaForm.controls['personas'].value === null ||
+              result.maximoPersonasPorReserva ===
+                this.busquedaForm.controls['personas'].value) &&
+            (this.busquedaForm.controls['tematica'].value === null ||
+              result.tematica ===
+                this.busquedaForm.controls['tematica'].value) &&
+            (this.busquedaForm.controls['precioMin'].value === null ||
+              precioMedio >= this.busquedaForm.controls['precioMin'].value) &&
+            (this.busquedaForm.controls['precioMax'].value === null ||
+              precioMedio <= this.busquedaForm.controls['precioMax'].value)
+          );
+        });
+        console.log('Filtrados', filteredResults);
+        this.results = filteredResults;
+        // Ordenar
+      });
+  }
+
+  verificarHoras(hora: any) {
+    console.log('hora', hora);
+    if (this.busquedaForm.controls['hora'].value !== null) {
+      var horaActual = new Date(
+        '1970-01-01T' + this.busquedaForm.controls['hora'].value + ':00'
+      );
+      var partesRangoHoras = hora.split('-');
+      var horaInicio = new Date('1970-01-01T' + partesRangoHoras[0] + ':00');
+      var horaFin = new Date('1970-01-01T' + partesRangoHoras[1] + ':00');
+      console.log('Actual', horaActual);
+      console.log('inicio', horaInicio);
+      console.log('Fin', horaFin);
+      return horaActual >= horaInicio && horaActual <= horaFin;
+    } else {
+      return true;
+    }
+  }
+
+  verificarHorario(horario: any) {
+    console.log('horario', horario);
+    for (var i = 0; i < horario.length; i++) {
+      for (var j = 0; j < horario[i].horas.length; j++) {
+        var hora = horario[i].horas[j];
+        var cumpleHorario = this.verificarHoras(hora);
+
+        if (cumpleHorario) {
+          console.log('cumple');
+          return true;
+        }
+      }
+    }
+
+    return false;
+  }
+
+  compruebaFecha(festivos: any, result: any) {
+    const days = [
+      'Domingo',
+      'Lunes',
+      'Martes',
+      'Miércoles',
+      'Jueves',
+      'Viernes',
+      'Sábado',
+    ];
+    let dias = false;
+    if (this.busquedaForm.controls['fecha'].value !== null) {
+      const date = this.busquedaForm.controls['fecha'].value;
+      const day = days[date.getDay()];
+
+      for (let i = 0; i < result.horario.length; i++) {
+        if (!dias) {
+          dias = result.horario[i].dias.includes(day);
+        }
+      }
+    } else {
+      dias = true;
+    }
+
+    let fest = false;
+    for (let i = 0; i < festivos.length; i++) {
+      if (!fest) {
+        fest = festivos[i].location.includes(this.searchCityTerm);
+      }
+    }
+    console.log('fest', !fest);
+    console.log('dias', dias);
+
+    return !fest && dias && this.verificarHorario(result.horario);
+  }
+
+  calculaPrecioMedioCarta(restaurante: any) {
+    let precioMedio = 0;
+    let numPlatos = 0;
+    const keys = [
+      'entrantes',
+      'primerosPlatos',
+      'segundosPlatos',
+      'postres',
+      'bebidas',
+    ];
+    for (let key of keys) {
+      for (let i = 0; i < restaurante.carta[key].length; i++) {
+        numPlatos += 1;
+        precioMedio += restaurante.carta[key][i].precio;
+      }
+    }
+    console.log('Nium', numPlatos);
+    if (numPlatos === 0) {
+      return 0;
+    }
+    return precioMedio / numPlatos;
+  }
+
   asignaValor(ciudad: any) {
     this.searchCityTerm = ciudad;
     this.res = [];

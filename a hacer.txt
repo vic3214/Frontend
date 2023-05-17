@@ -1,13 +1,14 @@
 
   // TODO:
 
-Filtros al buscar restaurante (añadir boton para aplicar filtros y hacer ordenaciones)
+Filtro para ordenar
 Filtrar reservas restaurante
 reserva confirmada, anular por parte del restaurante
 Mostrar estadisticas gráficamente
 Manejar error al buscar ciudad que no existe
 
 // Hecho
+Filtros al buscar restaurante
 Pulir buscador (añadir resultados y que elija el usuario)
 Añadidas fotos a platos
 Añadidas estadisticas del restaurante

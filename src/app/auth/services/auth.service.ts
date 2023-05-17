@@ -101,6 +101,22 @@ export class AuthService {
       .pipe(map((resp) => resp.ok));
   }
 
+  obtenerFestivos(fecha: any) {
+    const apiKey = 'f90475919e3b479e85362c5ea554f4c2';
+    if (fecha === null) {
+      return of([]);
+    }
+    const year = fecha.getFullYear();
+    const month = fecha.getMonth() + 1;
+    const day = fecha.getDate();
+    console.log(year);
+    console.log(month);
+    console.log(day);
+    return this.http.get(
+      `https://holidays.abstractapi.com/v1/?api_key=${apiKey}&country=ES&year=${year}&month=${month}&day=${day}`
+    );
+  }
+
   verificaAutenticacion(): Observable<boolean> {
     if (!localStorage.getItem('token')) {
       return of(false); // Creamos el observable del false

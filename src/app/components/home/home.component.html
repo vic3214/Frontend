@@ -79,7 +79,7 @@
       </mat-form-field>
 
       <mat-form-field class="inputBusqueda">
-        <mat-label>Precio medio mínimo</mat-label>
+        <mat-label>Precio medio mínimo carta</mat-label>
         <input
           matInput
           type="number"
@@ -89,7 +89,7 @@
       </mat-form-field>
 
       <mat-form-field class="inputBusqueda">
-        <mat-label>Precio medio máximo</mat-label>
+        <mat-label>Precio medio máximo carta</mat-label>
         <input
           matInput
           type="number"
@@ -97,7 +97,7 @@
           formControlName="precioMax"
         />
       </mat-form-field>
-      <mat-form-field>
+      <mat-form-field class="inputBusqueda">
         <mat-label>Ordenar por</mat-label>
         <mat-select formControlName="ordenado">
           <mat-option *ngFor="let orden of ordenado" [value]="orden">{{
@@ -105,6 +105,14 @@
           }}</mat-option>
         </mat-select>
       </mat-form-field>
+      <button
+        mat-raised-button
+        color="primary"
+        (click)="aplicarFiltros()"
+        class="inputBusqueda"
+      >
+        Aplicar Filtros
+      </button>
     </form>
     <ul>
       <li *ngFor="let result of results; index as i">
