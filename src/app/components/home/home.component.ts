@@ -12,8 +12,8 @@ import {
 } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
 import * as L from 'leaflet';
-import { Subject } from 'rxjs';
-import { debounceTime } from 'rxjs/operators';
+import { Subject, of } from 'rxjs';
+import { catchError, debounceTime } from 'rxjs/operators';
 import { SearchService } from 'src/app/auth/services/search.service';
 import { AuthService } from '../../auth/services/auth.service';
 
@@ -57,25 +57,27 @@ export class HomeComponent implements OnInit {
 
   ngOnInit(): void {
     this.debouncer.pipe(debounceTime(300)).subscribe((value) => {
-      console.log('deb', value);
       this.searchService
         .getCiudades(this.searchCityTerm)
         .subscribe((resp: any) => {
           this.res = [];
           this.res = [...resp];
-          console.log(resp);
-          console.log(this.res);
         });
     });
   }
 
+  reiniciarValoraciones(filteredResults: any) {
+    this.valoracion = [];
+    this.numeroValoraciones = [];
+    filteredResults.forEach((element: any) => {
+      this.calculaMedias(element);
+    });
+  }
+
   aplicarFiltros() {
-    console.log(this.busquedaForm);
-    console.log(this.results);
     this.authService
       .obtenerFestivos(this.busquedaForm.controls['fecha'].value)
       .subscribe((resp) => {
-        console.log('fes', resp);
         const festivos = resp;
         const filteredResults = this.results.filter((result) => {
           const precioMedio = this.calculaPrecioMedioCarta(result);
@@ -96,13 +98,98 @@ export class HomeComponent implements OnInit {
           );
         });
         console.log('Filtrados', filteredResults);
-        this.results = filteredResults;
+        const ordenElegido = this.busquedaForm.controls['ordenado'].value;
         // Ordenar
+        if (ordenElegido === 'Mejor valorados') {
+          filteredResults.sort((a, b) => {
+            let valoracionMediaA = 0;
+            if (a.valoracion.length !== 0) {
+              valoracionMediaA =
+                a.valoracion.reduce((acc: any, val: any) => acc + val.voto, 0) /
+                a.valoracion.length;
+            }
+            let valoracionMediaB = 0;
+            if (b.valoracion.length !== 0) {
+              valoracionMediaB =
+                b.valoracion.reduce((acc: any, val: any) => acc + val.voto, 0) /
+                b.valoracion.length;
+            }
+
+            return valoracionMediaB - valoracionMediaA;
+          });
+          this.reiniciarValoraciones(filteredResults);
+        }
+        if (ordenElegido === 'Peor valorados') {
+          filteredResults.sort((a, b) => {
+            let valoracionMediaA = 0;
+            if (a.valoracion.length !== 0) {
+              valoracionMediaA =
+                a.valoracion.reduce((acc: any, val: any) => acc + val.voto, 0) /
+                a.valoracion.length;
+            }
+            let valoracionMediaB = 0;
+            if (b.valoracion.length !== 0) {
+              valoracionMediaB =
+                b.valoracion.reduce((acc: any, val: any) => acc + val.voto, 0) /
+                b.valoracion.length;
+            }
+
+            return valoracionMediaA - valoracionMediaB;
+          });
+          this.reiniciarValoraciones(filteredResults);
+        }
+
+        if (ordenElegido === 'Precio más bajo') {
+          filteredResults.sort((a, b) => {
+            const valoracionMediaA = this.calculaPrecioMedioCarta(a);
+
+            const valoracionMediaB = this.calculaPrecioMedioCarta(b);
+
+            return valoracionMediaA - valoracionMediaB;
+          });
+          this.reiniciarValoraciones(filteredResults);
+        }
+
+        if (ordenElegido === 'Precio más alto') {
+          filteredResults.sort((a, b) => {
+            const valoracionMediaA = this.calculaPrecioMedioCarta(a);
+
+            const valoracionMediaB = this.calculaPrecioMedioCarta(b);
+
+            return valoracionMediaB - valoracionMediaA;
+          });
+          this.reiniciarValoraciones(filteredResults);
+        }
+
+        if (ordenElegido === 'Más visitados') {
+          filteredResults.sort((a, b) => {
+            const valoracionMediaA = a.vecesVisitado;
+
+            const valoracionMediaB = b.vecesVisitado;
+
+            return valoracionMediaB - valoracionMediaA;
+          });
+          this.reiniciarValoraciones(filteredResults);
+        }
+
+        if (ordenElegido === 'Menos visitados') {
+          filteredResults.sort((a, b) => {
+            const valoracionMediaA = a.vecesVisitado;
+
+            const valoracionMediaB = b.vecesVisitado;
+
+            return valoracionMediaA - valoracionMediaB;
+          });
+          this.reiniciarValoraciones(filteredResults);
+        }
+
+        console.log(filteredResults);
+        this.results = filteredResults;
+        console.log(this.results);
       });
   }
 
   verificarHoras(hora: any) {
-    console.log('hora', hora);
     if (this.busquedaForm.controls['hora'].value !== null) {
       var horaActual = new Date(
         '1970-01-01T' + this.busquedaForm.controls['hora'].value + ':00'
@@ -110,9 +197,6 @@ export class HomeComponent implements OnInit {
       var partesRangoHoras = hora.split('-');
       var horaInicio = new Date('1970-01-01T' + partesRangoHoras[0] + ':00');
       var horaFin = new Date('1970-01-01T' + partesRangoHoras[1] + ':00');
-      console.log('Actual', horaActual);
-      console.log('inicio', horaInicio);
-      console.log('Fin', horaFin);
       return horaActual >= horaInicio && horaActual <= horaFin;
     } else {
       return true;
@@ -120,14 +204,12 @@ export class HomeComponent implements OnInit {
   }
 
   verificarHorario(horario: any) {
-    console.log('horario', horario);
     for (var i = 0; i < horario.length; i++) {
       for (var j = 0; j < horario[i].horas.length; j++) {
         var hora = horario[i].horas[j];
         var cumpleHorario = this.verificarHoras(hora);
 
         if (cumpleHorario) {
-          console.log('cumple');
           return true;
         }
       }
@@ -166,8 +248,6 @@ export class HomeComponent implements OnInit {
         fest = festivos[i].location.includes(this.searchCityTerm);
       }
     }
-    console.log('fest', !fest);
-    console.log('dias', dias);
 
     return !fest && dias && this.verificarHorario(result.horario);
   }
@@ -188,11 +268,21 @@ export class HomeComponent implements OnInit {
         precioMedio += restaurante.carta[key][i].precio;
       }
     }
-    console.log('Nium', numPlatos);
     if (numPlatos === 0) {
       return 0;
     }
     return precioMedio / numPlatos;
+  }
+  calculaMedias(element: any) {
+    if (element.valoracion.length !== 0) {
+      let votos = Object.values(element.valoracion).map((obj: any) => obj.voto);
+      this.numeroValoraciones.push(votos.length);
+      let media = votos.reduce((a, b) => a + b) / votos.length;
+      this.valoracion.push(media);
+    } else {
+      this.valoracion.push(0);
+      this.numeroValoraciones.push(0);
+    }
   }
 
   asignaValor(ciudad: any) {
@@ -226,25 +316,13 @@ export class HomeComponent implements OnInit {
       .subscribe((restaurantes: any) => {
         if (restaurantes.ok) {
           restaurantes.restaurantes.forEach((element: any) => {
-            if (element.valoracion.length !== 0) {
-              let votos = Object.values(element.valoracion).map(
-                (obj: any) => obj.voto
-              );
-              this.numeroValoraciones.push(votos.length);
-              let media = votos.reduce((a, b) => a + b) / votos.length;
-              this.valoracion.push(media);
-            } else {
-              this.valoracion.push(0);
-              this.numeroValoraciones.push(0);
-            }
+            this.calculaMedias(element);
             this.results.push(element);
-            console.log(element.fotografia);
+
             if (element.fotografia) {
               this.authService
                 .recuperarImagen(element.fotografia)
                 .then((resp) => {
-                  console.log('foto', element.fotografia);
-                  console.log('respuesta', resp);
                   const reader = new FileReader();
                   reader.onload = (e) => {
                     this.imagenUrl.push(e.target!.result);
@@ -263,7 +341,6 @@ export class HomeComponent implements OnInit {
             // Añadir el marcador al mapa
             marker.addTo(this.map!);
           });
-          console.log(this.results);
         }
       });
 
@@ -289,6 +366,12 @@ export class HomeComponent implements OnInit {
     let longitud: number = 0;
     this.searchService
       .getUbicacionDesdeCiudad(this.searchCityTerm)
+      .pipe(
+        catchError((error: any) => {
+          this.openDialog(error.error.msg);
+          return of();
+        })
+      )
       .subscribe((resp: any) => {
         latitud = Number.parseFloat(resp.latitud);
         longitud = Number.parseFloat(resp.longitud);
@@ -352,7 +435,6 @@ export class HomeComponent implements OnInit {
 
   verRestaurante(i: number) {
     const id = this.results[i]._id;
-    console.log(id);
     this.results[i].vecesVisitado += 1;
     this.authService
       .editarRestaurante(this.results[i])
