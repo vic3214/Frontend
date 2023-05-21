@@ -31,7 +31,7 @@ export class RegistroComponent {
   datosPersonales: FormGroup = this._formBuilder.group({
     nombre: [],
     fechaNacimiento: [],
-    fotografia: ['', [FileValidator.maxContentSize(20000)]],
+    fotografia: ['', [FileValidator.maxContentSize(80000)]],
   });
 
   inicioSesion: FormGroup = this._formBuilder.group({

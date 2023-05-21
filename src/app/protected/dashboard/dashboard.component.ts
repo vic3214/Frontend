@@ -59,6 +59,7 @@ export class DashboardComponent implements OnInit {
               this.resultsReservas.push(res.restaurante);
             });
         }
+        console.log(this.resultsReservas);
       });
   }
 
@@ -120,6 +121,7 @@ export class DashboardComponent implements OnInit {
     );
     this.resultsReservas[i].reservas.splice(indiceReservaEliminar, 1);
     this.authService.editaUsuario(this.usuario).subscribe((res: any) => {});
+    this.resultsReservas[i].estado = true;
     this.authService
       .editarRestaurante(this.resultsReservas[i])
       .subscribe((res: any) => {

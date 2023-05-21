@@ -35,7 +35,7 @@
   <div *ngIf="reservasRestaurante.length > 0; else mensajeVacio">
     <ul>
       <li *ngFor="let result of reservasRestaurante; index as i">
-        <mat-card class="example-card">
+        <mat-card class="example-card" [ngClass]="{ cancelado: result.estado }">
           <mat-card-header class="header">
             <mat-card-title>Reserva de {{ result.usuario }}</mat-card-title>
             <mat-card-subtitle><h3>Datos de la reserva:</h3></mat-card-subtitle>
@@ -45,6 +45,15 @@
             <h4>Hora de la reserva: {{ result.hora }}</h4>
             <h4>Comensales: {{ result.personas }}</h4>
           </mat-card-content>
+          <mat-card-actions>
+            <button
+              mat-flat-button
+              color="primary"
+              (click)="cancelarReserva(i)"
+            >
+              Cancelar reserva
+            </button>
+          </mat-card-actions>
         </mat-card>
       </li>
     </ul>

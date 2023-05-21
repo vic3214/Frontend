@@ -90,7 +90,13 @@ export class RestauranteComponent implements OnInit, AfterViewInit {
         }
       }
       for (let i = 0; i < this.restaurante.carta.segundosPlatos.length; i++) {
-        if (this.restaurante.carta.segundosPlatos[i].fotografiaPlato) {
+        console.log(
+          'restimage',
+          this.restaurante.carta.segundosPlatos[i].fotografiaPlato
+        );
+        if (
+          this.restaurante.carta.segundosPlatos[i].fotografiaPlato !== undefined
+        ) {
           this.authService
             .recuperarImagen(
               this.restaurante.carta.segundosPlatos[i].fotografiaPlato
@@ -107,7 +113,9 @@ export class RestauranteComponent implements OnInit, AfterViewInit {
       }
 
       for (let i = 0; i < this.restaurante.carta.bebidas.length; i++) {
-        if (this.restaurante.carta.segundosPlatos[i].fotografiaPlato) {
+        if (
+          this.restaurante.carta.segundosPlatos[i].fotografiaPlato !== undefined
+        ) {
           this.authService
             .recuperarImagen(this.restaurante.carta.bebidas[i].fotografiaPlato)
             .then((resp) => {
@@ -121,7 +129,9 @@ export class RestauranteComponent implements OnInit, AfterViewInit {
         }
       }
       for (let i = 0; i < this.restaurante.carta.postres.length; i++) {
-        if (this.restaurante.carta.segundosPlatos[i].fotografiaPlato) {
+        if (
+          this.restaurante.carta.segundosPlatos[i].fotografiaPlato !== undefined
+        ) {
           this.authService
             .recuperarImagen(this.restaurante.carta.postres[i].fotografiaPlato)
             .then((resp) => {
@@ -250,12 +260,14 @@ export class RestauranteComponent implements OnInit, AfterViewInit {
         personas: this.reservasGroup.controls['personas'].value,
         hora: this.reservasGroup.controls['hora'].value,
         fecha: this.reservasGroup.controls['fecha'].value,
+        estado: false,
       };
       this.restaurante.reservas.push(reserva);
       this.restaurante.vecesReservado += 1;
       this.authService.editarRestaurante(this.restaurante).subscribe((resp) => {
         reserva['uidReserva'] = resp.restaurante.reservas.slice(-1)[0]._id;
         reserva['uidRestaurante'] = resp.restaurante._id;
+        reserva['uidUsuario'] = this.usuario._id;
         console.log(reserva);
         this.usuario.reservas.push(reserva);
         this.authService.editaUsuario(this.usuario).subscribe((res: any) => {});

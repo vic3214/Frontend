@@ -61,12 +61,6 @@ li {
   margin: 10px;
 }
 
-.example-card {
-  margin: 0 auto;
-  width: 250px;
-  box-shadow: 0px 3px 15px rgba(0,0,0,0.2);
-}
-
 .spacer-button {
   margin-left: 5px;
   flex: 1 1 auto;
@@ -186,4 +180,26 @@ mat-card-subtitle {
   width: 120px;
   height: 100px;
 
+}
+.example-card {
+  position: relative;
+margin: 0 auto;
+  width: 250px;
+  box-shadow: 0px 3px 15px rgba(0,0,0,0.2); 
+}
+
+.example-card.cancelado{
+  background-color: lightgray;
+
+}
+
+.example-card.cancelado::after {
+  content: "Cancelado";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-weight: bold;
+  font-size: 24px;
+  color: red;
 }

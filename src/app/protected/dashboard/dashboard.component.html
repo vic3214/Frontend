@@ -76,7 +76,10 @@
   <div *ngIf="getResultsReservas.length > 0; else mensajeVacio">
     <ul>
       <li *ngFor="let result of getResultsReservas; index as i">
-        <mat-card class="example-card">
+        <mat-card
+          class="example-card"
+          [ngClass]="{ cancelado: result.reservas[i].estado }"
+        >
           <mat-card-header>
             <div mat-card-avatar class="example-header-image"></div>
             <mat-card-title>{{ result.nombre }}</mat-card-title>

@@ -36,16 +36,15 @@
           formControlName="fotografia"
           placeholder="Imagen de perfil (JPG)"
           [accept]="'.jpg'"
-          maxContentSize="20000"
+          maxContentSize="80000"
         ></ngx-mat-file-input>
         <mat-icon matSuffix class="carpeta">folder_shared</mat-icon>
         <mat-hint>Opcional</mat-hint>
         <mat-error
           *ngIf="datosPersonales.get('fotografia')?.hasError('maxContentSize')"
-          >La imagen tiene un tamaño superior a 20 KB
+          >La imagen tiene un tamaño superior a 80 bytes
         </mat-error>
       </mat-form-field>
-
       <div>
         <button mat-raised-button color="primary" matStepperNext>
           Siguiente

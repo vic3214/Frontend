@@ -2,7 +2,7 @@
   // TODO:
 
 Filtrar reservas restaurante
-reserva confirmada, anular por parte del restaurante
+reserva confirmada, anular por parte del restaurante (Cambiar botones de usuario cuando se elimine reserva por restaurante)
 Mostrar estadisticas gráficamente
 
 // Hecho

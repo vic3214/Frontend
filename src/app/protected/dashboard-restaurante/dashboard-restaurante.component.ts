@@ -4,6 +4,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
 import { AuthService } from 'src/app/auth/services/auth.service';
+import { SearchService } from 'src/app/auth/services/search.service';
 import { ComentarioAnnotatedComponent } from 'src/app/components/home/home.component';
 import { DialogOverviewExampleDialog } from '../dashboard/dashboard.component';
 
@@ -70,15 +71,17 @@ export class DashboardRestauranteComponent implements OnInit {
         .subscribe(async (res: any) => {
           this.restaurante = res.restaurante;
           this.reservasRestaurante = res.restaurante.reservas;
-          this.authService
-            .recuperarImagen(this.restaurante.fotografia)
-            .then((resp) => {
-              const reader = new FileReader();
-              reader.onload = (e) => {
-                this.imagenUrl = e.target!.result;
-              };
-              reader.readAsDataURL(resp);
-            });
+          if (this.restaurante.fotografia !== undefined) {
+            this.authService
+              .recuperarImagen(this.restaurante.fotografia)
+              .then((resp) => {
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                  this.imagenUrl = e.target!.result;
+                };
+                reader.readAsDataURL(resp);
+              });
+          }
 
           let horarios: any[] = [];
 
@@ -114,7 +117,7 @@ export class DashboardRestauranteComponent implements OnInit {
               let imagen: any;
               this.showImage.push(false);
               console.log('Categoria', categoria[i]);
-              if (categoria[i].fotografiaPlato) {
+              if (categoria[i].fotografiaPlato !== undefined) {
                 this.placeholder.push('ImagenPrecargada.jpg');
                 console.log('show', this.showImage);
                 await this.authService
@@ -220,7 +223,8 @@ export class DashboardRestauranteComponent implements OnInit {
     private authService: AuthService,
     private _formBuilder: FormBuilder,
     private _snackBar: MatSnackBar,
-    public dialog: MatDialog
+    public dialog: MatDialog,
+    private searchService: SearchService
   ) {}
 
   logout() {
@@ -362,6 +366,28 @@ export class DashboardRestauranteComponent implements OnInit {
     } else {
       return true;
     }
+  }
+
+  cancelarReserva(i: number) {
+    this.restaurante.reservas[i].estado = true;
+    // TODO: Incluir id de usuario en la reserva y pasarla al servicio que hay que crear
+    this.searchService
+      .getUsuarioPorId(this.restaurante.reservas[i].uidUsuario)
+      .subscribe((resp: any) => {
+        for (let j = 0; j < resp.usuario.reservas.length; j++) {
+          if (
+            resp.usuario.reservas[j].uidReserva ===
+            this.restaurante.reservas[i]._id
+          ) {
+            resp.usuario.reservas[j].estado = true;
+          }
+        }
+        this.authService.editaUsuario(resp.usuario).subscribe((resp) => {
+          this.authService
+            .editarRestaurante(this.restaurante)
+            .subscribe((resp) => {});
+        });
+      });
   }
 
   onFileChange(event: any, index: number) {

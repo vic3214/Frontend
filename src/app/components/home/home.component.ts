@@ -318,8 +318,8 @@ export class HomeComponent implements OnInit {
           restaurantes.restaurantes.forEach((element: any) => {
             this.calculaMedias(element);
             this.results.push(element);
-
-            if (element.fotografia) {
+            console.log('fotografia', element.fotografia);
+            if (element.fotografia !== undefined) {
               this.authService
                 .recuperarImagen(element.fotografia)
                 .then((resp) => {
