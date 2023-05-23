@@ -32,6 +32,7 @@ export class RestauranteComponent implements OnInit, AfterViewInit {
   imagenUrlEntrantes: any[] = [];
   imagenUrlPrimeros: any[] = [];
   imagenUrlSegundos: any[] = [];
+  numerosGenerados: string[] = [];
   constructor(
     private activatedRoute: ActivatedRoute,
     private _snackBar: MatSnackBar,
@@ -253,9 +254,32 @@ export class RestauranteComponent implements OnInit, AfterViewInit {
       data: { mensaje: mensaje },
     });
   }
+  generarNumeroAleatorio(longitud: any): string {
+    let caracteres =
+      'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+    let resultado = '';
+    for (let i = 0; i < longitud; i++) {
+      resultado += caracteres.charAt(
+        Math.floor(Math.random() * caracteres.length)
+      );
+    }
+    return resultado;
+  }
+
+  generarNumeroUnico(): string {
+    let numeroAleatorio = this.generarNumeroAleatorio(20);
+    while (this.numerosGenerados.includes(numeroAleatorio)) {
+      numeroAleatorio = this.generarNumeroAleatorio(20);
+    }
+    this.numerosGenerados.push(numeroAleatorio);
+    return numeroAleatorio;
+  }
+
   reservar() {
     if (this.reservasGroup.valid && localStorage.getItem('token') != null) {
       const reserva: any = {
+        uidReserva: this.generarNumeroUnico(),
+        uidUsuario: this.usuario._id,
         usuario: this.reservasGroup.controls['nombre'].value,
         personas: this.reservasGroup.controls['personas'].value,
         hora: this.reservasGroup.controls['hora'].value,
@@ -265,9 +289,7 @@ export class RestauranteComponent implements OnInit, AfterViewInit {
       this.restaurante.reservas.push(reserva);
       this.restaurante.vecesReservado += 1;
       this.authService.editarRestaurante(this.restaurante).subscribe((resp) => {
-        reserva['uidReserva'] = resp.restaurante.reservas.slice(-1)[0]._id;
         reserva['uidRestaurante'] = resp.restaurante._id;
-        reserva['uidUsuario'] = this.usuario._id;
         console.log(reserva);
         this.usuario.reservas.push(reserva);
         this.authService.editaUsuario(this.usuario).subscribe((res: any) => {});

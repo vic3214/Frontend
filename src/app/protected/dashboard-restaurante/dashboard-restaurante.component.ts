@@ -390,6 +390,10 @@ export class DashboardRestauranteComponent implements OnInit {
       });
   }
 
+  eliminarReserva(i: number) {
+    this.restaurante.reservas.splice(i, 1);
+  }
+
   onFileChange(event: any, index: number) {
     const reader = new FileReader();
 

@@ -31,8 +31,6 @@ export class DashboardComponent implements OnInit {
         this.authService
           .recuperarImagen(this.usuario.fotografia)
           .then((resp) => {
-            console.log('foto', this.usuario.fotografia);
-            console.log('respuesta', resp);
             const reader = new FileReader();
             reader.onload = (e) => {
               this.imagenUrl = e.target!.result;
@@ -56,10 +54,20 @@ export class DashboardComponent implements OnInit {
           this.searchService
             .getRestaurantePorId(this.usuario.reservas[i].uidRestaurante)
             .subscribe((res: any) => {
-              this.resultsReservas.push(res.restaurante);
+              for (let j = 0; j < res.restaurante.reservas.length; j++) {
+                if (
+                  this.usuario.reservas[i].uidReserva ===
+                  res.restaurante.reservas[j].uidReserva
+                ) {
+                  this.resultsReservas.push({
+                    restaurante: res.restaurante,
+                    reserva: res.restaurante.reservas[j],
+                  });
+                }
+              }
             });
         }
-        console.log(this.resultsReservas);
+        console.log('Reservas', this.resultsReservas);
       });
   }
 
@@ -115,18 +123,38 @@ export class DashboardComponent implements OnInit {
 
   cancelarReserva(i: number) {
     const idReserva = this.usuario.reservas[i].uidReserva;
-    this.usuario.reservas.splice(i, 1);
-    const indiceReservaEliminar = this.resultsReservas[i].reservas.findIndex(
-      (r: any) => r._id === idReserva
-    );
-    this.resultsReservas[i].reservas.splice(indiceReservaEliminar, 1);
+    //    this.usuario.reservas.splice(i, 1);
+    const indiceReservaEliminar = this.resultsReservas[
+      i
+    ].restaurante.reservas.findIndex((r: any) => r._id === idReserva);
+    this.usuario.reservas[i].estado = true;
     this.authService.editaUsuario(this.usuario).subscribe((res: any) => {});
-    this.resultsReservas[i].estado = true;
+    //TODO: Modificar el estado en el restaurante
+    console.log('Antes error', this.resultsReservas[i].reserva);
+    console.log('Antes error', this.resultsReservas[i].restaurante);
+    const indiceReserva = this.resultsReservas[
+      i
+    ].restaurante.reservas.findIndex(
+      (reserva: any) =>
+        reserva.uidReserva === this.resultsReservas[i].reserva.uidReserva
+    );
+    console.log('Results', this.resultsReservas);
+    console.log('i', i);
+    console.log('Indice resr', indiceReserva);
+    this.resultsReservas[i].restaurante.reservas[indiceReserva].estado = true;
+    console.log(
+      'cc',
+      this.resultsReservas[i].restaurante.reservas[indiceReserva]
+    );
     this.authService
-      .editarRestaurante(this.resultsReservas[i])
-      .subscribe((res: any) => {
-        this.resultsReservas.splice(i, 1);
-      });
+      .editarRestaurante(this.resultsReservas[i].restaurante)
+      .subscribe((resp) => {});
+  }
+
+  eliminarReserva(i: number) {
+    this.resultsReservas.splice(i, 1);
+    this.usuario.reservas.splice(i, 1);
+    this.authService.editaUsuario(this.usuario).subscribe((res: any) => {});
   }
 
   eliminaCuenta() {

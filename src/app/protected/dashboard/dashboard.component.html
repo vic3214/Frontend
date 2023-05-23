@@ -78,21 +78,35 @@
       <li *ngFor="let result of getResultsReservas; index as i">
         <mat-card
           class="example-card"
-          [ngClass]="{ cancelado: result.reservas[i].estado }"
+          [ngClass]="{ cancelado: result.reserva.estado }"
         >
           <mat-card-header>
             <div mat-card-avatar class="example-header-image"></div>
-            <mat-card-title>{{ result.nombre }}</mat-card-title>
-            <mat-card-subtitle>{{ result.tematica }}</mat-card-subtitle>
+            <mat-card-title>{{ result.restaurante.nombre }}</mat-card-title>
+            <mat-card-subtitle>{{
+              result.restaurante.tematica
+            }}</mat-card-subtitle>
           </mat-card-header>
           <mat-card-content>
-            <h3><b>Comentarios de los usuarios:</b></h3>
-            <li *ngFor="let comentario of result.comentarios">
-              {{ comentario.usuario }} comentó: {{ comentario.comentario }}
-            </li>
+            <h3>
+              <b>Usuario: {{ result.reserva.usuario }}</b>
+            </h3>
           </mat-card-content>
           <mat-card-actions>
-            <button mat-flat-button color="primary" (click)="verRestaurante(i)">
+            <button
+              mat-flat-button
+              color="primary"
+              (click)="eliminarReserva(i)"
+              *ngIf="result.reserva.estado"
+            >
+              Eliminar
+            </button>
+            <button
+              mat-flat-button
+              color="primary"
+              (click)="verRestaurante(i)"
+              *ngIf="!result.reserva.estado"
+            >
               Ver Restaurante
             </button>
             <span class="spacer-button"></span>
@@ -100,6 +114,7 @@
               mat-flat-button
               color="primary"
               (click)="cancelarReserva(i)"
+              *ngIf="!result.reserva.estado"
             >
               Cancelar reserva
             </button>
