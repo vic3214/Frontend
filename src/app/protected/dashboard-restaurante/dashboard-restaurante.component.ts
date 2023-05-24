@@ -17,6 +17,7 @@ export class DashboardRestauranteComponent implements OnInit {
   editar: Boolean = false;
   reservas: Boolean = true;
   reservasRestaurante: any[] = [];
+  copiaReservas: any[] = [];
   restaurante: any = {};
   dias = [
     'Lunes',
@@ -32,6 +33,25 @@ export class DashboardRestauranteComponent implements OnInit {
   imageSrc: string[] = [];
   showImage: boolean[] = [];
   placeholder: string[] = [];
+  ordenado = [
+    'Más comensales',
+    'Menos comensales',
+    'Fecha más lejana',
+    'Fecha más próxima',
+    'Hora y fecha más próxima',
+    'Hora y fecha más lejana',
+  ];
+  estados = ['No Cancelada', 'Cancelada'];
+  busquedaForm: FormGroup = this._formBuilder.group({
+    fechaAntes: [],
+    fechaDespues: [],
+    horaAntes: [],
+    horaDespues: [],
+    comensalesMin: [],
+    comensalesMax: [],
+    ordenado: [],
+    estado: [],
+  });
 
   horario: FormGroup = this._formBuilder.group({
     horario: this._formBuilder.array([
@@ -71,6 +91,7 @@ export class DashboardRestauranteComponent implements OnInit {
         .subscribe(async (res: any) => {
           this.restaurante = res.restaurante;
           this.reservasRestaurante = res.restaurante.reservas;
+          this.copiaReservas = res.restaurante.reservas;
           if (this.restaurante.fotografia !== undefined) {
             this.authService
               .recuperarImagen(this.restaurante.fotografia)
@@ -173,6 +194,98 @@ export class DashboardRestauranteComponent implements OnInit {
 
   get password() {
     return this.inicioSesion.get('password');
+  }
+
+  aplicarFiltros() {
+    const filteredResults = this.reservasRestaurante.filter((reserva) => {
+      const date1 = new Date('1970-01-01T' + reserva.hora + ':00Z');
+      const date2 = new Date(
+        '1970-01-01T' + this.busquedaForm.controls['horaAntes'].value + ':00Z'
+      );
+      const date3 = new Date(
+        '1970-01-01T' + this.busquedaForm.controls['horaDespues'].value + ':00Z'
+      );
+
+      const date = new Date(reserva.fecha);
+      console.log(typeof date);
+      console.log(date);
+      console.log(typeof this.busquedaForm.controls['fechaAntes'].value);
+      console.log(this.busquedaForm.controls['fechaAntes'].value);
+
+      return (
+        (this.busquedaForm.controls['fechaAntes'].value === null ||
+          this.compareDates(
+            date,
+            this.busquedaForm.controls['fechaAntes'].value
+          ) <= 0) &&
+        (this.busquedaForm.controls['fechaDespues'].value === null ||
+          this.compareDates(
+            date,
+            this.busquedaForm.controls['fechaDespues'].value
+          ) > 0) &&
+        (this.busquedaForm.controls['horaAntes'].value === null ||
+          date1 < date2) &&
+        (this.busquedaForm.controls['horaDespues'].value === null ||
+          date1 > date3) &&
+        (this.busquedaForm.controls['comensalesMin'].value === null ||
+          reserva.personas >=
+            this.busquedaForm.controls['comensalesMin'].value) &&
+        (this.busquedaForm.controls['comensalesMax'].value === null ||
+          reserva.personas <=
+            this.busquedaForm.controls['comensalesMax'].value) &&
+        (this.busquedaForm.controls['estado'].value === null ||
+          reserva.estado === this.compruebaCancelada())
+      );
+    });
+    console.log('Filtrados', filteredResults);
+
+    this.reservasRestaurante = filteredResults;
+  }
+
+  quitarFiltros() {
+    this.reservasRestaurante = this.copiaReservas;
+    this.busquedaForm.reset();
+  }
+
+  compareDates(date1: Date, date2: Date) {
+    const year1 = date1.getFullYear();
+    const year2 = date2.getFullYear();
+
+    if (year1 < year2) {
+      return -1;
+    } else if (year1 > year2) {
+      return 1;
+    }
+    console.log('año');
+    const month1 = date1.getMonth();
+    const month2 = date2.getMonth();
+
+    if (month1 < month2) {
+      return -1;
+    } else if (month1 > month2) {
+      return 1;
+    }
+    console.log('mes');
+    const day1 = date1.getUTCDate();
+    const day2 = date2.getUTCDate();
+    console.log(day1);
+    console.log(day2);
+
+    if (day1 < day2) {
+      return -1;
+    } else if (day1 > day2) {
+      return 1;
+    }
+    console.log('dia');
+
+    return 0;
+  }
+
+  compruebaCancelada() {
+    if (this.busquedaForm.controls['estado'].value === 'Cancelada') {
+      return true;
+    }
+    return false;
   }
 
   agregarHorario() {
@@ -392,6 +505,9 @@ export class DashboardRestauranteComponent implements OnInit {
 
   eliminarReserva(i: number) {
     this.restaurante.reservas.splice(i, 1);
+    this.authService
+      .editarRestaurante(this.restaurante)
+      .subscribe((resp) => {});
   }
 
   onFileChange(event: any, index: number) {

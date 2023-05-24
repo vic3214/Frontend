@@ -5,6 +5,7 @@ import {
   FormGroup,
   Validators,
 } from '@angular/forms';
+import { DateAdapter } from '@angular/material/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatTabGroup } from '@angular/material/tabs';
 import { ActivatedRoute } from '@angular/router';
@@ -36,10 +37,13 @@ export class RestauranteComponent implements OnInit, AfterViewInit {
   constructor(
     private activatedRoute: ActivatedRoute,
     private _snackBar: MatSnackBar,
+    private date: DateAdapter<Date>,
     private searchService: SearchService,
     private _formBuilder: FormBuilder,
     private authService: AuthService
-  ) {}
+  ) {
+    date.getFirstDayOfWeek = () => 1;
+  }
 
   ngOnInit(): void {
     this.id = this.activatedRoute.snapshot.paramMap.get('id') || '';
@@ -276,6 +280,16 @@ export class RestauranteComponent implements OnInit, AfterViewInit {
   }
 
   reservar() {
+    // Controlamos fecha local para que se guarde en mongo correctamente la fecha seleccionada
+    const year = this.reservasGroup.controls['fecha'].value.getFullYear();
+    const mes = this.reservasGroup.controls['fecha'].value.getMonth() + 1;
+    const dia = this.reservasGroup.controls['fecha'].value.getDate();
+    const fecha = `${year}-${mes.toString().padStart(2, '0')}-${dia
+      .toString()
+      .padStart(2, '0')}T00:00:00Z`;
+
+    const date = new Date(fecha);
+
     if (this.reservasGroup.valid && localStorage.getItem('token') != null) {
       const reserva: any = {
         uidReserva: this.generarNumeroUnico(),
@@ -283,7 +297,7 @@ export class RestauranteComponent implements OnInit, AfterViewInit {
         usuario: this.reservasGroup.controls['nombre'].value,
         personas: this.reservasGroup.controls['personas'].value,
         hora: this.reservasGroup.controls['hora'].value,
-        fecha: this.reservasGroup.controls['fecha'].value,
+        fecha: date,
         estado: false,
       };
       this.restaurante.reservas.push(reserva);

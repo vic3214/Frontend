@@ -1,10 +1,10 @@
 
   // TODO:
 
-Filtrar reservas restaurante
 Mostrar estadisticas gráficamente
 
 // Hecho
+Filtrar reservas restaurante
 Manejar error al buscar ciudad que no existe
 Filtros para ordenar
 Filtros al buscar restaurante

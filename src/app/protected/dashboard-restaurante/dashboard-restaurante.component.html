@@ -32,7 +32,113 @@
 
 <div *ngIf="reservas">
   <h2>Reservas de los usuarios:</h2>
+
   <div *ngIf="reservasRestaurante.length > 0; else mensajeVacio">
+    <form [formGroup]="busquedaForm" class="filtros">
+      <mat-form-field class="inputBusqueda">
+        <mat-label>Antes de</mat-label>
+        <input
+          matInput
+          [matDatepicker]="fechaAntes"
+          datePickerFormat="DD/MM/YYYY"
+          placeholder="Fecha"
+          formControlName="fechaAntes"
+        />
+        <mat-hint>MM/DD/YYYY</mat-hint>
+        <mat-datepicker-toggle
+          matSuffix
+          [for]="fechaAntes"
+        ></mat-datepicker-toggle>
+        <mat-datepicker #fechaAntes></mat-datepicker>
+      </mat-form-field>
+      <mat-form-field class="inputBusqueda">
+        <mat-label>Después de</mat-label>
+        <input
+          matInput
+          [matDatepicker]="fechaDespues"
+          datePickerFormat="DD/MM/YYYY"
+          placeholder="Fecha"
+          formControlName="fechaDespues"
+        />
+        <mat-hint>MM/DD/YYYY</mat-hint>
+        <mat-datepicker-toggle
+          matSuffix
+          [for]="fechaDespues"
+        ></mat-datepicker-toggle>
+        <mat-datepicker #fechaDespues></mat-datepicker>
+      </mat-form-field>
+      <mat-form-field class="inputBusqueda">
+        <mat-label>Antes de las</mat-label>
+        <input
+          matInput
+          type="time"
+          placeholder="Hora"
+          formControlName="horaAntes"
+        />
+      </mat-form-field>
+      <mat-form-field class="inputBusqueda">
+        <mat-label>Después de las</mat-label>
+        <input
+          matInput
+          type="time"
+          placeholder="Hora"
+          formControlName="horaDespues"
+        />
+      </mat-form-field>
+      <mat-form-field class="inputBusqueda">
+        <mat-label>Mínimo de comensales</mat-label>
+        <input
+          matInput
+          type="number"
+          step="1"
+          placeholder="Comensales"
+          formControlName="comensalesMin"
+        />
+      </mat-form-field>
+      <mat-form-field class="inputBusqueda">
+        <mat-label>Máximo comensales</mat-label>
+        <input
+          matInput
+          type="number"
+          step="1"
+          placeholder="Comensales"
+          formControlName="comensalesMax"
+        />
+      </mat-form-field>
+      <mat-form-field class="inputBusqueda">
+        <mat-label>Estado de la reserva</mat-label>
+        <mat-select formControlName="estado">
+          <mat-option *ngFor="let estado of estados" [value]="estado">{{
+            estado
+          }}</mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <mat-form-field class="inputBusqueda">
+        <mat-label>Ordenar por</mat-label>
+        <mat-select formControlName="ordenado">
+          <mat-option *ngFor="let orden of ordenado" [value]="orden">{{
+            orden
+          }}</mat-option>
+        </mat-select>
+      </mat-form-field>
+      <button
+        mat-raised-button
+        color="primary"
+        (click)="aplicarFiltros()"
+        class="inputBusqueda"
+      >
+        Aplicar Filtros
+      </button>
+      <button
+        mat-raised-button
+        color="primary"
+        (click)="quitarFiltros()"
+        class="inputBusqueda"
+      >
+        Quitar Filtros
+      </button>
+    </form>
     <ul>
       <li *ngFor="let result of reservasRestaurante; index as i">
         <mat-card class="example-card" [ngClass]="{ cancelado: result.estado }">

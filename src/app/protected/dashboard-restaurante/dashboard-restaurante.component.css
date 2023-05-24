@@ -203,3 +203,11 @@ margin: 0 auto;
   font-size: 24px;
   color: red;
 }
+.filtros{
+  display: inline;
+  margin-left: 10px;
+}
+.inputBusqueda{
+  margin-left: 10px;
+  color: white;
+}
