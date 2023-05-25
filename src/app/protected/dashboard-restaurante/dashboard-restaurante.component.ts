@@ -16,6 +16,7 @@ import { DialogOverviewExampleDialog } from '../dashboard/dashboard.component';
 export class DashboardRestauranteComponent implements OnInit {
   editar: Boolean = false;
   reservas: Boolean = true;
+  graficas: Boolean = false;
   reservasRestaurante: any[] = [];
   copiaReservas: any[] = [];
   restaurante: any = {};
@@ -348,10 +349,18 @@ export class DashboardRestauranteComponent implements OnInit {
   reservasVisibilidad() {
     this.editar = false;
     this.reservas = true;
+    this.graficas = false;
   }
   editarDatos() {
     this.reservas = false;
     this.editar = true;
+    this.graficas = false;
+  }
+
+  mostrarGraficas() {
+    this.reservas = false;
+    this.editar = false;
+    this.graficas = true;
   }
 
   eliminarHorario(index: number) {

@@ -211,3 +211,29 @@ margin: 0 auto;
   margin-left: 10px;
   color: white;
 }
+
+.grid_graficas{
+  display: grid;
+  grid-template-columns: repeat(2,1fr);
+  grid-template-rows: repeat(2,1fr);
+}
+
+.grid_graficas_chart1{
+  grid-column: 1;
+  grid-row: 1;
+}
+
+.grid_graficas_chart2{
+  grid-column: 2;
+  grid-row: 1;
+}
+
+.grid_graficas_chart3{
+  grid-column: 1;
+  grid-row: 2;
+}
+
+.grid_graficas_chart4{
+  grid-column: 2;
+  grid-row: 2;
+}

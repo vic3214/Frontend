@@ -19,6 +19,11 @@
     Editar Datos
   </button>
   <span class="toolbar_spacer"></span>
+  <button mat-fab extended class="toolbar_button" (click)="mostrarGraficas()">
+    <mat-icon> bar_chart</mat-icon>
+    Mostrar estadísticas
+  </button>
+  <span class="toolbar_spacer"></span>
   <button mat-fab extended class="toolbar_button" (click)="logout()">
     <mat-icon>exit_to_app</mat-icon>
     Cerrar Sesión
@@ -402,3 +407,21 @@
 <ng-template #mensajeVacio>
   <div class="mensaje-vacio">No hay resultados para mostrar.</div>
 </ng-template>
+
+<div *ngIf="graficas">
+  <h2>Estadísticas:</h2>
+  <div class="grid_graficas">
+    <div class="grid_graficas_chart1">
+      <app-reservas-chart></app-reservas-chart>
+    </div>
+    <div class="grid_graficas_chart2">
+      <app-visitados-chart></app-visitados-chart>
+    </div>
+    <div class="grid_graficas_chart3">
+      <app-carta-chart></app-carta-chart>
+    </div>
+    <div class="grid_graficas_chart4">
+      <app-horas-chart></app-horas-chart>
+    </div>
+  </div>
+</div>
