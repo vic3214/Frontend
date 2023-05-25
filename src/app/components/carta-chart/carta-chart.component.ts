@@ -1,6 +1,7 @@
-import { Component } from '@angular/core';
-/* import { ChartConfiguration, ChartData, ChartEvent, ChartType } from 'chart.js';
-import { BaseChartDirective } from 'ng2-charts'; */
+import { Component, ViewChild } from '@angular/core';
+import { ChartConfiguration, ChartData, ChartEvent, ChartType } from 'chart.js';
+import { BaseChartDirective } from 'ng2-charts';
+//import DataLabelsPlugin from 'chartjs-plugin-datalabels';
 
 @Component({
   selector: 'app-carta-chart',
@@ -8,7 +9,7 @@ import { BaseChartDirective } from 'ng2-charts'; */
   styleUrls: ['./carta-chart.component.css'],
 })
 export class CartaChartComponent {
-  /*   @ViewChild(BaseChartDirective) chart: BaseChartDirective | undefined;
+  @ViewChild(BaseChartDirective) chart: BaseChartDirective | undefined;
 
   public barChartOptions: ChartConfiguration['options'] = {
     responsive: true,
@@ -23,14 +24,14 @@ export class CartaChartComponent {
       legend: {
         display: true,
       },
-      datalabels: {
+      /*       datalabels: {
         anchor: 'end',
         align: 'end',
-      },
+      }, */
     },
   };
   public barChartType: ChartType = 'bar';
-  public barChartPlugins = [DataLabelsPlugin];
+  //public barChartPlugins = [DataLabelsPlugin];
 
   public barChartData: ChartData<'bar'> = {
     labels: ['2006', '2007', '2008', '2009', '2010', '2011', '2012'],
@@ -74,5 +75,5 @@ export class CartaChartComponent {
     ];
 
     this.chart?.update();
-  } */
+  }
 }
