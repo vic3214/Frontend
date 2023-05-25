@@ -1,9 +1,8 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { MaterialFileInputModule } from 'ngx-material-file-input';
 
-import { ComponentsModule } from '../components/components.module';
+import { MatCardModule } from '@angular/material/card';
 import { MaterialModule } from '../material/material.module';
 import { AuthRoutingModule } from './auth-routing.module';
 import { DialogComponent, LoginComponent } from './pages/login/login.component';
@@ -28,11 +27,10 @@ import { RestauranteComponent } from './pages/restaurante/restaurante.component'
   imports: [
     CommonModule,
     AuthRoutingModule,
-    ReactiveFormsModule,
     FormsModule,
-    ComponentsModule,
+    ReactiveFormsModule,
+    MatCardModule,
     MaterialModule,
-    MaterialFileInputModule,
   ],
 })
 export class AuthModule {}

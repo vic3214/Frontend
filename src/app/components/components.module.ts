@@ -2,6 +2,7 @@ import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatCardModule } from '@angular/material/card';
+import { NgChartsModule } from 'ng2-charts';
 import { AuthRoutingModule } from '../auth/auth-routing.module';
 import { MaterialModule } from '../material/material.module';
 import { CartaChartComponent } from './carta-chart/carta-chart.component';
@@ -25,12 +26,14 @@ import { VisitadosChartComponent } from './visitados-chart/visitados-chart.compo
     HorasChartComponent,
   ],
   imports: [
-    CommonModule,
+    MatCardModule,
+    NgChartsModule,
     AuthRoutingModule,
     FormsModule,
     MatCardModule,
     MaterialModule,
     ReactiveFormsModule,
+    CommonModule,
   ],
   exports: [
     HomeComponent,

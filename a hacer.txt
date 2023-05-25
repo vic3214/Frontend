@@ -1,7 +1,8 @@
 
   // TODO:
-
+Libreria para meter ficheros sustituyendo a ngx-file-input
 Mostrar estadisticas gráficamente
+Solucionar problemas y estilos
 
 // Hecho
 Filtrar reservas restaurante

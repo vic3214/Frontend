@@ -232,8 +232,8 @@
                 </mat-select>
               </mat-form-field>
               <div class="contenedorImagen">
-                <mat-form-field>
-                  <ngx-mat-file-input
+                <mat-form-field formControlName="fotografiaPlato">
+                  <!--                   <ngx-mat-file-input
                     (change)="onFileChange($event, i)"
                     (mouseover)="showImage[i] = true"
                     (mouseout)="showImage[i] = false"
@@ -242,7 +242,7 @@
                     formControlName="fotografiaPlato"
                     [placeholder]="placeholder[i]"
                     [accept]="'.jpg'"
-                  ></ngx-mat-file-input>
+                  ></ngx-mat-file-input> -->
                   <mat-icon matSuffix class="carpeta">folder_shared</mat-icon>
                   <mat-hint>Previsualiza pasando el ratón</mat-hint>
                 </mat-form-field>

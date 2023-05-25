@@ -1,7 +1,7 @@
 import { Component, ViewChild } from '@angular/core';
 import { ChartConfiguration, ChartData, ChartEvent, ChartType } from 'chart.js';
+import DataLabelsPlugin from 'chartjs-plugin-datalabels';
 import { BaseChartDirective } from 'ng2-charts';
-//import DataLabelsPlugin from 'chartjs-plugin-datalabels';
 
 @Component({
   selector: 'app-carta-chart',
@@ -24,14 +24,14 @@ export class CartaChartComponent {
       legend: {
         display: true,
       },
-      /*       datalabels: {
+      datalabels: {
         anchor: 'end',
         align: 'end',
-      }, */
+      },
     },
   };
   public barChartType: ChartType = 'bar';
-  //public barChartPlugins = [DataLabelsPlugin];
+  public barChartPlugins = [DataLabelsPlugin];
 
   public barChartData: ChartData<'bar'> = {
     labels: ['2006', '2007', '2008', '2009', '2010', '2011', '2012'],

@@ -7,7 +7,6 @@ import {
 } from '@angular/forms';
 import { DateAdapter } from '@angular/material/core';
 import { Router } from '@angular/router';
-import { FileValidator } from 'ngx-material-file-input';
 import { AuthService } from '../../services/auth.service';
 
 @Component({
@@ -31,7 +30,7 @@ export class RegistroComponent {
   datosPersonales: FormGroup = this._formBuilder.group({
     nombre: [],
     fechaNacimiento: [],
-    fotografia: ['', [FileValidator.maxContentSize(80000)]],
+    fotografia: [''], // Validar contenido fichero 80000kb
   });
 
   inicioSesion: FormGroup = this._formBuilder.group({

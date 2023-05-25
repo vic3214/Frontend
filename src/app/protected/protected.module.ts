@@ -1,7 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { MaterialFileInputModule } from 'ngx-material-file-input';
 import { ComponentsModule } from '../components/components.module';
 import { MaterialModule } from '../material/material.module';
 import { FormateoFechasPipe } from '../pipes/formateo-fechas.pipe';
@@ -25,7 +24,6 @@ import { ProtectedRoutingModule } from './protected-routing.module';
     MaterialModule,
     FormsModule,
     ReactiveFormsModule,
-    MaterialFileInputModule,
     ComponentsModule,
   ],
 })
