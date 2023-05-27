@@ -31,7 +31,7 @@ export class DashboardRestauranteComponent implements OnInit {
     'Festivos',
   ];
   options = ['Entrante', 'Primero', 'Segundo', 'Postre', 'Bebida'];
-  imageSrc: string[] = [];
+  imageSrc: any[] = [];
   showImage: boolean[] = [];
   placeholder: string[] = [];
   ordenado = [
@@ -132,20 +132,17 @@ export class DashboardRestauranteComponent implements OnInit {
             this.restaurante.carta.postres,
           ];
 
-          console.log('categorias', categorias);
-
           for (let categoria of categorias) {
             for (let i = 0; i < categoria.length; i++) {
               let imagen: any;
               this.showImage.push(false);
-              console.log('Categoria', categoria[i]);
+
               if (categoria[i].fotografiaPlato !== undefined) {
                 this.placeholder.push('ImagenPrecargada.jpg');
-                console.log('show', this.showImage);
+
                 await this.authService
                   .recuperarImagen(categoria[i].fotografiaPlato)
                   .then((resp) => {
-                    console.log('respuesta', resp);
                     const reader = new FileReader();
                     reader.onload = (e) => {
                       imagen = e.target!.result;
@@ -175,7 +172,6 @@ export class DashboardRestauranteComponent implements OnInit {
             tematica: [this.restaurante.tematica],
             platos: this._formBuilder.array(platos),
           });
-          console.log('carta', this.carta);
         });
     } else if (!this.authService.validarRestauranteToken()) {
       this.router.navigateByUrl('auth/loginRestaurante');
@@ -208,10 +204,6 @@ export class DashboardRestauranteComponent implements OnInit {
       );
 
       const date = new Date(reserva.fecha);
-      console.log(typeof date);
-      console.log(date);
-      console.log(typeof this.busquedaForm.controls['fechaAntes'].value);
-      console.log(this.busquedaForm.controls['fechaAntes'].value);
 
       return (
         (this.busquedaForm.controls['fechaAntes'].value === null ||
@@ -238,6 +230,7 @@ export class DashboardRestauranteComponent implements OnInit {
           reserva.estado === this.compruebaCancelada())
       );
     });
+    //TODO: queda ordenar
     console.log('Filtrados', filteredResults);
 
     this.reservasRestaurante = filteredResults;
@@ -257,7 +250,7 @@ export class DashboardRestauranteComponent implements OnInit {
     } else if (year1 > year2) {
       return 1;
     }
-    console.log('año');
+
     const month1 = date1.getMonth();
     const month2 = date2.getMonth();
 
@@ -266,18 +259,15 @@ export class DashboardRestauranteComponent implements OnInit {
     } else if (month1 > month2) {
       return 1;
     }
-    console.log('mes');
+
     const day1 = date1.getUTCDate();
     const day2 = date2.getUTCDate();
-    console.log(day1);
-    console.log(day2);
 
     if (day1 < day2) {
       return -1;
     } else if (day1 > day2) {
       return 1;
     }
-    console.log('dia');
 
     return 0;
   }
@@ -374,15 +364,12 @@ export class DashboardRestauranteComponent implements OnInit {
       this.inicioSesion.controls['password'].value ===
         this.inicioSesion.controls['passwordRepetida'].value
     ) {
-      console.log('Cambio');
-      console.log(this.restaurante);
       this.restaurante.email = this.inicioSesion.controls['email'].value;
       this.restaurante.password = this.inicioSesion.controls['password'].value;
-      console.log(this.restaurante);
+
       this.authService
         .cambiaPasswordRestaurante(this.restaurante)
         .subscribe((resp) => {
-          console.log('respuesta', resp);
           if (resp.ok) {
             this._snackBar.openFromComponent(ComentarioAnnotatedComponent, {
               duration: 3 * 500,
@@ -425,7 +412,6 @@ export class DashboardRestauranteComponent implements OnInit {
 
   editarHorario() {
     if (this.horario.valid) {
-      console.log(this.restaurante);
       this.restaurante.horario = this.horario.controls['horario'].value;
       this.authService
         .editarRestaurante(this.restaurante)
@@ -445,10 +431,10 @@ export class DashboardRestauranteComponent implements OnInit {
     if (this.carta.valid) {
       const bodyCarta = await this.authService.construyeCarta(this.carta);
       this.restaurante.carta = bodyCarta;
-      console.log('restEnvi', this.restaurante);
-      this.authService.editarRestaurante(this.restaurante).subscribe((resp) => {
-        console.log(resp);
-      });
+
+      this.authService
+        .editarRestaurante(this.restaurante)
+        .subscribe((resp) => {});
     } else {
       this._snackBar.openFromComponent(ComentarioAnnotatedComponent, {
         duration: 3 * 500,
@@ -483,11 +469,11 @@ export class DashboardRestauranteComponent implements OnInit {
       i,
       'fotografiaPlato',
     ])!.value;
+
     if (fotografiaPlatoValue === null) {
       return false;
-    } else {
-      return true;
     }
+    return true;
   }
 
   cancelarReserva(i: number) {
@@ -529,6 +515,33 @@ export class DashboardRestauranteComponent implements OnInit {
       reader.onload = () => {
         this.imageSrc[index] = reader.result as string;
       };
+    }
+  }
+
+  uploadFile(e: any, i: number) {
+    const maxSize = 80000;
+    if (e.srcElement.files[0] && e.srcElement.files[0].size <= maxSize) {
+      const platosArray = this.carta.get('platos') as FormArray;
+      platosArray.at(i).get('fotografiaPlato')!.setValue(e.srcElement.files[0]);
+
+      const file = new File(
+        [e.srcElement.files[0]],
+        `imagenPrecargada${i}.jpg`,
+        { type: 'image/jpeg' }
+      );
+      const blob = new Blob([file], { type: file.type });
+
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        if (this.imageSrc[i]) {
+          this.imageSrc[i] = e!.target!.result;
+        } else {
+          this.imageSrc.push(e!.target!.result);
+        }
+      };
+      reader.readAsDataURL(blob);
+    } else {
+      console.log('Archivo muy pesado');
     }
   }
 }

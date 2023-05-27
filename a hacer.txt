@@ -1,10 +1,11 @@
 
   // TODO:
-Libreria para meter ficheros sustituyendo a ngx-file-input
+
 Mostrar estadisticas gráficamente
 Solucionar problemas y estilos
 
 // Hecho
+Libreria para meter ficheros sustituyendo a ngx-file-input
 Filtrar reservas restaurante
 Manejar error al buscar ciudad que no existe
 Filtros para ordenar

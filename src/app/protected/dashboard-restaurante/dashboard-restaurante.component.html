@@ -46,7 +46,7 @@
           matInput
           [matDatepicker]="fechaAntes"
           datePickerFormat="DD/MM/YYYY"
-          placeholder="Fecha"
+          ="Fecha"
           formControlName="fechaAntes"
         />
         <mat-hint>MM/DD/YYYY</mat-hint>
@@ -62,7 +62,7 @@
           matInput
           [matDatepicker]="fechaDespues"
           datePickerFormat="DD/MM/YYYY"
-          placeholder="Fecha"
+          ="Fecha"
           formControlName="fechaDespues"
         />
         <mat-hint>MM/DD/YYYY</mat-hint>
@@ -74,21 +74,11 @@
       </mat-form-field>
       <mat-form-field class="inputBusqueda">
         <mat-label>Antes de las</mat-label>
-        <input
-          matInput
-          type="time"
-          placeholder="Hora"
-          formControlName="horaAntes"
-        />
+        <input matInput type="time" ="Hora" formControlName="horaAntes" />
       </mat-form-field>
       <mat-form-field class="inputBusqueda">
         <mat-label>Después de las</mat-label>
-        <input
-          matInput
-          type="time"
-          placeholder="Hora"
-          formControlName="horaDespues"
-        />
+        <input matInput type="time" ="Hora" formControlName="horaDespues" />
       </mat-form-field>
       <mat-form-field class="inputBusqueda">
         <mat-label>Mínimo de comensales</mat-label>
@@ -96,7 +86,7 @@
           matInput
           type="number"
           step="1"
-          placeholder="Comensales"
+          ="Comensales"
           formControlName="comensalesMin"
         />
       </mat-form-field>
@@ -106,7 +96,7 @@
           matInput
           type="number"
           step="1"
-          placeholder="Comensales"
+          ="Comensales"
           formControlName="comensalesMax"
         />
       </mat-form-field>
@@ -185,10 +175,10 @@
     <mat-tab label="Carta y temática">
       <form [formGroup]="carta" class="formCarta">
         <mat-form-field class="fieldCarta">
+          <mat-label>Temática</mat-label>
           <input
             autocomplete="off"
-            matInput
-            placeholder="Temática"
+            matInput="Temática"
             formControlName="tematica"
             required
           />
@@ -203,19 +193,19 @@
             <h3>Plato {{ i + 1 }}</h3>
             <div class="contenedorCarta">
               <mat-form-field class="fieldCarta">
+                <mat-label>Nombre del plato</mat-label>
                 <input
                   autocomplete="off"
-                  matInput
-                  placeholder="Nombre del plato"
+                  matInput="Nombre del plato"
                   formControlName="nombrePlato"
                   required
                 />
               </mat-form-field>
               <mat-form-field class="fieldCarta">
+                <mat-label>Precio del plato</mat-label>
                 <input
                   autocomplete="off"
-                  matInput
-                  placeholder="Precio del plato"
+                  matInput="Precio del plato"
                   formControlName="precio"
                   type="number"
                   step="0.01"
@@ -232,20 +222,22 @@
                 </mat-select>
               </mat-form-field>
               <div class="contenedorImagen">
-                <mat-form-field formControlName="fotografiaPlato">
-                  <!--                   <ngx-mat-file-input
-                    (change)="onFileChange($event, i)"
-                    (mouseover)="showImage[i] = true"
-                    (mouseout)="showImage[i] = false"
-                    type="file"
-                    enctype="multipart/form-data"
-                    formControlName="fotografiaPlato"
-                    [placeholder]="placeholder[i]"
-                    [accept]="'.jpg'"
-                  ></ngx-mat-file-input> -->
-                  <mat-icon matSuffix class="carpeta">folder_shared</mat-icon>
-                  <mat-hint>Previsualiza pasando el ratón</mat-hint>
-                </mat-form-field>
+                <button
+                  mat-raised-button
+                  (click)="fileInput.click()"
+                  (change)="onFileChange($event, i)"
+                  (mouseover)="showImage[i] = true"
+                  (mouseout)="showImage[i] = false"
+                >
+                  Seleccionar archivo
+                </button>
+                <input
+                  hidden
+                  type="file"
+                  #fileInput
+                  (change)="uploadFile($event, i)"
+                  accept=".jpg"
+                />
                 <div
                   class="previsualizacion"
                   *ngIf="showImage[i] && checkValue(i)"
@@ -336,9 +328,9 @@
     <mat-tab label="Inicio de sesión">
       <form [formGroup]="inicioSesion" class="formInicioSesion">
         <mat-form-field class="fieldInicioSesion">
+          <mat-label>Correo</mat-label>
           <input
-            matInput
-            placeholder="tucorreo@dominio.com"
+            matInput="tucorreo@dominio.com"
             formControlName="email"
             pattern="[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}"
             required

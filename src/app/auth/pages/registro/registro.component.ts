@@ -49,7 +49,19 @@ export class RegistroComponent {
   get email() {
     return this.inicioSesion.get('email');
   }
+  uploadFile(e: any) {
+    console.log(e);
+    const maxSize = 80000;
+    if (e.srcElement.files[0] && e.srcElement.files[0].size <= maxSize) {
+      this.datosPersonales.controls['fotografia'].setValue(
+        e.srcElement.files[0]
+      );
+    } else {
+      console.log('Archivo muy pesado');
+    }
 
+    console.log(this.datosPersonales.controls['fotografia'].value);
+  }
   // TODO: COmprobar que ambas contraseñas sean iguales
   async creaUsuario() {
     if (this.datosPersonales.valid && this.inicioSesion.valid) {

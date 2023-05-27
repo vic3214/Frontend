@@ -361,10 +361,10 @@ export class AuthService {
       console.log('plato', plato);
       if (
         plato.fotografiaPlato !== null &&
-        plato.fotografiaPlato._files.length > 0
+        plato.fotografiaPlato._files !== null
       ) {
         let idImagen;
-        await this.subirImagen(plato.fotografiaPlato._files[0]).then(
+        await this.subirImagen(plato.fotografiaPlato).then(
           (resp) => (idImagen = resp.idImagen)
         );
         plato.fotografiaPlato = idImagen;

@@ -94,6 +94,20 @@ export class RegistroRestauranteComponent {
     return this.datosRestaurante.get('horario') as FormArray;
   }
 
+  uploadFile(e: any) {
+    console.log(e);
+    const maxSize = 80000;
+    if (e.srcElement.files[0] && e.srcElement.files[0].size <= maxSize) {
+      this.datosRestaurante.controls['fotografia'].setValue(
+        e.srcElement.files[0]
+      );
+    } else {
+      console.log('Archivo muy pesado');
+    }
+
+    console.log(this.datosRestaurante.controls['fotografia'].value);
+  }
+
   agregarHorario() {
     this.horarios.push(
       this._formBuilder.group({

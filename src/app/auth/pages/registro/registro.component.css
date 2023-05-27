@@ -26,9 +26,7 @@
   input{
     color:white;
   }
-  ngx-mat-file-input{
-    color:white;
-  }
+
 
   .boton_derecho{
     margin-left:10px;

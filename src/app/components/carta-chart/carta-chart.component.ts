@@ -13,7 +13,7 @@ export class CartaChartComponent {
 
   public barChartOptions: ChartConfiguration['options'] = {
     responsive: true,
-    // We use these empty structures as placeholders for dynamic theming.
+    // We use these empty structures as s for dynamic theming.
     scales: {
       x: {},
       y: {

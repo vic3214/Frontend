@@ -3,10 +3,10 @@
     <form [formGroup]="datosPersonales">
       <ng-template matStepLabel>Datos propietario</ng-template>
       <mat-form-field>
+        <mat-label>Nombre</mat-label>
         <input
           autocomplete="off"
-          matInput
-          placeholder="Nombre"
+          matInput="Nombre"
           formControlName="nombrePropietario"
           required
         />
@@ -39,77 +39,76 @@
     <form [formGroup]="datosRestaurante">
       <ng-template matStepLabel>Datos Restaurante</ng-template>
       <mat-form-field>
+        <mat-label>Nombre del restaurante</mat-label>
         <input
           autocomplete="off"
-          matInput
-          placeholder="Nombre"
+          matInput="Nombre"
           formControlName="nombre"
           required
         />
       </mat-form-field>
       <mat-form-field>
+        <mat-label>Ciudad</mat-label>
         <input
           autocomplete="off"
-          matInput
-          placeholder="Ciudad"
+          matInput="Ciudad"
           formControlName="ciudad"
           required
         />
       </mat-form-field>
       <mat-form-field>
+        <mat-label>Calle</mat-label>
         <input
           autocomplete="off"
-          matInput
-          placeholder="Calle"
+          matInput="Calle"
           formControlName="calle"
           required
         />
       </mat-form-field>
       <mat-form-field>
+        <mat-label>Número</mat-label>
         <input
           autocomplete="off"
-          matInput
-          placeholder="Número"
+          matInput="Número"
           formControlName="numero"
           required
         />
       </mat-form-field>
       <mat-form-field>
+        <mat-label>Código Postal</mat-label>
         <input
           autocomplete="off"
-          matInput
-          placeholder="Código postal"
+          matInput="Código postal"
           formControlName="codigoPostal"
           required
         />
       </mat-form-field>
+
+      <button mat-raised-button (click)="fileInput.click()">
+        Seleccionar archivo
+      </button>
+      <input
+        hidden
+        type="file"
+        #fileInput
+        (change)="uploadFile($event)"
+        accept=".jpg"
+      />
+
       <mat-form-field>
-        <ngx-mat-file-input
-          type="file"
-          name="fotografia"
-          enctype="multipart/form-data"
-          formControlName="fotografia"
-          placeholder="Imagen de perfil (JPG)"
-          [accept]="'.jpg'"
-        ></ngx-mat-file-input>
-        <mat-icon matSuffix class="carpeta">folder_shared</mat-icon>
-        <mat-hint>Opcional</mat-hint>
-      </mat-form-field>
-      <mat-form-field>
+        <mat-label>Temática</mat-label>
         <input
           autocomplete="off"
-          matInput
-          placeholder="Temática"
+          matInput="Temática"
           formControlName="tematica"
           required
         />
       </mat-form-field>
       <mat-form-field>
-        <mat-label>Número máximo personas por hora</mat-label>
+        <mat-label>Máximo personas/hora</mat-label>
         <input
           autocomplete="off"
           matInput
-          placeholder="Numero de personas"
           formControlName="maxPersonas"
           type="number"
           step="1"
@@ -117,11 +116,10 @@
         />
       </mat-form-field>
       <mat-form-field style="width: 200px">
-        <mat-label>Número máximo personas por reserva</mat-label>
+        <mat-label>Máximo personas/reserva</mat-label>
         <input
           autocomplete="off"
           matInput
-          placeholder="Numero de personas"
           formControlName="maxReservas"
           type="number"
           step="1"
@@ -187,19 +185,19 @@
           [formGroupName]="i"
         >
           <mat-form-field>
+            <mat-label>Nombre</mat-label>
             <input
               autocomplete="off"
-              matInput
-              placeholder="Nombre"
+              matInput="Nombre"
               formControlName="nombrePlato"
               required
             />
           </mat-form-field>
           <mat-form-field>
+            <mat-label>Precio</mat-label>
             <input
               autocomplete="off"
-              matInput
-              placeholder="Precio"
+              matInput="Precio"
               formControlName="precio"
               type="number"
               step="0.01"
@@ -215,17 +213,18 @@
               }}</mat-option>
             </mat-select>
           </mat-form-field>
-          <mat-form-field>
-            <ngx-mat-file-input
-              type="file"
-              enctype="multipart/form-data"
-              formControlName="fotografiaPlato"
-              placeholder="Fotografia del Plato (JPG)"
-              [accept]="'.jpg'"
-            ></ngx-mat-file-input>
-            <mat-icon matSuffix class="carpeta">folder_shared</mat-icon>
-            <mat-hint>Opcional</mat-hint>
-          </mat-form-field>
+
+          <button mat-raised-button (click)="fileInput.click()">
+            Seleccionar archivo
+          </button>
+          <input
+            hidden
+            type="file"
+            #fileInput
+            (change)="uploadFile($event)"
+            accept=".jpg"
+          />
+
           <button
             mat-raised-button
             color="primary"
@@ -250,9 +249,9 @@
     <form [formGroup]="inicioSesion" class="inicio_sesion">
       <ng-template matStepLabel>Configuración de inicio de sesión</ng-template>
       <mat-form-field>
+        <mat-label>Correo</mat-label>
         <input
-          matInput
-          placeholder="tucorreo@dominio.com"
+          matInput="tucorreo@dominio.com"
           formControlName="email"
           pattern="[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}"
           required
@@ -325,20 +324,20 @@
   </mat-step>
   <mat-step>
     <ng-template matStepLabel>Terminar</ng-template>
-    <!--     <div
+    <div
       *ngIf="inicioSesion.valid && datosPersonales.valid; else elementoOculto"
-    > -->
-    <h3 class="terminar">
-      ¡Has rellenado todos los datos! Pulsa en continuar para registrar tu
-      cuenta.
-    </h3>
-    <!--   </div> -->
-    <!--     <ng-template #elementoOculto>
+    >
+      <h3 class="terminar">
+        ¡Has rellenado todos los datos! Pulsa en continuar para registrar tu
+        cuenta.
+      </h3>
+    </div>
+    <ng-template #elementoOculto>
       <h3 class="terminarError">
         Faltan campos requeridos por rellenar. Asegurate de que están
         rellenados.
       </h3></ng-template
-    > -->
+    >
 
     <div>
       <button mat-raised-button color="primary" matStepperPrevious>

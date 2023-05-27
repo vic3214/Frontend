@@ -47,7 +47,6 @@
           matInput
           [matDatepicker]="fecha"
           datePickerFormat="DD/MM/YYYY"
-          placeholder="Fecha"
           formControlName="fecha"
         />
         <mat-hint>MM/DD/YYYY</mat-hint>
@@ -56,46 +55,25 @@
       </mat-form-field>
       <mat-form-field class="inputBusqueda">
         <mat-label>Hora</mat-label>
-        <input matInput type="time" placeholder="Hora" formControlName="hora" />
+        <input matInput type="time" formControlName="hora" />
       </mat-form-field>
       <mat-form-field class="inputBusqueda">
         <mat-label>Personas</mat-label>
-        <input
-          matInput
-          type="number"
-          step="1"
-          placeholder="Personas"
-          formControlName="personas"
-        />
+        <input matInput type="number" step="1" formControlName="personas" />
       </mat-form-field>
       <mat-form-field class="inputBusqueda">
         <mat-label>Temática</mat-label>
-        <input
-          matInput
-          type="text"
-          placeholder="Temática"
-          formControlName="tematica"
-        />
+        <input matInput type="text" formControlName="tematica" />
       </mat-form-field>
 
       <mat-form-field class="inputBusqueda">
         <mat-label>Precio medio mínimo carta</mat-label>
-        <input
-          matInput
-          type="number"
-          placeholder="Precio"
-          formControlName="precioMin"
-        />
+        <input matInput type="number" formControlName="precioMin" />
       </mat-form-field>
 
       <mat-form-field class="inputBusqueda">
         <mat-label>Precio medio máximo carta</mat-label>
-        <input
-          matInput
-          type="number"
-          placeholder="Precio"
-          formControlName="precioMax"
-        />
+        <input matInput type="number" formControlName="precioMax" />
       </mat-form-field>
       <mat-form-field class="inputBusqueda">
         <mat-label>Ordenar por</mat-label>
@@ -134,7 +112,7 @@
             <h3>
               Valoración:
               <span class="spacer-icon"></span>
-              <!--  {{ valoracionRestaurante(i) | number : "1.0-2" }}/5 -->
+              {{ valoracionRestaurante(i) | number : "1.0-2" }}/5
 
               <span class="spacer-icon"></span>
               <mat-icon class="star-icon">star</mat-icon>
