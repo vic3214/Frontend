@@ -173,12 +173,13 @@
             <input matInput type="number" formControlName="personas" required />
           </mat-form-field>
           <mat-form-field>
+            <mat-label>Selecciona la fecha</mat-label>
             <input
+              readonly
               required
               matInput
               [min]="minDate"
               [matDatepicker]="picker"
-              ="Selecciona el día"
               formControlName="fecha"
             />
             <mat-datepicker-toggle
@@ -218,10 +219,10 @@
             </button>
             <span class="spacer"></span>
             <mat-form-field color="accent">
+              <mat-label>Valoración</mat-label>
               <input
                 matInput
                 type="number"
-                ="Valora"
                 formControlName="valoracion"
                 pattern="^[0-5]$"
                 required
@@ -244,13 +245,13 @@
             </button>
             <span class="spacer"></span>
             <mat-form-field color="accent">
+              <mat-label>Comentario</mat-label>
               <textarea
                 matInput
                 matTextareaAutosize
                 matAutosizeMinRows="3"
                 matAutosizeMaxRows="5"
                 autocomplete="off"
-                ="Comenta"
                 formControlName="comentario"
                 required
               ></textarea>

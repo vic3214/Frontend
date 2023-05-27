@@ -143,6 +143,19 @@ export class DashboardRestauranteComponent implements OnInit {
                 await this.authService
                   .recuperarImagen(categoria[i].fotografiaPlato)
                   .then((resp) => {
+                    console.log('res', resp);
+                    if (resp.size !== 24) {
+                      const file = new File(
+                        [resp],
+                        `imagenPrecargada${i}.jpg`,
+                        {
+                          type: 'image/jpeg',
+                        }
+                      );
+                      const blob = new Blob([file], { type: file.type });
+                      resp = blob;
+                    }
+
                     const reader = new FileReader();
                     reader.onload = (e) => {
                       imagen = e.target!.result;

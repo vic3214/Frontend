@@ -35,6 +35,7 @@ export class AuthService {
   }
 
   async recuperarImagen(id: string): Promise<Blob> {
+    console.log('recImagen', id);
     const response = await fetch(`${this.baseUrl}/recuperar-imagen/${id}`);
     const data = await response.json();
     const imagen_base64 = data.imagen;
@@ -49,9 +50,13 @@ export class AuthService {
   }
   async subirImagen(imagen: File): Promise<any> {
     console.log('File', imagen);
+    const file = new File([imagen], `imagenPrecargada.jpg`, {
+      type: 'image/jpeg',
+    });
+    const blob = new Blob([file], { type: file.type });
     return new Promise((resolve, reject) => {
       const reader = new FileReader();
-      reader.readAsArrayBuffer(imagen);
+      reader.readAsArrayBuffer(blob);
       reader.onloadend = () => {
         const buffer = reader.result as ArrayBuffer;
         const imagen_array = Array.from(new Uint8Array(buffer));
@@ -72,10 +77,11 @@ export class AuthService {
 
   async registraUsuario(datosPersonales: FormGroup, inicioSesion: FormGroup) {
     let idImagen;
+
     if (datosPersonales.controls['fotografia'].value !== '') {
-      await this.subirImagen(
-        datosPersonales.controls['fotografia'].value._files[0]
-      ).then((resp) => (idImagen = resp.idImagen));
+      await this.subirImagen(datosPersonales.controls['fotografia'].value).then(
+        (resp) => (idImagen = resp.idImagen)
+      );
     } else {
       // TODO: Asignar fotografia predeterminada
     }
@@ -276,7 +282,7 @@ export class AuthService {
     let idImagen;
     if (datosRestaurante.controls['fotografia'].value !== '') {
       await this.subirImagen(
-        datosRestaurante.controls['fotografia'].value._files[0]
+        datosRestaurante.controls['fotografia'].value
       ).then((resp) => (idImagen = resp.idImagen));
     } else {
       // TODO: Asignar fotografia predeterminada
@@ -361,7 +367,8 @@ export class AuthService {
       console.log('plato', plato);
       if (
         plato.fotografiaPlato !== null &&
-        plato.fotografiaPlato._files !== null
+        plato.fotografiaPlato !== undefined &&
+        typeof plato.fotografiaPlato !== 'string'
       ) {
         let idImagen;
         await this.subirImagen(plato.fotografiaPlato).then(

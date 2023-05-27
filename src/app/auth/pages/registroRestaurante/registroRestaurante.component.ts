@@ -94,18 +94,28 @@ export class RegistroRestauranteComponent {
     return this.datosRestaurante.get('horario') as FormArray;
   }
 
-  uploadFile(e: any) {
+  uploadFile(e: any, form: string, i: number) {
     console.log(e);
     const maxSize = 80000;
-    if (e.srcElement.files[0] && e.srcElement.files[0].size <= maxSize) {
-      this.datosRestaurante.controls['fotografia'].setValue(
-        e.srcElement.files[0]
-      );
+    if (form === 'restaurante') {
+      if (e.srcElement.files[0] && e.srcElement.files[0].size <= maxSize) {
+        this.datosRestaurante.controls['fotografia'].setValue(
+          e.srcElement.files[0]
+        );
+      } else {
+        console.log('Archivo muy pesado');
+      }
     } else {
-      console.log('Archivo muy pesado');
+      if (e.srcElement.files[0] && e.srcElement.files[0].size <= maxSize) {
+        const platosArray = this.carta.get('platos') as FormArray;
+        platosArray
+          .at(i)
+          .get('fotografiaPlato')!
+          .setValue(e.srcElement.files[0]);
+      } else {
+        console.log('Archivo muy pesado');
+      }
     }
-
-    console.log(this.datosRestaurante.controls['fotografia'].value);
   }
 
   agregarHorario() {

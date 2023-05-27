@@ -46,7 +46,6 @@
           matInput
           [matDatepicker]="fechaAntes"
           datePickerFormat="DD/MM/YYYY"
-          ="Fecha"
           formControlName="fechaAntes"
         />
         <mat-hint>MM/DD/YYYY</mat-hint>
@@ -62,7 +61,6 @@
           matInput
           [matDatepicker]="fechaDespues"
           datePickerFormat="DD/MM/YYYY"
-          ="Fecha"
           formControlName="fechaDespues"
         />
         <mat-hint>MM/DD/YYYY</mat-hint>
@@ -74,11 +72,11 @@
       </mat-form-field>
       <mat-form-field class="inputBusqueda">
         <mat-label>Antes de las</mat-label>
-        <input matInput type="time" ="Hora" formControlName="horaAntes" />
+        <input matInput type="time" formControlName="horaAntes" />
       </mat-form-field>
       <mat-form-field class="inputBusqueda">
         <mat-label>Después de las</mat-label>
-        <input matInput type="time" ="Hora" formControlName="horaDespues" />
+        <input matInput type="time" formControlName="horaDespues" />
       </mat-form-field>
       <mat-form-field class="inputBusqueda">
         <mat-label>Mínimo de comensales</mat-label>
@@ -86,7 +84,6 @@
           matInput
           type="number"
           step="1"
-          ="Comensales"
           formControlName="comensalesMin"
         />
       </mat-form-field>
@@ -96,7 +93,6 @@
           matInput
           type="number"
           step="1"
-          ="Comensales"
           formControlName="comensalesMax"
         />
       </mat-form-field>
@@ -137,7 +133,6 @@
     <ul>
       <li *ngFor="let result of reservasRestaurante; index as i">
         <mat-card class="example-card" [ngClass]="{ cancelado: result.estado }">
-          <!-- -->
           <mat-card-header class="header">
             <mat-card-title>Reserva de {{ result.usuario }}</mat-card-title>
             <mat-card-subtitle><h3>Datos de la reserva:</h3></mat-card-subtitle>

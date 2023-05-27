@@ -5,6 +5,7 @@ Mostrar estadisticas gráficamente
 Solucionar problemas y estilos
 
 // Hecho
+Actualizar angular v16
 Libreria para meter ficheros sustituyendo a ngx-file-input
 Filtrar reservas restaurante
 Manejar error al buscar ciudad que no existe
