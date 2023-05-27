@@ -1,1 +1,12 @@
-<p>reservas-chart works!</p>
+<div>
+  <h4>Restaurantes más reservados</h4>
+  <canvas
+    baseChart
+    class="chart"
+    [data]="barChartData"
+    [options]="barChartOptions"
+    [plugins]="barChartPlugins"
+    [type]="barChartType"
+  >
+  </canvas>
+</div>

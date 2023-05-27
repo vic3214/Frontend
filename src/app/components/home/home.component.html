@@ -35,7 +35,16 @@
   </ul>
 </div>
 
-<div class="contenedor">
+<div
+  class="contenedor"
+  style="
+    background-image: url('assets/fondo.jpg');
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    background-size: 100% 100%;
+  "
+>
   <div
     class="results-container"
     *ngIf="results.length != 0 || busqueda; else mensajeBuscar"
@@ -144,6 +153,7 @@
   </div>
   <div id="map"></div>
 </div>
+
 <ng-template #mensajeBuscar>
   <div class="mensaje">Comienza a buscar restaurantes</div>
 </ng-template>

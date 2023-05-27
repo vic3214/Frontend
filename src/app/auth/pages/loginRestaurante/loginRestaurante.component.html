@@ -1,84 +1,96 @@
-<mat-drawer-container class="example-container" autosize>
-  <mat-drawer #drawer class="example-sidenav" mode="over">
-    <mat-card class="example-card">
-      <mat-card-header>
-        <mat-card-title>Inicio de Sesión con tu restaurante</mat-card-title>
-        <mat-card-subtitle
-          >Regístra tu restaurante si aún no lo has hecho!</mat-card-subtitle
-        >
-      </mat-card-header>
-      <mat-card-content>
-        <form [formGroup]="loginForm" (ngSubmit)="login()" id="loginForm">
-          <div class="example-container">
-            <mat-form-field appearance="fill">
-              <mat-label>Introduce tu email</mat-label>
-              <input
-                autocomplete="off"
-                type="email"
-                formControlName="email"
-                matInput="tuCorreo@dominio.com"
-                required
-              />
-            </mat-form-field>
-          </div>
-          <br />
-          <div class="example-container">
-            <mat-form-field appearance="fill">
-              <mat-label>Introduce tu contraseña</mat-label>
-              <input
-                autocomplete="off"
-                type="password"
-                formControlName="password"
-                matInput
-                [type]="hide ? 'password' : 'text'"
-                required
-              />
-              <button
-                type="button"
-                mat-icon-button
-                matSuffix
-                (click)="hide = !hide"
-                [attr.aria-label]="'Hide password'"
-                [attr.aria-pressed]="hide"
-              >
-                <mat-icon>{{
-                  hide ? "visibility_off" : "visibility"
-                }}</mat-icon>
-              </button>
-            </mat-form-field>
-          </div>
-        </form>
-      </mat-card-content>
-      <mat-card-actions>
-        <button
-          mat-raised-button
-          color="accent"
-          type="submit"
-          (click)="login()"
-        >
-          Iniciar Sesión con Restaurante
-        </button>
-        <button
-          mat-raised-button
-          color="accent"
-          routerLink="/auth/registroRestaurante"
-          routerLinkActive="active"
-          ariaCurrentWhenActive="page"
-        >
-          Registrar restaurante
-        </button>
-      </mat-card-actions>
-    </mat-card>
-  </mat-drawer>
+<div style="height: 91%">
+  <mat-drawer-container class="example-container" autosize>
+    <mat-drawer #drawer class="example-sidenav" mode="over">
+      <mat-card class="example-card">
+        <mat-card-header>
+          <mat-card-title>Inicio de Sesión con tu restaurante</mat-card-title>
+          <mat-card-subtitle
+            >Regístra tu restaurante si aún no lo has hecho!</mat-card-subtitle
+          >
+        </mat-card-header>
+        <mat-card-content>
+          <form [formGroup]="loginForm" (ngSubmit)="login()" id="loginForm">
+            <div class="example-container">
+              <mat-form-field appearance="fill">
+                <mat-label>Introduce tu email</mat-label>
+                <input
+                  autocomplete="off"
+                  type="email"
+                  formControlName="email"
+                  matInput="tuCorreo@dominio.com"
+                  required
+                />
+              </mat-form-field>
+            </div>
+            <br />
+            <div class="example-container">
+              <mat-form-field appearance="fill">
+                <mat-label>Introduce tu contraseña</mat-label>
+                <input
+                  autocomplete="off"
+                  type="password"
+                  formControlName="password"
+                  matInput
+                  [type]="hide ? 'password' : 'text'"
+                  required
+                />
+                <button
+                  type="button"
+                  mat-icon-button
+                  matSuffix
+                  (click)="hide = !hide"
+                  [attr.aria-label]="'Hide password'"
+                  [attr.aria-pressed]="hide"
+                >
+                  <mat-icon>{{
+                    hide ? "visibility_off" : "visibility"
+                  }}</mat-icon>
+                </button>
+              </mat-form-field>
+            </div>
+          </form>
+        </mat-card-content>
+        <mat-card-actions>
+          <button
+            mat-raised-button
+            color="primary"
+            class="margin_right"
+            type="submit"
+            (click)="login()"
+          >
+            Iniciar Sesión con Restaurante
+          </button>
+          <button
+            mat-raised-button
+            color="primary"
+            routerLink="/auth/registroRestaurante"
+            routerLinkActive="active"
+            ariaCurrentWhenActive="page"
+          >
+            Registrar restaurante
+          </button>
+        </mat-card-actions>
+      </mat-card>
+    </mat-drawer>
 
-  <div class="example-sidenav-content">
-    <button
-      type="button"
-      mat-raised-button
-      color="primary"
-      (click)="drawer.toggle()"
+    <div
+      class="example-sidenav-content"
+      style="
+        background-image: url('assets/restaurante.jpg');
+        background-size: cover;
+        background-repeat: no-repeat;
+        background-attachment: fixed;
+        background-size: 100% 100%;
+      "
     >
-      Iniciar Sesión con tu restaurante
-    </button>
-  </div>
-</mat-drawer-container>
+      <button
+        type="button"
+        mat-raised-button
+        color="primary"
+        (click)="drawer.toggle()"
+      >
+        Iniciar Sesión con tu restaurante
+      </button>
+    </div>
+  </mat-drawer-container>
+</div>

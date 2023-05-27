@@ -13,6 +13,7 @@ export interface AuthResponse {
   msg?: string;
   reservas?: string[];
   favoritos?: string[];
+  restaurante?: any;
 }
 
 export interface Usuario {

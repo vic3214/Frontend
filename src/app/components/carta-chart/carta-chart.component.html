@@ -1,11 +1,10 @@
-<canvas
-  baseChart
-  class="chart"
-  [data]="barChartData"
-  [options]="barChartOptions"
-  [plugins]="barChartPlugins"
-  [type]="barChartType"
-  (chartHover)="chartHovered($event)"
-  (chartClick)="chartClicked($event)"
->
-</canvas>
+<div>
+  <h4>Platos por tipo</h4>
+  <canvas
+    baseChart
+    class="chart"
+    [data]="radarChartData"
+    [options]="radarChartOptions"
+    [type]="radarChartType"
+  ></canvas>
+</div>

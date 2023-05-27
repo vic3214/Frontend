@@ -31,4 +31,8 @@ export class SearchService {
       `https://nominatim.openstreetmap.org/search?format=json&q=${ciudad}&countrycodes=es&featuretype=city&limit=10`
     );
   }
+
+  getAllRestaurantes() {
+    return this.http.get<any>(`${this.baseUrl}/restaurantes`);
+  }
 }

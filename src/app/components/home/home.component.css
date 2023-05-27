@@ -91,7 +91,7 @@ li {
   flex-direction: row;
   flex-grow: 1;
   margin-top: 10px;
-  height: 70%;
+  height: 78.4%;
 }
 
 .results-container {
@@ -119,7 +119,7 @@ color: white;
 
 #map{
   margin: 0 auto;
-  width: 40%;
+  width: 50%;
   min-height: 400px;
   max-height: 700px;
   height: 100%;

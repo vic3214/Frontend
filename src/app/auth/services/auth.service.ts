@@ -35,7 +35,6 @@ export class AuthService {
   }
 
   async recuperarImagen(id: string): Promise<Blob> {
-    console.log('recImagen', id);
     const response = await fetch(`${this.baseUrl}/recuperar-imagen/${id}`);
     const data = await response.json();
     const imagen_base64 = data.imagen;
@@ -49,7 +48,6 @@ export class AuthService {
     return blob;
   }
   async subirImagen(imagen: File): Promise<any> {
-    console.log('File', imagen);
     const file = new File([imagen], `imagenPrecargada.jpg`, {
       type: 'image/jpeg',
     });
@@ -115,9 +113,6 @@ export class AuthService {
     const year = fecha.getFullYear();
     const month = fecha.getMonth() + 1;
     const day = fecha.getDate();
-    console.log(year);
-    console.log(month);
-    console.log(day);
     return this.http.get(
       `https://holidays.abstractapi.com/v1/?api_key=${apiKey}&country=ES&year=${year}&month=${month}&day=${day}`
     );
@@ -140,7 +135,7 @@ export class AuthService {
       'x-token',
       localStorage.getItem('token') || ''
     );
-    console.log('Enviar usuario', usuario);
+
     return this.http.put<any>(
       `${this.baseUrl}/editar-usuario/${usuario._id}`,
       usuario,
@@ -278,7 +273,6 @@ export class AuthService {
     carta: FormGroup,
     inicioSesion: FormGroup
   ) {
-    console.log('imagen');
     let idImagen;
     if (datosRestaurante.controls['fotografia'].value !== '') {
       await this.subirImagen(
@@ -288,7 +282,7 @@ export class AuthService {
       // TODO: Asignar fotografia predeterminada
       idImagen = 'Prueba';
     }
-    console.log('carta');
+
     const bodyCarta = await this.construyeCarta(carta);
 
     const ciudad = datosRestaurante.controls['ciudad'].value;
@@ -296,7 +290,6 @@ export class AuthService {
     const numero = datosRestaurante.controls['numero'].value;
     const codigoPostal = datosRestaurante.controls['codigoPostal'].value;
 
-    console.log('ubicacion');
     const ubicacion = await this.obtenerUbicacion(
       calle,
       ciudad,
@@ -304,7 +297,6 @@ export class AuthService {
       codigoPostal
     );
 
-    console.log('body');
     let body: any = {
       nombrePropietario: datosPersonales.controls['nombrePropietario'].value,
       fechaNacimiento: datosPersonales.controls['fechaNacimiento'].value,
@@ -324,8 +316,6 @@ export class AuthService {
       vecesReservado: 0,
       vecesVisitado: 0,
     };
-    console.log('body', body);
-    console.log('return');
     return this.http
       .post<any>(`${this.baseUrl}/nuevo-restaurante`, body)
       .pipe(map((resp) => resp.ok));
@@ -364,7 +354,7 @@ export class AuthService {
 
     for (let index = 0; index < longitud; index++) {
       const plato = carta.controls['platos'].value[index];
-      console.log('plato', plato);
+
       if (
         plato.fotografiaPlato !== null &&
         plato.fotografiaPlato !== undefined &&
@@ -382,7 +372,7 @@ export class AuthService {
         bodyCarta[tipo].push(plato);
       }
     }
-    console.log('BodyCarta', bodyCarta);
+
     return bodyCarta;
   }
 
@@ -399,8 +389,6 @@ export class AuthService {
 
     const response = await fetch(url);
     const data = await response.json();
-
-    console.log('datos', data);
 
     if (data.length > 0) {
       const location = data[0];

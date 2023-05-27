@@ -137,13 +137,15 @@ export class DashboardRestauranteComponent implements OnInit {
               let imagen: any;
               this.showImage.push(false);
 
-              if (categoria[i].fotografiaPlato !== undefined) {
+              if (
+                categoria[i].fotografiaPlato !== undefined &&
+                categoria[i].fotografiaPlato !== null
+              ) {
                 this.placeholder.push('ImagenPrecargada.jpg');
 
                 await this.authService
                   .recuperarImagen(categoria[i].fotografiaPlato)
                   .then((resp) => {
-                    console.log('res', resp);
                     if (resp.size !== 24) {
                       const file = new File(
                         [resp],
@@ -554,6 +556,7 @@ export class DashboardRestauranteComponent implements OnInit {
       };
       reader.readAsDataURL(blob);
     } else {
+      //TODO: Aviso de archivo pesado
       console.log('Archivo muy pesado');
     }
   }

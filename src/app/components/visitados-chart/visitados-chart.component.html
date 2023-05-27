@@ -1,1 +1,12 @@
-<p>visitados-chart works!</p>
+<div>
+  <h4>Restaurantes más visitados</h4>
+  <canvas
+    baseChart
+    class="chart"
+    [data]="barChartData"
+    [options]="barChartOptions"
+    [plugins]="barChartPlugins"
+    [type]="barChartType"
+  >
+  </canvas>
+</div>
