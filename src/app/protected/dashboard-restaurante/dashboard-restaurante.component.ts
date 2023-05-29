@@ -1,5 +1,12 @@
 import { Component, OnInit } from '@angular/core';
-import { FormArray, FormBuilder, FormGroup } from '@angular/forms';
+import {
+  AbstractControl,
+  FormArray,
+  FormBuilder,
+  FormGroup,
+  ValidationErrors,
+  ValidatorFn,
+} from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
@@ -73,10 +80,18 @@ export class DashboardRestauranteComponent implements OnInit {
         nombrePlato: [],
         precio: [],
         tipo: [],
-        fotografiaPlato: [''],
+        fotografiaPlato: ['', this.checkFileSize()],
       }),
     ]),
   });
+
+  checkFileSize(): ValidatorFn {
+    return (control: AbstractControl): ValidationErrors | null => {
+      return control.get('fotografiaPlato')?.value.length > 0
+        ? { fileSize: true }
+        : null;
+    };
+  }
 
   hide: boolean = true;
   hideRepetida: boolean = true;
@@ -493,7 +508,6 @@ export class DashboardRestauranteComponent implements OnInit {
 
   cancelarReserva(i: number) {
     this.restaurante.reservas[i].estado = true;
-    // TODO: Incluir id de usuario en la reserva y pasarla al servicio que hay que crear
     this.searchService
       .getUsuarioPorId(this.restaurante.reservas[i].uidUsuario)
       .subscribe((resp: any) => {

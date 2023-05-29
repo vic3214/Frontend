@@ -332,14 +332,34 @@ export class HomeComponent implements OnInit {
             }
 
             // Crear el marcador para el restaurante
-            const marker = L.marker([
-              element.ubicacion[0],
-              element.ubicacion[1],
-            ])
+            let marker = L.marker([element.ubicacion[0], element.ubicacion[1]])
               .bindPopup(element.nombre)
               .openPopup();
             // Añadir el marcador al mapa
             marker.addTo(this.map!);
+
+            // Geolocalizacion
+            var browserLat;
+            var browserLong;
+
+            navigator.geolocation.getCurrentPosition(
+              (position) => {
+                console.log(position);
+                browserLat = position.coords.latitude;
+                browserLong = position.coords.longitude;
+
+                marker = L.marker([browserLat, browserLong]).addTo(this.map!);
+                marker.bindPopup('Hola Tu estas aqui').openPopup();
+                this.map!.setView([browserLat, browserLong], 18);
+
+                console.log(browserLat);
+                console.log(browserLong);
+              },
+              function (err) {
+                console.error('Error', err);
+              },
+              { maximumAge: 100, timeout: 5000, enableHighAccuracy: true }
+            );
           });
         }
       });

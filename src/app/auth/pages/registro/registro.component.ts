@@ -1,8 +1,11 @@
 import { Component } from '@angular/core';
 import {
+  AbstractControl,
   FormBuilder,
   FormControl,
   FormGroup,
+  ValidationErrors,
+  ValidatorFn,
   Validators,
 } from '@angular/forms';
 import { DateAdapter } from '@angular/material/core';
@@ -39,11 +42,21 @@ export class RegistroComponent {
       Validators.required,
       Validators.minLength(6),
     ]),
-    passwordRepetida: [],
+    passwordRepetida: ['', this.checkEqualsPasswords()],
   });
 
+  checkEqualsPasswords(): ValidatorFn {
+    return (control: AbstractControl): ValidationErrors | null => {
+      return control.get('password') === control.get('passwordRepetida')
+        ? { password: true }
+        : null;
+    };
+  }
   get password() {
     return this.inicioSesion.get('password');
+  }
+  get passwordRepetida() {
+    return this.inicioSesion.get('passwordRepetida');
   }
 
   get email() {
@@ -62,7 +75,7 @@ export class RegistroComponent {
 
     console.log(this.datosPersonales.controls['fotografia'].value);
   }
-  // TODO: COmprobar que ambas contraseñas sean iguales
+
   async creaUsuario() {
     if (this.datosPersonales.valid && this.inicioSesion.valid) {
       (

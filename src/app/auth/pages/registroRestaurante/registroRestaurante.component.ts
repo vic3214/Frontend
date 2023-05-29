@@ -1,9 +1,12 @@
 import { Component } from '@angular/core';
 import {
+  AbstractControl,
   FormArray,
   FormBuilder,
   FormControl,
   FormGroup,
+  ValidationErrors,
+  ValidatorFn,
   Validators,
 } from '@angular/forms';
 import { DateAdapter } from '@angular/material/core';
@@ -74,7 +77,17 @@ export class RegistroRestauranteComponent {
       }),
     ]),
   });
-
+  checkFileSize(): ValidatorFn {
+    return (control: AbstractControl): ValidationErrors | null => {
+      const value = control.value;
+      if (value instanceof File) {
+        return value.size > 80000 ? { fileSize: true } : null;
+      } else if (typeof value === 'string') {
+        return value === '' ? null : { fileSize: true };
+      }
+      return null;
+    };
+  }
   inicioSesion: FormGroup = this._formBuilder.group({
     email: new FormControl(
       [],
@@ -87,8 +100,12 @@ export class RegistroRestauranteComponent {
       Validators.required,
       Validators.minLength(6),
     ]),
-    passwordRepetida: [],
+    passwordRepetida: [['']],
   });
+
+  get passwordRepetida() {
+    return this.inicioSesion.get('passwordRepetida');
+  }
 
   get horarios(): FormArray {
     return this.datosRestaurante.get('horario') as FormArray;

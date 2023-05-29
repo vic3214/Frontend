@@ -57,7 +57,7 @@
           required
         />
         <mat-error *ngIf="email!.invalid && inicioSesion.touched"
-          >El correo debe estar bien formado
+          >Correo mal formado
         </mat-error>
       </mat-form-field>
       <mat-form-field appearance="fill">
@@ -92,6 +92,9 @@
           [type]="hideRepetida ? 'password' : 'text'"
           required=""
         />
+        <mat-error *ngIf="passwordRepetida!.invalid && inicioSesion.touched"
+          >Las contraseñas deben coincidir
+        </mat-error>
         <button
           type="button"
           mat-icon-button

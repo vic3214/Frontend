@@ -94,7 +94,6 @@
         (change)="uploadFile($event, 'restaurante', 0)"
         accept=".jpg"
       />
-
       <mat-form-field>
         <mat-label>Temática</mat-label>
         <input
@@ -216,17 +215,19 @@
             </mat-select>
           </mat-form-field>
 
-          <button mat-raised-button (click)="fileInput.click()">
-            Seleccionar archivo
-          </button>
-          <input
-            hidden
-            type="file"
-            #fileInput
-            (change)="uploadFile($event, 'plato', i)"
-            accept=".jpg"
-          />
-
+          <div style="display: inline; margin-left: 5px">
+            <label>Fotografía del plato: </label>
+            <button mat-raised-button (click)="fileInput.click()">
+              Seleccionar archivo
+            </button>
+            <input
+              hidden
+              type="file"
+              #fileInput
+              (change)="uploadFile($event, 'plato', i)"
+              accept=".jpg"
+            />
+          </div>
           <button
             mat-raised-button
             color="primary"
@@ -296,6 +297,9 @@
           [type]="hideRepetida ? 'password' : 'text'"
           required=""
         />
+        <mat-error *ngIf="passwordRepetida!.invalid && inicioSesion.touched"
+          >Las contraseñas deben coincidir
+        </mat-error>
         <button
           type="button"
           mat-icon-button

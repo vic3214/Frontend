@@ -306,11 +306,17 @@ export class RestauranteComponent implements OnInit, AfterViewInit {
         reserva['uidRestaurante'] = resp.restaurante._id;
         console.log(reserva);
         this.usuario.reservas.push(reserva);
-        this.authService.editaUsuario(this.usuario).subscribe((res: any) => {});
+        this.authService.editaUsuario(this.usuario).subscribe({
+          next: (data) => {
+            this.openSnackBar('¡Reserva realizada con éxito!');
+          },
+          error: (error: Error) => {
+            this.openSnackBar(
+              'Hubo un problema al realizar la reserva: ' + error.message
+            );
+          },
+        });
       });
-
-      //TODO: Lanzar algo reserva exitosa o reserva fallida
-      this.openSnackBar('¡Reserva realizada con éxito!');
     } else {
       this.openSnackBar('¡Debes iniciar sesión para hacer una reserva!');
     }

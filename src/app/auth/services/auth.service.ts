@@ -81,7 +81,7 @@ export class AuthService {
         (resp) => (idImagen = resp.idImagen)
       );
     } else {
-      // TODO: Asignar fotografia predeterminada
+      idImagen = '';
     }
 
     let anio = datosPersonales.controls['fechaNacimiento'].value.getFullYear();
@@ -279,8 +279,7 @@ export class AuthService {
         datosRestaurante.controls['fotografia'].value
       ).then((resp) => (idImagen = resp.idImagen));
     } else {
-      // TODO: Asignar fotografia predeterminada
-      idImagen = 'Prueba';
+      idImagen = '';
     }
 
     const bodyCarta = await this.construyeCarta(carta);
