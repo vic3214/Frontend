@@ -318,8 +318,7 @@ export class HomeComponent implements OnInit {
           restaurantes.restaurantes.forEach((element: any) => {
             this.calculaMedias(element);
             this.results.push(element);
-            console.log('fotografia', element.fotografia);
-            if (element.fotografia !== undefined) {
+            if (element.fotografia !== undefined && element.fotografia !== '') {
               this.authService
                 .recuperarImagen(element.fotografia)
                 .then((resp) => {
@@ -344,16 +343,32 @@ export class HomeComponent implements OnInit {
 
             navigator.geolocation.getCurrentPosition(
               (position) => {
-                console.log(position);
                 browserLat = position.coords.latitude;
                 browserLong = position.coords.longitude;
 
-                marker = L.marker([browserLat, browserLong]).addTo(this.map!);
-                marker.bindPopup('Hola Tu estas aqui').openPopup();
-                this.map!.setView([browserLat, browserLong], 18);
+                // Calculo radio
+                console.log(restaurantes);
+                console.table([browserLat, browserLong]);
+                console.table([element.ubicacion[0], element.ubicacion[1]]);
 
-                console.log(browserLat);
-                console.log(browserLong);
+                const radio = this.calcDistance(
+                  browserLat,
+                  browserLong,
+                  element.ubicacion[0],
+                  element.ubicacion[1]
+                );
+                console.log(radio);
+
+                L.circle([browserLat, browserLong], {
+                  color: '#1f6d0e',
+                  fillColor: 'green',
+                  fillOpacity: 0.1,
+                  radius: 700,
+                }).addTo(this.map!);
+
+                marker = L.marker([browserLat, browserLong]).addTo(this.map!);
+                marker.bindPopup('Estás aquí').openPopup();
+                this.map!.setView([browserLat, browserLong], 15);
               },
               function (err) {
                 console.error('Error', err);
@@ -371,6 +386,26 @@ export class HomeComponent implements OnInit {
       this.map = undefined;
       this.iniciarMapa();
     }
+  }
+
+  calcDistance(lat1: any, lon1: any, lat2: any, lon2: any) {
+    let rad = function (x: any) {
+      return (x * Math.PI) / 180;
+    };
+
+    var R = 6378.137; //Radio de la tierra en km
+    var dLat = rad(lat2 - lat1);
+    var dLong = rad(lon2 - lon1);
+
+    var a =
+      Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+      Math.cos(rad(lat1)) *
+        Math.cos(rad(lat2)) *
+        Math.sin(dLong / 2) *
+        Math.sin(dLong / 2);
+    var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+    var d = R * c;
+    return d.toFixed(3); //Retorna número de KM entre los puntos (tres decimales)
   }
 
   valoracionRestaurante(i: number) {

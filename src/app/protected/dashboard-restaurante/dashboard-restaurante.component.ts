@@ -108,7 +108,10 @@ export class DashboardRestauranteComponent implements OnInit {
           this.restaurante = res.restaurante;
           this.reservasRestaurante = res.restaurante.reservas;
           this.copiaReservas = res.restaurante.reservas;
-          if (this.restaurante.fotografia !== undefined) {
+          if (
+            this.restaurante.fotografia !== undefined &&
+            this.restaurante.fotografia !== ''
+          ) {
             this.authService
               .recuperarImagen(this.restaurante.fotografia)
               .then((resp) => {
@@ -154,7 +157,8 @@ export class DashboardRestauranteComponent implements OnInit {
 
               if (
                 categoria[i].fotografiaPlato !== undefined &&
-                categoria[i].fotografiaPlato !== null
+                categoria[i].fotografiaPlato !== null &&
+                categoria[i].fotografiaPlato !== ''
               ) {
                 this.placeholder.push('ImagenPrecargada.jpg');
 

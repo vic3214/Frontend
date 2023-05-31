@@ -34,9 +34,11 @@ export class AuthService {
     return { ...this._restaurante };
   }
 
-  async recuperarImagen(id: string): Promise<Blob> {
+  async recuperarImagen(id: string): Promise<any> {
     const response = await fetch(`${this.baseUrl}/recuperar-imagen/${id}`);
     const data = await response.json();
+    console.log(data);
+
     const imagen_base64 = data.imagen;
     const imagen_binaria = atob(imagen_base64);
     const array = new Uint8Array(imagen_binaria.length);
@@ -44,7 +46,6 @@ export class AuthService {
       array[i] = imagen_binaria.charCodeAt(i);
     }
     const blob = new Blob([array], { type: 'image/jpeg' });
-
     return blob;
   }
   async subirImagen(imagen: File): Promise<any> {

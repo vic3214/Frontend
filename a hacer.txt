@@ -1,10 +1,14 @@
 
   // TODO:
 
+Asignar imagen por defecto a plato
+Mensaje o aviso no hay reservas en grafico
+Mostrar cercanos segun el radio (ver como activar la funcionalidad)
 
-Solucionar problemas de estilos
 
 // Hecho
+Errores fotografia home
+Solucionar problemas de estilos
 Mostrar estadisticas gráficamente
 Actualizar angular v16
 Libreria para meter ficheros sustituyendo a ngx-file-input
