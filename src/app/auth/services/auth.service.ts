@@ -37,7 +37,6 @@ export class AuthService {
   async recuperarImagen(id: string): Promise<any> {
     const response = await fetch(`${this.baseUrl}/recuperar-imagen/${id}`);
     const data = await response.json();
-    console.log(data);
 
     const imagen_base64 = data.imagen;
     const imagen_binaria = atob(imagen_base64);

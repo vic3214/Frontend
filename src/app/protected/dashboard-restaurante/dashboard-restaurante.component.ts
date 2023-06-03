@@ -10,9 +10,9 @@ import {
 import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
+import { ComentarioAnnotatedComponent } from 'src/app/auth/pages/home/home.component';
 import { AuthService } from 'src/app/auth/services/auth.service';
 import { SearchService } from 'src/app/auth/services/search.service';
-import { ComentarioAnnotatedComponent } from 'src/app/components/home/home.component';
 import { DialogOverviewExampleDialog } from '../dashboard/dashboard.component';
 
 @Component({

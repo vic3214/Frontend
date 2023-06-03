@@ -112,10 +112,11 @@ export class DashboardComponent implements OnInit {
   }
 
   verRestaurante(i: number) {
-    const id = this.results[i]._id;
-    this.results[i].vecesVisitado += 1;
+    console.log(this.resultsReservas[i]);
+    const id = this.resultsReservas[i].restaurante._id;
+    this.resultsReservas[i].restaurante.vecesVisitado += 1;
     this.authService
-      .editarRestaurante(this.results[i])
+      .editarRestaurante(this.resultsReservas[i].restaurante)
       .subscribe((resp: any) => {
         this.router.navigateByUrl(`/auth/restaurante/${id}`);
       });

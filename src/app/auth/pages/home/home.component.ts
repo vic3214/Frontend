@@ -15,7 +15,7 @@ import * as L from 'leaflet';
 import { Subject, of } from 'rxjs';
 import { catchError, debounceTime } from 'rxjs/operators';
 import { SearchService } from 'src/app/auth/services/search.service';
-import { AuthService } from '../../auth/services/auth.service';
+import { AuthService } from '../../services/auth.service';
 
 @Component({
   selector: 'app-home',
@@ -373,7 +373,7 @@ export class HomeComponent implements OnInit {
               function (err) {
                 console.error('Error', err);
               },
-              { maximumAge: 100, timeout: 5000, enableHighAccuracy: true }
+              { maximumAge: 0, timeout: 5000, enableHighAccuracy: true }
             );
           });
         }
@@ -475,9 +475,33 @@ export class HomeComponent implements OnInit {
               usuario.usuario.listaRestaurantesFavoritos.push(
                 this.results[i]._id
               );
-              this.authService
-                .editaUsuario(usuario.usuario)
-                .subscribe((res) => {});
+              this.authService.editaUsuario(usuario.usuario).subscribe({
+                error: (err) => {
+                  this._snackBar.openFromComponent(
+                    ComentarioAnnotatedComponent,
+                    {
+                      duration: this.durationInSeconds * 500,
+                      panelClass: ['snackBar'],
+                      data: {
+                        mensaje:
+                          '¡Hubo un error al guardar este restaurante en favoritos!',
+                      },
+                    }
+                  );
+                },
+                complete: () => {
+                  this._snackBar.openFromComponent(
+                    ComentarioAnnotatedComponent,
+                    {
+                      duration: this.durationInSeconds * 500,
+                      panelClass: ['snackBar'],
+                      data: {
+                        mensaje: '¡Reserva efectuada con éxito!',
+                      },
+                    }
+                  );
+                },
+              });
             }
           });
       });
