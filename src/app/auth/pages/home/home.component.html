@@ -19,6 +19,13 @@
     <button class="search-button" (click)="search()">
       <i class="fas fa-search"></i>
     </button>
+    <mat-checkbox
+      class="example-margin"
+      [(ngModel)]="checkGeolocation"
+      [labelPosition]="'after'"
+    >
+      Buscar cercanos
+    </mat-checkbox>
   </div>
 </div>
 

@@ -1,12 +1,12 @@
-
 // TODO:
-Ordenar reservas restaurante
-Mostrar 3 comentarioos aleatorios ver mas?
-Previsualizacion imagen en editar cuando no hay foto
-Mostrar cercanos segun el radio (ver como activar la funcionalidad checkbox?)
-Mostrar todos cuando no se busque nada
+
+Mostrar 3 comentarioos aleatorios ver mas? y añadir media de carta como dato
 
 // Hecho
+Ordenar reservas restaurante
+Previsualizacion imagen en editar cuando no hay foto
+Mostrar cercanos segun ciudad ( activar la funcionalidad con checkbox)
+Mostrar todos cuando no se busque nada
 Mensaje o aviso no hay reservas en grafico
 Asignar imagen por defecto a plato
 Errores fotografia home

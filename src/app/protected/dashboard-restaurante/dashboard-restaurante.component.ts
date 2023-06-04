@@ -185,7 +185,8 @@ export class DashboardRestauranteComponent implements OnInit {
                     reader.readAsDataURL(resp);
                   });
               } else {
-                imagen = '';
+                imagen = 'assets/default-plato.jpg';
+                this.imageSrc.push(imagen);
               }
 
               const formCarta = this._formBuilder.group({
@@ -264,8 +265,60 @@ export class DashboardRestauranteComponent implements OnInit {
           reserva.estado === this.compruebaCancelada())
       );
     });
-    //TODO: queda ordenar
-    console.log('Filtrados', filteredResults);
+
+    const ordenElegido = this.busquedaForm.controls['ordenado'].value;
+
+    if (ordenElegido === 'Hora y fecha más lejana') {
+      filteredResults.sort((a: any, b: any) => {
+        const fechaA: any = new Date(a.fecha);
+        fechaA.setHours(a.hora.slice(0, 2), a.hora.slice(-2));
+        console.log(fechaA);
+        const fechaB: any = new Date(b.fecha);
+        fechaA.setHours(b.hora.slice(0, 2), b.hora.slice(-2));
+        console.log(fechaA);
+        return fechaB - fechaA;
+      });
+    }
+
+    if (ordenElegido === 'Hora y fecha más próxima') {
+      filteredResults.sort((a: any, b: any) => {
+        const fechaA: any = new Date(a.fecha);
+        fechaA.setHours(a.hora.slice(0, 2), a.hora.slice(-2));
+        console.log(fechaA);
+        const fechaB: any = new Date(b.fecha);
+        fechaA.setHours(b.hora.slice(0, 2), b.hora.slice(-2));
+        console.log(fechaA);
+        return fechaA - fechaB;
+      });
+    }
+
+    if (ordenElegido === 'Fecha más lejana') {
+      filteredResults.sort((a: any, b: any) => {
+        const fechaA: any = new Date(a.fecha);
+        const fechaB: any = new Date(b.fecha);
+        return fechaB - fechaA;
+      });
+    }
+
+    if (ordenElegido === 'Fecha más próxima') {
+      filteredResults.sort((a: any, b: any) => {
+        const fechaA: any = new Date(a.fecha);
+        const fechaB: any = new Date(b.fecha);
+        return fechaA - fechaB;
+      });
+    }
+
+    if (ordenElegido === 'Más comensales') {
+      filteredResults.sort((a: any, b: any) => {
+        return b.personas - a.personas;
+      });
+    }
+
+    if (ordenElegido === 'Menos comensales') {
+      filteredResults.sort((a: any, b: any) => {
+        return a.personas - b.personas;
+      });
+    }
 
     this.reservasRestaurante = filteredResults;
   }

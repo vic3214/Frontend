@@ -1,5 +1,6 @@
 import { Component, Inject, OnInit, inject } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
+import { DateAdapter } from '@angular/material/core';
 import {
   MAT_DIALOG_DATA,
   MatDialog,
@@ -16,7 +17,6 @@ import { Subject, of } from 'rxjs';
 import { catchError, debounceTime } from 'rxjs/operators';
 import { SearchService } from 'src/app/auth/services/search.service';
 import { AuthService } from '../../services/auth.service';
-
 @Component({
   selector: 'app-home',
   templateUrl: './home.component.html',
@@ -29,8 +29,11 @@ export class HomeComponent implements OnInit {
     public dialog: MatDialog,
     private router: Router,
     private _snackBar: MatSnackBar,
-    private _formBuilder: FormBuilder
-  ) {}
+    private _formBuilder: FormBuilder,
+    private date: DateAdapter<Date>
+  ) {
+    date.getFirstDayOfWeek = () => 1;
+  }
 
   // TODO: Implementar paginacion en los resultados
 
@@ -55,6 +58,7 @@ export class HomeComponent implements OnInit {
     'Más visitados',
     'Menos visitados',
   ];
+  checkGeolocation = false;
 
   ngOnInit(): void {
     this.debouncer.pipe(debounceTime(300)).subscribe((value) => {
@@ -307,13 +311,42 @@ export class HomeComponent implements OnInit {
     ordenado: [],
   });
 
-  search() {
+  async search() {
     this.res = [];
     this.busqueda = true;
     this.results = [];
+
     if (this.searchCityTerm === undefined) {
       this.searchCityTerm = 'Madrid';
     }
+
+    if (this.searchTerm === undefined) {
+      this.searchTerm = 'Buscar todos';
+    }
+
+    if (this.checkGeolocation) {
+      console.log('porqe');
+      await new Promise<void>((resolve, reject) => {
+        navigator.geolocation.getCurrentPosition(
+          async (position) => {
+            this.searchCityTerm =
+              await this.searchService.getCiudadDesdeUbicacion(
+                position.coords.latitude,
+                position.coords.longitude
+              );
+            resolve();
+          },
+          function (err) {
+            console.error('Error', err);
+            reject(err);
+          },
+          { maximumAge: 0, timeout: 5000, enableHighAccuracy: true }
+        );
+      });
+    }
+
+    console.log(this.searchCityTerm);
+    console.log(this.searchTerm);
     this.searchService
       .getRestaurantesPorCiudadYNombre(this.searchTerm, this.searchCityTerm)
       .subscribe((restaurantes: any) => {
@@ -341,40 +374,24 @@ export class HomeComponent implements OnInit {
             marker.addTo(this.map!);
 
             // Geolocalizacion
-            var browserLat;
-            var browserLong;
+            if (this.checkGeolocation) {
+              var browserLat;
+              var browserLong;
+              navigator.geolocation.getCurrentPosition(
+                (position) => {
+                  browserLat = position.coords.latitude;
+                  browserLong = position.coords.longitude;
 
-            navigator.geolocation.getCurrentPosition(
-              (position) => {
-                browserLat = position.coords.latitude;
-                browserLong = position.coords.longitude;
-
-                // Calculo radio
-
-                const radio = this.calcDistance(
-                  browserLat,
-                  browserLong,
-                  element.ubicacion[0],
-                  element.ubicacion[1]
-                );
-                console.log('radio', radio);
-
-                L.circle([browserLat, browserLong], {
-                  color: '#1f6d0e',
-                  fillColor: 'green',
-                  fillOpacity: 0.1,
-                  radius: 700,
-                }).addTo(this.map!);
-
-                marker = L.marker([browserLat, browserLong]).addTo(this.map!);
-                marker.bindPopup('Estás aquí').openPopup();
-                this.map!.setView([browserLat, browserLong], 15);
-              },
-              function (err) {
-                console.error('Error', err);
-              },
-              { maximumAge: 0, timeout: 5000, enableHighAccuracy: true }
-            );
+                  marker = L.marker([browserLat, browserLong]).addTo(this.map!);
+                  marker.bindPopup('Estás aquí').openPopup();
+                  this.map!.setView([browserLat, browserLong], 15);
+                },
+                function (err) {
+                  console.error('Error', err);
+                },
+                { maximumAge: 0, timeout: 5000, enableHighAccuracy: true }
+              );
+            }
           });
         }
       });
@@ -386,26 +403,6 @@ export class HomeComponent implements OnInit {
       this.map = undefined;
       this.iniciarMapa();
     }
-  }
-
-  calcDistance(lat1: any, lon1: any, lat2: any, lon2: any) {
-    let rad = function (x: any) {
-      return (x * Math.PI) / 180;
-    };
-
-    var R = 6378.137; //Radio de la tierra en km
-    var dLat = rad(lat2 - lat1);
-    var dLong = rad(lon2 - lon1);
-
-    var a =
-      Math.sin(dLat / 2) * Math.sin(dLat / 2) +
-      Math.cos(rad(lat1)) *
-        Math.cos(rad(lat2)) *
-        Math.sin(dLong / 2) *
-        Math.sin(dLong / 2);
-    var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-    var d = R * c;
-    return d.toFixed(3); //Retorna número de KM entre los puntos (tres decimales)
   }
 
   valoracionRestaurante(i: number) {
@@ -496,7 +493,7 @@ export class HomeComponent implements OnInit {
                       duration: this.durationInSeconds * 500,
                       panelClass: ['snackBar'],
                       data: {
-                        mensaje: '¡Reserva efectuada con éxito!',
+                        mensaje: '¡Restaurante guardado en favoritos!',
                       },
                     }
                   );
