@@ -37,6 +37,7 @@ export class HomeComponent implements OnInit {
   searchTerm!: string;
   searchCityTerm!: string;
   results: any[] = [];
+  resultsAux: any[] = [];
   map: L.Map | undefined;
   mapInitialized: boolean = false;
   busqueda: boolean = false;
@@ -75,6 +76,7 @@ export class HomeComponent implements OnInit {
   }
 
   aplicarFiltros() {
+    this.resultsAux = this.results;
     this.authService
       .obtenerFestivos(this.busquedaForm.controls['fecha'].value)
       .subscribe((resp) => {
@@ -97,7 +99,6 @@ export class HomeComponent implements OnInit {
               precioMedio <= this.busquedaForm.controls['precioMax'].value)
           );
         });
-        console.log('Filtrados', filteredResults);
         const ordenElegido = this.busquedaForm.controls['ordenado'].value;
         // Ordenar
         if (ordenElegido === 'Mejor valorados') {
@@ -183,10 +184,12 @@ export class HomeComponent implements OnInit {
           this.reiniciarValoraciones(filteredResults);
         }
 
-        console.log(filteredResults);
         this.results = filteredResults;
-        console.log(this.results);
       });
+  }
+
+  quitarFiltros() {
+    this.results = this.resultsAux;
   }
 
   verificarHoras(hora: any) {
@@ -347,9 +350,6 @@ export class HomeComponent implements OnInit {
                 browserLong = position.coords.longitude;
 
                 // Calculo radio
-                console.log(restaurantes);
-                console.table([browserLat, browserLong]);
-                console.table([element.ubicacion[0], element.ubicacion[1]]);
 
                 const radio = this.calcDistance(
                   browserLat,
@@ -357,7 +357,7 @@ export class HomeComponent implements OnInit {
                   element.ubicacion[0],
                   element.ubicacion[1]
                 );
-                console.log(radio);
+                console.log('radio', radio);
 
                 L.circle([browserLat, browserLong], {
                   color: '#1f6d0e',
@@ -545,10 +545,6 @@ export class DialogHomeComponent {
     `
       :host {
         display: flex;
-      }
-
-      .example-pizza-party {
-        color: hotpink;
       }
     `,
   ],

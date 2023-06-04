@@ -1,4 +1,4 @@
-<div>
+<div *ngIf="mostrarGrafico; else noData">
   <h4>Horario más habitual de las reservas actuales</h4>
   <canvas
     baseChart
@@ -10,3 +10,5 @@
   >
   </canvas>
 </div>
+
+<ng-template #noData>No tienes reservas para ver este gráfico</ng-template>

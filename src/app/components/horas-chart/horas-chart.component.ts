@@ -10,11 +10,11 @@ import { AuthService } from 'src/app/auth/services/auth.service';
 })
 export class HorasChartComponent implements OnInit {
   constructor(private authService: AuthService) {}
+  mostrarGrafico = false;
 
   ngOnInit(): void {
     this.authService.obtenerDatosRestauranteToken().subscribe((resp: any) => {
-      let intervalos: string[] = [];
-      const horas = resp.restaurante.reservas.map((reserva: any) => {
+      const intervalos = resp.restaurante.reservas.map((reserva: any) => {
         let intervaloIzq = reserva.hora.slice(0, -2) + '00';
         let hora = parseInt(intervaloIzq.slice(0, 2)) + 1;
         if (hora === 24) {
@@ -27,25 +27,27 @@ export class HorasChartComponent implements OnInit {
 
         let intervaloDer = horaCadena + intervaloIzq.slice(0 + 2);
         const intervaloCompleto = intervaloIzq + '-' + intervaloDer;
-        intervalos.push(intervaloCompleto);
-        return reserva.hora.slice(0, -2) + '00';
+        return intervaloCompleto;
       });
-      console.log(horas);
-      console.log(intervalos);
+
+      if (intervalos.length !== 0) {
+        this.mostrarGrafico = true;
+      }
 
       intervalos.sort((a: any, b: any) => {
         let aStartHour = parseInt(a.slice(0, 2));
         let bStartHour = parseInt(b.slice(0, 2));
         return aStartHour - bStartHour;
       });
-      console.log(intervalos);
+
       let counts = intervalos.reduce((acc: any, val: any) => {
         acc[val] = (acc[val] || 0) + 1;
         return acc;
       }, {});
-      console.log(counts);
-      let unique = intervalos.filter((val, i) => intervalos.indexOf(val) === i);
-      console.log(unique);
+
+      let unique = intervalos.filter(
+        (val: any, i: any) => intervalos.indexOf(val) === i
+      );
 
       this.barChartData.labels = unique;
       this.barChartData.datasets[0].data = Object.values(counts);

@@ -100,6 +100,14 @@
       >
         Aplicar Filtros
       </button>
+      <button
+        mat-raised-button
+        color="primary"
+        (click)="quitarFiltros()"
+        class="inputBusqueda"
+      >
+        Quitar Filtros
+      </button>
     </form>
     <ul>
       <li *ngFor="let result of results; index as i">

@@ -1,12 +1,14 @@
 
-  // TODO:
-
-Asignar imagen por defecto a plato
-Mensaje o aviso no hay reservas en grafico
-Mostrar cercanos segun el radio (ver como activar la funcionalidad)
-
+// TODO:
+Ordenar reservas restaurante
+Mostrar 3 comentarioos aleatorios ver mas?
+Previsualizacion imagen en editar cuando no hay foto
+Mostrar cercanos segun el radio (ver como activar la funcionalidad checkbox?)
+Mostrar todos cuando no se busque nada
 
 // Hecho
+Mensaje o aviso no hay reservas en grafico
+Asignar imagen por defecto a plato
 Errores fotografia home
 Solucionar problemas de estilos
 Mostrar estadisticas gráficamente
