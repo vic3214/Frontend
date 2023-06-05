@@ -71,6 +71,18 @@ export class HomeComponent implements OnInit {
     });
   }
 
+  getRandomComments(commentsArray: any) {
+    let randomComments: any = [];
+    for (let i = 0; i < 3 && i < commentsArray.length; i++) {
+      let randomIndex = Math.floor(Math.random() * commentsArray.length);
+      while (randomComments.includes(commentsArray[randomIndex])) {
+        randomIndex = Math.floor(Math.random() * commentsArray.length);
+      }
+      randomComments.push(commentsArray[randomIndex]);
+    }
+    return randomComments;
+  }
+
   reiniciarValoraciones(filteredResults: any) {
     this.valoracion = [];
     this.numeroValoraciones = [];

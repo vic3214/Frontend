@@ -1,8 +1,5 @@
-// TODO:
-
-Mostrar 3 comentarioos aleatorios ver mas? y añadir media de carta como dato
-
 // Hecho
+Mostrar 3 comentarioos aleatorios ver mas? y añadir media de carta como dato
 Ordenar reservas restaurante
 Previsualizacion imagen en editar cuando no hay foto
 Mostrar cercanos segun ciudad ( activar la funcionalidad con checkbox)

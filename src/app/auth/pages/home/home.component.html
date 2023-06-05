@@ -143,8 +143,13 @@
               <span class="spacer-icon"></span>
               de {{ numValoracionesRestaurante(i) }} valoraciones
             </h3>
-
-            <li *ngFor="let comentario of result.comentarios">
+            <h3>
+              Número máximo de personas por reserva:
+              {{ result.maximoPersonasPorReserva }}
+            </h3>
+            <li
+              *ngFor="let comentario of getRandomComments(result.comentarios)"
+            >
               {{ comentario.usuario }} comentó: {{ comentario.comentario }}
             </li>
           </mat-card-content>
