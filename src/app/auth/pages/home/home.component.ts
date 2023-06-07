@@ -46,6 +46,7 @@ export class HomeComponent implements OnInit {
   busqueda: boolean = false;
   durationInSeconds = 3;
   imagenUrl: any[] = [];
+  imagenUrlAux: any[] = [];
   valoracion: number[] = [];
   numeroValoraciones: number[] = [];
   private debouncer: Subject<string> = new Subject<string>();
@@ -116,7 +117,7 @@ export class HomeComponent implements OnInit {
           );
         });
         const ordenElegido = this.busquedaForm.controls['ordenado'].value;
-        // Ordenar
+
         if (ordenElegido === 'Mejor valorados') {
           filteredResults.sort((a, b) => {
             let valoracionMediaA = 0;
@@ -200,41 +201,28 @@ export class HomeComponent implements OnInit {
           this.reiniciarValoraciones(filteredResults);
         }
 
+        let auxArray = this.results;
+        let posiciones = filteredResults.reduce(function (acc, elemento) {
+          let indice = auxArray.indexOf(elemento);
+          console.log(indice);
+          if (indice !== -1) {
+            acc.push(indice);
+          }
+          return acc;
+        }, []);
+
         this.results = filteredResults;
+        this.imagenUrl = [];
+        for (let i = 0; i < posiciones.length; i++) {
+          this.imagenUrl.push(this.imagenUrlAux[posiciones[i]]);
+        }
       });
   }
 
   quitarFiltros() {
-    this.results = this.resultsAux;
-  }
-
-  verificarHoras(hora: any) {
-    if (this.busquedaForm.controls['hora'].value !== null) {
-      var horaActual = new Date(
-        '1970-01-01T' + this.busquedaForm.controls['hora'].value + ':00'
-      );
-      var partesRangoHoras = hora.split('-');
-      var horaInicio = new Date('1970-01-01T' + partesRangoHoras[0] + ':00');
-      var horaFin = new Date('1970-01-01T' + partesRangoHoras[1] + ':00');
-      return horaActual >= horaInicio && horaActual <= horaFin;
-    } else {
-      return true;
-    }
-  }
-
-  verificarHorario(horario: any) {
-    for (var i = 0; i < horario.length; i++) {
-      for (var j = 0; j < horario[i].horas.length; j++) {
-        var hora = horario[i].horas[j];
-        var cumpleHorario = this.verificarHoras(hora);
-
-        if (cumpleHorario) {
-          return true;
-        }
-      }
-    }
-
-    return false;
+    this.results = [...this.resultsAux];
+    this.imagenUrl = [...this.imagenUrlAux];
+    console.log(this.results);
   }
 
   compruebaFecha(festivos: any, result: any) {
@@ -260,6 +248,7 @@ export class HomeComponent implements OnInit {
     } else {
       dias = true;
     }
+    console.log('cumple dias', dias);
 
     let fest = false;
     for (let i = 0; i < festivos.length; i++) {
@@ -268,7 +257,7 @@ export class HomeComponent implements OnInit {
       }
     }
 
-    return !fest && dias && this.verificarHorario(result.horario);
+    return !fest && dias;
   }
 
   calculaPrecioMedioCarta(restaurante: any) {
@@ -315,7 +304,6 @@ export class HomeComponent implements OnInit {
 
   busquedaForm: FormGroup = this._formBuilder.group({
     fecha: [],
-    hora: [],
     personas: [],
     tematica: [],
     precioMin: [],
@@ -377,6 +365,7 @@ export class HomeComponent implements OnInit {
                   reader.readAsDataURL(resp);
                 });
             }
+            this.imagenUrlAux = this.imagenUrl;
 
             // Crear el marcador para el restaurante
             let marker = L.marker([element.ubicacion[0], element.ubicacion[1]])
