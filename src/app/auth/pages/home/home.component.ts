@@ -222,7 +222,7 @@ export class HomeComponent implements OnInit {
   quitarFiltros() {
     this.results = [...this.resultsAux];
     this.imagenUrl = [...this.imagenUrlAux];
-    console.log(this.results);
+    this.busquedaForm.reset();
   }
 
   compruebaFecha(festivos: any, result: any) {

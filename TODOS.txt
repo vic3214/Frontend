@@ -1,4 +1,5 @@
 // Hecho
+Corrección fotografias al filtrar
 Mostrar 3 comentarioos aleatorios ver mas? y añadir media de carta como dato
 Ordenar reservas restaurante
 Previsualizacion imagen en editar cuando no hay foto
