@@ -3,24 +3,30 @@
     <span>{{ restaurante?.nombre }}</span>
   </mat-toolbar-row>
 </mat-toolbar>
-<mat-card>
+<div>
   <h2>Cocina de temática {{ restaurante?.tematica }}</h2>
-  <mat-card-content>
+  <div>
     <mat-tab-group>
       <mat-tab label="Nuestro Menú">
-        <mat-card>
-          <mat-card-content>
+        <div>
+          <div>
             <mat-tab-group #myTabGroup>
               <mat-tab label="Entrantes">
-                <div
-                  class="square"
+                <mat-card
+                  class="example-card"
+                  style="
+                    display: inline-block;
+                    width: 300px;
+                    height: 300px;
+                    margin-top: 5px;
+                  "
                   *ngFor="let plato of restaurante?.carta.entrantes; index as i"
                 >
-                  <mat-card class="example-card">
-                    <mat-card-header>
-                      <mat-card-title>{{ plato.nombrePlato }} </mat-card-title>
-                      <mat-card-subtitle>{{ plato.tipo }}</mat-card-subtitle>
-                    </mat-card-header>
+                  <mat-card-header>
+                    <mat-card-title>{{ plato.nombrePlato }} </mat-card-title>
+                    <mat-card-subtitle>{{ plato.tipo }}</mat-card-subtitle>
+                  </mat-card-header>
+                  <mat-card-content>
                     <img
                       mat-card-image
                       [src]="imagenUrlEntrantes[i]"
@@ -29,24 +35,30 @@
                     <ng-template #defaultImage class="header-image">
                       <img src="assets/default-plato.jpg" />
                     </ng-template>
-                    <mat-card-content>
-                      <p>Descripcion</p>
-                    </mat-card-content>
-                  </mat-card>
-                </div>
+
+                    <p>Descripcion</p>
+                  </mat-card-content>
+                </mat-card>
               </mat-tab>
               <mat-tab label="Primeros platos">
-                <div
+                <mat-card
+                  class="example-card"
+                  style="
+                    display: inline-block;
+                    width: 300px;
+                    height: 300px;
+                    margin-top: 5px;
+                  "
                   *ngFor="
                     let plato of restaurante?.carta.primerosPlatos;
                     index as i
                   "
                 >
-                  <mat-card class="example-card">
-                    <mat-card-header>
-                      <mat-card-title>{{ plato.nombrePlato }} </mat-card-title>
-                      <mat-card-subtitle>{{ plato.tipo }}</mat-card-subtitle>
-                    </mat-card-header>
+                  <mat-card-header>
+                    <mat-card-title>{{ plato.nombrePlato }} </mat-card-title>
+                    <mat-card-subtitle>{{ plato.tipo }}</mat-card-subtitle>
+                  </mat-card-header>
+                  <mat-card-content>
                     <img
                       mat-card-image
                       [src]="imagenUrlPrimeros[i]"
@@ -55,55 +67,59 @@
                     <ng-template #defaultImage class="header-image">
                       <img src="assets/default-plato.jpg" />
                     </ng-template>
-                    <mat-card-content>
-                      <p>Descripcion</p>
-                    </mat-card-content>
-                  </mat-card>
-                </div>
+
+                    <p>Descripcion</p>
+                  </mat-card-content>
+                </mat-card>
               </mat-tab>
               <mat-tab label="Segundos platos">
-                <mat-card>
+                <mat-card
+                  class="example-card"
+                  style="
+                    display: inline-block;
+                    width: 300px;
+                    height: 300px;
+                    margin-top: 5px;
+                  "
+                  *ngFor="
+                    let plato of restaurante?.carta.segundosPlatos;
+                    index as i
+                  "
+                >
+                  <mat-card-header>
+                    <mat-card-title>{{ plato.nombrePlato }} </mat-card-title>
+                    <mat-card-subtitle>{{ plato.tipo }}</mat-card-subtitle>
+                  </mat-card-header>
                   <mat-card-content>
-                    <div
-                      *ngFor="
-                        let plato of restaurante?.carta.segundosPlatos;
-                        index as i
-                      "
-                    >
-                      <mat-card class="example-card">
-                        <mat-card-header>
-                          <mat-card-title
-                            >{{ plato.nombrePlato }}
-                          </mat-card-title>
-                          <mat-card-subtitle>{{
-                            plato.tipo
-                          }}</mat-card-subtitle>
-                        </mat-card-header>
-                        <img
-                          mat-card-image
-                          [src]="imagenUrlPostres[i]"
-                          *ngIf="imagenUrlPostres[i]; else defaultImage"
-                        />
-                        <ng-template #defaultImage class="header-image">
-                          <img src="assets/default-plato.jpg" />
-                        </ng-template>
-                        <mat-card-content>
-                          <p>Descripcion</p>
-                        </mat-card-content>
-                      </mat-card>
-                    </div>
+                    <img
+                      mat-card-image
+                      [src]="imagenUrlSegundos[i]"
+                      *ngIf="imagenUrlSegundos[i]; else defaultImage"
+                    />
+                    <ng-template #defaultImage class="header-image">
+                      <img src="assets/default-plato.jpg" />
+                    </ng-template>
+
+                    <p>Descripcion</p>
                   </mat-card-content>
                 </mat-card>
               </mat-tab>
               <mat-tab label="Postres">
-                <div
+                <mat-card
+                  class="example-card"
+                  style="
+                    display: inline-block;
+                    width: 300px;
+                    height: 300px;
+                    margin-top: 5px;
+                  "
                   *ngFor="let plato of restaurante?.carta.postres; index as i"
                 >
-                  <mat-card class="example-card">
-                    <mat-card-header>
-                      <mat-card-title>{{ plato.nombrePlato }} </mat-card-title>
-                      <mat-card-subtitle>{{ plato.tipo }}</mat-card-subtitle>
-                    </mat-card-header>
+                  <mat-card-header>
+                    <mat-card-title>{{ plato.nombrePlato }} </mat-card-title>
+                    <mat-card-subtitle>{{ plato.tipo }}</mat-card-subtitle>
+                  </mat-card-header>
+                  <mat-card-content>
                     <img
                       mat-card-image
                       [src]="imagenUrlPostres[i]"
@@ -112,21 +128,27 @@
                     <ng-template #defaultImage class="header-image">
                       <img src="assets/default-plato.jpg" />
                     </ng-template>
-                    <mat-card-content>
-                      <p>Descripcion</p>
-                    </mat-card-content>
-                  </mat-card>
-                </div>
+
+                    <p>Descripcion</p>
+                  </mat-card-content>
+                </mat-card>
               </mat-tab>
               <mat-tab label="Bebidas">
-                <div
+                <mat-card
+                  class="example-card"
+                  style="
+                    display: inline-block;
+                    width: 300px;
+                    height: 300px;
+                    margin-top: 5px;
+                  "
                   *ngFor="let plato of restaurante?.carta.bebidas; index as i"
                 >
-                  <mat-card class="example-card">
-                    <mat-card-header>
-                      <mat-card-title>{{ plato.nombrePlato }} </mat-card-title>
-                      <mat-card-subtitle>{{ plato.tipo }}</mat-card-subtitle>
-                    </mat-card-header>
+                  <mat-card-header>
+                    <mat-card-title>{{ plato.nombrePlato }} </mat-card-title>
+                    <mat-card-subtitle>{{ plato.tipo }}</mat-card-subtitle>
+                  </mat-card-header>
+                  <mat-card-content>
                     <img
                       mat-card-image
                       [src]="imagenUrlBebidas[i]"
@@ -135,15 +157,14 @@
                     <ng-template #defaultImage class="header-image">
                       <img src="assets/default-plato.jpg" />
                     </ng-template>
-                    <mat-card-content>
-                      <p>Descripcion</p>
-                    </mat-card-content>
-                  </mat-card>
-                </div>
+
+                    <p>Descripcion</p>
+                  </mat-card-content>
+                </mat-card>
               </mat-tab>
             </mat-tab-group>
-          </mat-card-content>
-        </mat-card>
+          </div>
+        </div>
       </mat-tab>
       <mat-tab label="Horario de atención">
         <mat-card>
@@ -264,5 +285,5 @@
         </mat-card>
       </mat-tab>
     </mat-tab-group>
-  </mat-card-content>
-</mat-card>
+  </div>
+</div>

@@ -68,10 +68,13 @@
   .spacer-icon{
     margin-right: 5px;
   }
+  .example-card{
+    margin-right: 10px;
+  }
   
   .example-card img {
-    max-width: 250px;
-    max-height: 200px;
+    width: 250px;
+    height: 200px;
   }
   .square {
     display: grid;

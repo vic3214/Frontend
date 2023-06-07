@@ -67,7 +67,7 @@
           formControlName="password"
           matInput
           [type]="hide ? 'password' : 'text'"
-          required=""
+          required
         />
         <mat-error *ngIf="password!.invalid && inicioSesion.touched"
           >La contraseña debe tener 6 caracteres mínimo.
@@ -90,9 +90,13 @@
           formControlName="passwordRepetida"
           matInput
           [type]="hideRepetida ? 'password' : 'text'"
-          required=""
+          required
         />
-        <mat-error *ngIf="passwordRepetida!.invalid && inicioSesion.touched"
+        <mat-error
+          *ngIf="
+            inicioSesion.get('passwordRepetida')!.hasError('password') &&
+            inicioSesion.touched
+          "
           >Las contraseñas deben coincidir
         </mat-error>
         <button

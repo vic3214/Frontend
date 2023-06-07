@@ -337,7 +337,6 @@ export class HomeComponent implements OnInit {
     }
 
     if (this.checkGeolocation) {
-      console.log('porqe');
       await new Promise<void>((resolve, reject) => {
         navigator.geolocation.getCurrentPosition(
           async (position) => {
@@ -362,6 +361,7 @@ export class HomeComponent implements OnInit {
     this.searchService
       .getRestaurantesPorCiudadYNombre(this.searchTerm, this.searchCityTerm)
       .subscribe((restaurantes: any) => {
+        console.log(restaurantes);
         if (restaurantes.ok) {
           restaurantes.restaurantes.forEach((element: any) => {
             this.calculaMedias(element);
@@ -386,6 +386,9 @@ export class HomeComponent implements OnInit {
             marker.addTo(this.map!);
 
             // Geolocalizacion
+            let marjerGeo;
+            console.log('check');
+            console.log(this.checkGeolocation);
             if (this.checkGeolocation) {
               var browserLat;
               var browserLong;
@@ -394,9 +397,12 @@ export class HomeComponent implements OnInit {
                   browserLat = position.coords.latitude;
                   browserLong = position.coords.longitude;
 
-                  marker = L.marker([browserLat, browserLong]).addTo(this.map!);
-                  marker.bindPopup('Estás aquí').openPopup();
+                  marjerGeo = L.marker([browserLat, browserLong]).addTo(
+                    this.map!
+                  );
+                  marjerGeo.bindPopup('Estás aquí').openPopup();
                   this.map!.setView([browserLat, browserLong], 15);
+                  marjerGeo.addTo(this.map!);
                 },
                 function (err) {
                   console.error('Error', err);

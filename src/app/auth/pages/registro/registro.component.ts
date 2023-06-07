@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import {
   AbstractControl,
   FormBuilder,
@@ -17,7 +17,7 @@ import { AuthService } from '../../services/auth.service';
   templateUrl: './registro.component.html',
   styleUrls: ['./registro.component.css'],
 })
-export class RegistroComponent {
+export class RegistroComponent implements OnInit {
   hide: boolean = true;
   hideRepetida: boolean = true;
 
@@ -29,6 +29,11 @@ export class RegistroComponent {
   ) {
     // Ponemos en los calendarios el lunes como primer día
     date.getFirstDayOfWeek = () => 1;
+  }
+  ngOnInit(): void {
+    this.inicioSesion
+      .get('passwordRepetida')!
+      .setValidators([this.checkEqualsPasswords()]);
   }
   datosPersonales: FormGroup = this._formBuilder.group({
     nombre: [],
@@ -42,14 +47,14 @@ export class RegistroComponent {
       Validators.required,
       Validators.minLength(6),
     ]),
-    passwordRepetida: ['', this.checkEqualsPasswords()],
+    passwordRepetida: [''],
   });
 
   checkEqualsPasswords(): ValidatorFn {
     return (control: AbstractControl): ValidationErrors | null => {
-      return control.get('password') === control.get('passwordRepetida')
-        ? { password: true }
-        : null;
+      const password = this.inicioSesion.get('password')!.value;
+      const passwordRepetida = control.value;
+      return password === passwordRepetida ? null : { password: true };
     };
   }
   get password() {
