@@ -1,3 +1,6 @@
+// TODO:
+Comprobar que la hora de la reserva cumple con el horario
+
 // Hecho
 Corrección fotografias al filtrar
 Mostrar 3 comentarioos aleatorios ver mas? y añadir media de carta como dato

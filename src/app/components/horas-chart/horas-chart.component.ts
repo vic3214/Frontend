@@ -81,7 +81,11 @@ export class HorasChartComponent implements OnInit {
   public barChartData: ChartData<'bar'> = {
     labels: [],
     datasets: [
-      { data: [], label: 'Horarios más comunes', backgroundColor: 'purple' },
+      {
+        data: [],
+        label: 'Número de reservas por horario',
+        backgroundColor: 'purple',
+      },
     ],
   };
 }

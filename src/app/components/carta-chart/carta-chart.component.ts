@@ -33,6 +33,7 @@ export class CartaChartComponent implements OnInit {
     responsive: true,
     scales: {
       r: {
+        beginAtZero: true,
         ticks: {
           stepSize: 1,
         },
