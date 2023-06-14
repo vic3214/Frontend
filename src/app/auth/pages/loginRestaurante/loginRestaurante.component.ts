@@ -1,12 +1,12 @@
 import { Component, Inject } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 import {
-  MAT_DIALOG_DATA,
-  MatDialog,
-  MatDialogRef,
+    MAT_DIALOG_DATA,
+    MatDialog,
+    MatDialogRef,
 } from '@angular/material/dialog';
 import { Router } from '@angular/router';
-import { AuthService } from '../../services/auth.service';
+import { AuthService } from '../../../services/auth.service';
 
 @Component({
   selector: 'app-loginRestaurante',
@@ -14,8 +14,8 @@ import { AuthService } from '../../services/auth.service';
   styleUrls: ['./loginRestaurante.component.css'],
 })
 export class LoginRestauranteComponent {
-  registrarUsuario: Boolean = false;
-  hide: Boolean = true;
+  registrarUsuario = false;
+  hide = true;
 
   public loginForm = this.fb.group({
     email: ['', [Validators.required, Validators.email]],
@@ -60,8 +60,8 @@ export class LoginRestauranteComponent {
         }
       },
       (err) => {
-        let erroresEnviar: any = [];
-        let formErrors = err.error.errores === undefined;
+        const erroresEnviar: any = [];
+        const formErrors = err.error.errores === undefined;
         if (!formErrors) {
           // Errores al checkear si estan vacios email, contraseña y si el email está bien formado
           Object.entries(err.error.errores).forEach(([key, value]) => {

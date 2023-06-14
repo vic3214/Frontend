@@ -1,18 +1,18 @@
 import { Component, OnInit } from '@angular/core';
 import {
-  AbstractControl,
-  FormArray,
-  FormBuilder,
-  FormGroup,
-  ValidationErrors,
-  ValidatorFn,
+    AbstractControl,
+    FormArray,
+    FormBuilder,
+    FormGroup,
+    ValidationErrors,
+    ValidatorFn,
 } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
 import { ComentarioAnnotatedComponent } from 'src/app/auth/pages/home/home.component';
-import { AuthService } from 'src/app/auth/services/auth.service';
-import { SearchService } from 'src/app/auth/services/search.service';
+import { AuthService } from 'src/app/services/auth.service';
+import { SearchService } from 'src/app/services/search.service';
 import { DialogOverviewExampleDialog } from '../dashboard/dashboard.component';
 
 @Component({

@@ -1,4 +1,4 @@
 export interface Restaurante {
   ok: boolean;
-  restaurante: Object;
+  restaurante: object;
 }

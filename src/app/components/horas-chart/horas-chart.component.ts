@@ -2,7 +2,7 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { ChartConfiguration, ChartData, ChartType } from 'chart.js';
 import DataLabelsPlugin from 'chartjs-plugin-datalabels';
 import { BaseChartDirective } from 'ng2-charts';
-import { AuthService } from 'src/app/auth/services/auth.service';
+import { AuthService } from 'src/app/services/auth.service';
 @Component({
   selector: 'app-horas-chart',
   templateUrl: './horas-chart.component.html',
@@ -15,7 +15,7 @@ export class HorasChartComponent implements OnInit {
   ngOnInit(): void {
     this.authService.obtenerDatosRestauranteToken().subscribe((resp: any) => {
       const intervalos = resp.restaurante.reservas.map((reserva: any) => {
-        let intervaloIzq = reserva.hora.slice(0, -2) + '00';
+        const intervaloIzq = reserva.hora.slice(0, -2) + '00';
         let hora = parseInt(intervaloIzq.slice(0, 2)) + 1;
         if (hora === 24) {
           hora = 0;
@@ -25,7 +25,7 @@ export class HorasChartComponent implements OnInit {
           horaCadena = '0' + horaCadena;
         }
 
-        let intervaloDer = horaCadena + intervaloIzq.slice(0 + 2);
+        const intervaloDer = horaCadena + intervaloIzq.slice(0 + 2);
         const intervaloCompleto = intervaloIzq + '-' + intervaloDer;
         return intervaloCompleto;
       });
@@ -35,17 +35,17 @@ export class HorasChartComponent implements OnInit {
       }
 
       intervalos.sort((a: any, b: any) => {
-        let aStartHour = parseInt(a.slice(0, 2));
-        let bStartHour = parseInt(b.slice(0, 2));
+        const aStartHour = parseInt(a.slice(0, 2));
+        const bStartHour = parseInt(b.slice(0, 2));
         return aStartHour - bStartHour;
       });
 
-      let counts = intervalos.reduce((acc: any, val: any) => {
+      const counts = intervalos.reduce((acc: any, val: any) => {
         acc[val] = (acc[val] || 0) + 1;
         return acc;
       }, {});
 
-      let unique = intervalos.filter(
+      const unique = intervalos.filter(
         (val: any, i: any) => intervalos.indexOf(val) === i
       );
 

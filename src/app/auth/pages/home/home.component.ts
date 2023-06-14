@@ -2,21 +2,21 @@ import { Component, Inject, OnInit, inject } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { DateAdapter } from '@angular/material/core';
 import {
-  MAT_DIALOG_DATA,
-  MatDialog,
-  MatDialogRef,
+    MAT_DIALOG_DATA,
+    MatDialog,
+    MatDialogRef,
 } from '@angular/material/dialog';
 import {
-  MAT_SNACK_BAR_DATA,
-  MatSnackBar,
-  MatSnackBarRef,
+    MAT_SNACK_BAR_DATA,
+    MatSnackBar,
+    MatSnackBarRef,
 } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
 import * as L from 'leaflet';
 import { Subject, of } from 'rxjs';
 import { catchError, debounceTime } from 'rxjs/operators';
-import { SearchService } from 'src/app/auth/services/search.service';
-import { AuthService } from '../../services/auth.service';
+import { SearchService } from 'src/app/services/search.service';
+import { AuthService } from '../../../services/auth.service';
 @Component({
   selector: 'app-home',
   templateUrl: './home.component.html',
@@ -42,8 +42,8 @@ export class HomeComponent implements OnInit {
   results: any[] = [];
   resultsAux: any[] = [];
   map: L.Map | undefined;
-  mapInitialized: boolean = false;
-  busqueda: boolean = false;
+  mapInitialized = false;
+  busqueda = false;
   durationInSeconds = 3;
   imagenUrl: any[] = [];
   imagenUrlAux: any[] = [];
@@ -73,7 +73,7 @@ export class HomeComponent implements OnInit {
   }
 
   getRandomComments(commentsArray: any) {
-    let randomComments: any = [];
+    const randomComments: any = [];
     for (let i = 0; i < 3 && i < commentsArray.length; i++) {
       let randomIndex = Math.floor(Math.random() * commentsArray.length);
       while (randomComments.includes(commentsArray[randomIndex])) {
@@ -100,7 +100,7 @@ export class HomeComponent implements OnInit {
         const festivos = resp;
         const filteredResults = this.results.filter((result) => {
           const precioMedio = this.calculaPrecioMedioCarta(result);
-          let comprobacionFechaYHora = this.compruebaFecha(festivos, result);
+          const comprobacionFechaYHora = this.compruebaFecha(festivos, result);
 
           return (
             comprobacionFechaYHora &&
@@ -201,9 +201,9 @@ export class HomeComponent implements OnInit {
           this.reiniciarValoraciones(filteredResults);
         }
 
-        let auxArray = this.results;
-        let posiciones = filteredResults.reduce(function (acc, elemento) {
-          let indice = auxArray.indexOf(elemento);
+        const auxArray = this.results;
+        const posiciones = filteredResults.reduce(function (acc, elemento) {
+          const indice = auxArray.indexOf(elemento);
           console.log(indice);
           if (indice !== -1) {
             acc.push(indice);
@@ -270,7 +270,7 @@ export class HomeComponent implements OnInit {
       'postres',
       'bebidas',
     ];
-    for (let key of keys) {
+    for (const key of keys) {
       for (let i = 0; i < restaurante.carta[key].length; i++) {
         numPlatos += 1;
         precioMedio += restaurante.carta[key][i].precio;
@@ -283,9 +283,9 @@ export class HomeComponent implements OnInit {
   }
   calculaMedias(element: any) {
     if (element.valoracion.length !== 0) {
-      let votos = Object.values(element.valoracion).map((obj: any) => obj.voto);
+      const votos = Object.values(element.valoracion).map((obj: any) => obj.voto);
       this.numeroValoraciones.push(votos.length);
-      let media = votos.reduce((a, b) => a + b) / votos.length;
+      const media = votos.reduce((a, b) => a + b) / votos.length;
       this.valoracion.push(media);
     } else {
       this.valoracion.push(0);
@@ -368,7 +368,7 @@ export class HomeComponent implements OnInit {
             this.imagenUrlAux = this.imagenUrl;
 
             // Crear el marcador para el restaurante
-            let marker = L.marker([element.ubicacion[0], element.ubicacion[1]])
+            const marker = L.marker([element.ubicacion[0], element.ubicacion[1]])
               .bindPopup(element.nombre)
               .openPopup();
             // Añadir el marcador al mapa
@@ -379,8 +379,8 @@ export class HomeComponent implements OnInit {
             console.log('check');
             console.log(this.checkGeolocation);
             if (this.checkGeolocation) {
-              var browserLat;
-              var browserLong;
+              let browserLat;
+              let browserLong;
               navigator.geolocation.getCurrentPosition(
                 (position) => {
                   browserLat = position.coords.latitude;
@@ -421,8 +421,8 @@ export class HomeComponent implements OnInit {
   }
 
   iniciarMapa() {
-    let latitud: number = 0;
-    let longitud: number = 0;
+    let latitud = 0;
+    let longitud = 0;
     this.searchService
       .getUbicacionDesdeCiudad(this.searchCityTerm)
       .pipe(

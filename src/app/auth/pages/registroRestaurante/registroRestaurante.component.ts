@@ -1,17 +1,17 @@
 import { Component } from '@angular/core';
 import {
-  AbstractControl,
-  FormArray,
-  FormBuilder,
-  FormControl,
-  FormGroup,
-  ValidationErrors,
-  ValidatorFn,
-  Validators,
+    AbstractControl,
+    FormArray,
+    FormBuilder,
+    FormControl,
+    FormGroup,
+    ValidationErrors,
+    ValidatorFn,
+    Validators,
 } from '@angular/forms';
 import { DateAdapter } from '@angular/material/core';
 import { Router } from '@angular/router';
-import { AuthService } from '../../services/auth.service';
+import { AuthService } from '../../../services/auth.service';
 
 @Component({
   selector: 'app-registro',
@@ -19,8 +19,8 @@ import { AuthService } from '../../services/auth.service';
   styleUrls: ['./registroRestaurante.component.css'],
 })
 export class RegistroRestauranteComponent {
-  hide: boolean = true;
-  hideRepetida: boolean = true;
+  hide = true;
+  hideRepetida = true;
   options = ['Entrante', 'Primero', 'Segundo', 'Postre', 'Bebida'];
   dias = [
     'Lunes',

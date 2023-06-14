@@ -1,9 +1,9 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import {
-  FormBuilder,
-  FormControl,
-  FormGroup,
-  Validators,
+    FormBuilder,
+    FormControl,
+    FormGroup,
+    Validators,
 } from '@angular/forms';
 import { DateAdapter } from '@angular/material/core';
 import { MatDialog } from '@angular/material/dialog';
@@ -11,11 +11,11 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatTabGroup } from '@angular/material/tabs';
 import { ActivatedRoute } from '@angular/router';
 import {
-  ComentarioAnnotatedComponent,
-  DialogHomeComponent,
+    ComentarioAnnotatedComponent,
+    DialogHomeComponent,
 } from 'src/app/auth/pages/home/home.component';
-import { AuthService } from '../../services/auth.service';
-import { SearchService } from '../../services/search.service';
+import { AuthService } from '../../../services/auth.service';
+import { SearchService } from '../../../services/search.service';
 
 @Component({
   selector: 'app-restaurante',
@@ -25,10 +25,10 @@ import { SearchService } from '../../services/search.service';
 export class RestauranteComponent implements OnInit {
   @ViewChild('myTabGroup') myTabGroup!: MatTabGroup;
   minDate = new Date();
-  id: string = '';
+  id = '';
   restaurante: any;
-  valoracion: number = 0;
-  numeroValoraciones: number = 0;
+  valoracion = 0;
+  numeroValoraciones = 0;
   durationInSeconds = 5;
   usuario: any;
   sesionIniciada!: boolean;
@@ -56,11 +56,11 @@ export class RestauranteComponent implements OnInit {
     this.searchService.getRestaurantePorId(this.id).subscribe((res: any) => {
       this.restaurante = res.restaurante;
       if (this.restaurante.valoracion.length !== 0) {
-        let votos = Object.values(this.restaurante.valoracion).map(
+        const votos = Object.values(this.restaurante.valoracion).map(
           (obj: any) => obj.voto
         );
         this.numeroValoraciones = votos.length;
-        let media = votos.reduce((a, b) => a + b) / votos.length;
+        const media = votos.reduce((a, b) => a + b) / votos.length;
         this.valoracion = media;
       }
 
@@ -227,7 +227,7 @@ export class RestauranteComponent implements OnInit {
         this.authService
           .editarRestaurante(this.restaurante)
           .subscribe((resp) => {
-            let votos = this.restaurante.valoracion.map((obj: any) => obj.voto);
+            const votos = this.restaurante.valoracion.map((obj: any) => obj.voto);
             this.valoracion =
               votos.reduce((a: any, b: any) => a + b) / votos.length;
             this.numeroValoraciones = votos.length;
@@ -268,7 +268,7 @@ export class RestauranteComponent implements OnInit {
     });
   }
   generarNumeroAleatorio(longitud: any): string {
-    let caracteres =
+    const caracteres =
       'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
     let resultado = '';
     for (let i = 0; i < longitud; i++) {

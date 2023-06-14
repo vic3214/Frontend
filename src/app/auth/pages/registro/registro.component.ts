@@ -1,16 +1,16 @@
 import { Component, OnInit } from '@angular/core';
 import {
-  AbstractControl,
-  FormBuilder,
-  FormControl,
-  FormGroup,
-  ValidationErrors,
-  ValidatorFn,
-  Validators,
+    AbstractControl,
+    FormBuilder,
+    FormControl,
+    FormGroup,
+    ValidationErrors,
+    ValidatorFn,
+    Validators,
 } from '@angular/forms';
 import { DateAdapter } from '@angular/material/core';
 import { Router } from '@angular/router';
-import { AuthService } from '../../services/auth.service';
+import { AuthService } from '../../../services/auth.service';
 
 @Component({
   selector: 'app-registro',
@@ -18,8 +18,8 @@ import { AuthService } from '../../services/auth.service';
   styleUrls: ['./registro.component.css'],
 })
 export class RegistroComponent implements OnInit {
-  hide: boolean = true;
-  hideRepetida: boolean = true;
+  hide = true;
+  hideRepetida = true;
 
   constructor(
     private _formBuilder: FormBuilder,

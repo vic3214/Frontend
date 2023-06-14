@@ -2,8 +2,8 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { ChartConfiguration, ChartData, ChartType } from 'chart.js';
 import DataLabelsPlugin from 'chartjs-plugin-datalabels';
 import { BaseChartDirective } from 'ng2-charts';
-import { AuthService } from 'src/app/auth/services/auth.service';
-import { SearchService } from 'src/app/auth/services/search.service';
+import { AuthService } from 'src/app/services/auth.service';
+import { SearchService } from 'src/app/services/search.service';
 
 @Component({
   selector: 'app-reservas-chart',

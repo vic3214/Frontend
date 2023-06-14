@@ -2,8 +2,8 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { ChartConfiguration, ChartData, ChartType } from 'chart.js';
 import DataLabelsPlugin from 'chartjs-plugin-datalabels';
 import { BaseChartDirective } from 'ng2-charts';
-import { AuthService } from '../../auth/services/auth.service';
-import { SearchService } from '../../auth/services/search.service';
+import { AuthService } from '../../services/auth.service';
+import { SearchService } from '../../services/search.service';
 @Component({
   selector: 'app-visitados-chart',
   templateUrl: './visitados-chart.component.html',

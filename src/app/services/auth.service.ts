@@ -84,12 +84,12 @@ export class AuthService {
       idImagen = '';
     }
 
-    let anio = datosPersonales.controls['fechaNacimiento'].value.getFullYear();
-    let dia = datosPersonales.controls['fechaNacimiento'].value.getDay();
-    let mes = datosPersonales.controls['fechaNacimiento'].value.getMonth();
+    const anio = datosPersonales.controls['fechaNacimiento'].value.getFullYear();
+    const dia = datosPersonales.controls['fechaNacimiento'].value.getDay();
+    const mes = datosPersonales.controls['fechaNacimiento'].value.getMonth();
     const fechaNacimientoParseada = `${anio}-${mes}-${dia}`;
 
-    let body: any = {
+    const body: any = {
       nombre: datosPersonales.controls['nombre'].value,
       email: inicioSesion.controls['email'].value,
       password: inicioSesion.controls['password'].value,
@@ -296,7 +296,7 @@ export class AuthService {
       codigoPostal
     );
 
-    let body: any = {
+    const body: any = {
       nombrePropietario: datosPersonales.controls['nombrePropietario'].value,
       fechaNacimiento: datosPersonales.controls['fechaNacimiento'].value,
       nombre: datosRestaurante.controls['nombre'].value,
@@ -376,10 +376,10 @@ export class AuthService {
   }
 
   async obtenerUbicacion(
-    calle: String,
-    ciudad: String,
-    numero: String,
-    codigoPostal: String
+    calle: string,
+    ciudad: string,
+    numero: string,
+    codigoPostal: string
   ) {
     const direccion = `${calle} ${numero}, ${ciudad}`;
     const url = `https://nominatim.openstreetmap.org/search?street=${encodeURIComponent(

@@ -10,11 +10,11 @@ export class SearchService {
 
   constructor(private http: HttpClient) {}
 
-  getRestaurantesPorCiudadYNombre(nombre: String, ciudad: String) {
+  getRestaurantesPorCiudadYNombre(nombre: string, ciudad: string) {
     return this.http.get(`${this.baseUrl}/restaurantes/${nombre}/${ciudad}`);
   }
 
-  getUbicacionDesdeCiudad(ciudad: String) {
+  getUbicacionDesdeCiudad(ciudad: string) {
     return this.http.get(`${this.baseUrl}/restaurantes/${ciudad}`);
   }
 

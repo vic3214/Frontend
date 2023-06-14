@@ -1,12 +1,12 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import {
-  MAT_DIALOG_DATA,
-  MatDialog,
-  MatDialogRef,
+    MAT_DIALOG_DATA,
+    MatDialog,
+    MatDialogRef,
 } from '@angular/material/dialog';
 import { Router } from '@angular/router';
-import { AuthService } from 'src/app/auth/services/auth.service';
-import { SearchService } from 'src/app/auth/services/search.service';
+import { AuthService } from 'src/app/services/auth.service';
+import { SearchService } from 'src/app/services/search.service';
 
 @Component({
   selector: 'app-dashboard',

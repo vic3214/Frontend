@@ -1,12 +1,12 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 import {
-  MAT_DIALOG_DATA,
-  MatDialog,
-  MatDialogRef,
+    MAT_DIALOG_DATA,
+    MatDialog,
+    MatDialogRef,
 } from '@angular/material/dialog';
 import { Router } from '@angular/router';
-import { AuthService } from '../../services/auth.service';
+import { AuthService } from '../../../services/auth.service';
 
 @Component({
   selector: 'app-login',
@@ -14,8 +14,8 @@ import { AuthService } from '../../services/auth.service';
   styleUrls: ['./login.component.css'],
 })
 export class LoginComponent implements OnInit {
-  registrarUsuario: Boolean = false;
-  hide: Boolean = true;
+  registrarUsuario = false;
+  hide = true;
 
   constructor(
     private router: Router,
@@ -60,8 +60,8 @@ export class LoginComponent implements OnInit {
         }
       },
       (err) => {
-        let erroresEnviar: any = [];
-        let formErrors = err.error.errores === undefined;
+        const erroresEnviar: any = [];
+        const formErrors = err.error.errores === undefined;
         if (!formErrors) {
           // Errores al checkear si estan vacios email, contraseña y si el email está bien formado
           Object.entries(err.error.errores).forEach(([key, value]) => {
