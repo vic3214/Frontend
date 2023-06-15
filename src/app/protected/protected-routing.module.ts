@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
+import { ValidarTokenRestauranteGuard } from '../guards/validar-token-restaurante.guard';
 import { ValidarTokenGuard } from '../guards/validar-token.guard';
 import { DashboardRestauranteComponent } from './dashboard-restaurante/dashboard-restaurante.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
@@ -14,7 +15,9 @@ const routes: Routes = [
         canActivate: [ValidarTokenGuard],
         canLoad: [ValidarTokenGuard],
       },
-      { path: 'restaurante', component: DashboardRestauranteComponent },
+      { path: 'restaurante', component: DashboardRestauranteComponent,
+      canActivate: [ValidarTokenRestauranteGuard],
+      canLoad: [ValidarTokenRestauranteGuard],},
       { path: '**', redirectTo: '' },
     ],
   },

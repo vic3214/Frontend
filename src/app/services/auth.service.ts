@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
+/* eslint-disable @typescript-eslint/no-non-null-assertion */
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { FormGroup } from '@angular/forms';
@@ -246,6 +248,29 @@ export class AuthService {
 
   validarToken(token: string): Observable<boolean> {
     const url = `${this.baseUrl}/auth/renovar`;
+    const headers = new HttpHeaders().set(
+      'x-token',
+      localStorage.getItem(token) || ''
+    );
+
+    return this.http.get<AuthResponse>(url, { headers }).pipe(
+      map((resp) => {
+        localStorage.setItem(token, resp.token!);
+        this._usuario = {
+          nombre: resp.nombre!,
+          uid: resp.uid!,
+          email: resp.email!,
+          reservas: resp.reservas!,
+          favoritos: resp.favoritos!,
+        };
+        return resp.ok;
+      }),
+      catchError((err) => of(false))
+    );
+  }
+
+  validarTokenRestaurante(token: string): Observable<boolean> {
+    const url = `${this.baseUrl}/auth/renovar-restaurante`;
     const headers = new HttpHeaders().set(
       'x-token',
       localStorage.getItem(token) || ''
