@@ -1,16 +1,22 @@
+/* eslint-disable @typescript-eslint/no-empty-function */
+/* eslint-disable @typescript-eslint/no-unused-vars */
+/* eslint-disable @typescript-eslint/no-explicit-any */
+/* eslint-disable @typescript-eslint/no-non-null-assertion */
 import { Component, OnInit } from '@angular/core';
 import {
-    AbstractControl,
-    FormBuilder,
-    FormControl,
-    FormGroup,
-    ValidationErrors,
-    ValidatorFn,
-    Validators,
+  AbstractControl,
+  FormBuilder,
+  FormControl,
+  FormGroup,
+  ValidationErrors,
+  ValidatorFn,
+  Validators,
 } from '@angular/forms';
 import { DateAdapter } from '@angular/material/core';
+import { MatDialog } from '@angular/material/dialog';
 import { Router } from '@angular/router';
 import { AuthService } from '../../../services/auth.service';
+import { DialogHomeComponent } from '../home/home.component';
 
 @Component({
   selector: 'app-registro',
@@ -25,7 +31,8 @@ export class RegistroComponent implements OnInit {
     private _formBuilder: FormBuilder,
     private date: DateAdapter<Date>,
     private authService: AuthService,
-    private router: Router
+    private router: Router,
+    public dialog: MatDialog,
   ) {
     // Ponemos en los calendarios el lunes como primer día
     date.getFirstDayOfWeek = () => 1;
@@ -67,18 +74,21 @@ export class RegistroComponent implements OnInit {
   get email() {
     return this.inicioSesion.get('email');
   }
+  
   uploadFile(e: any) {
-    console.log(e);
     const maxSize = 80000;
     if (e.srcElement.files[0] && e.srcElement.files[0].size <= maxSize) {
       this.datosPersonales.controls['fotografia'].setValue(
         e.srcElement.files[0]
       );
     } else {
-      console.log('Archivo muy pesado');
+      const dialogRef = this.dialog.open(DialogHomeComponent, {
+        width: '300px',
+        data: { err: "Archivo muy pesado" },
+      });
+  
+      dialogRef.afterClosed().subscribe((result) => {}); 
     }
-
-    console.log(this.datosPersonales.controls['fotografia'].value);
   }
 
   async creaUsuario() {

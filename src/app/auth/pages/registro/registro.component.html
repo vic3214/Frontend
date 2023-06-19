@@ -1,3 +1,4 @@
+<!-- eslint-disable @angular-eslint/template/label-has-associated-control -->
 <mat-vertical-stepper [linear]="false" #stepper class="relleno">
   <mat-step [stepControl]="datosPersonales">
     <form [formGroup]="datosPersonales">
@@ -28,7 +29,9 @@
         ></mat-datepicker-toggle>
         <mat-datepicker #fechaNacimiento></mat-datepicker>
       </mat-form-field>
-      <button mat-raised-button (click)="fileInput.click()">
+      <div class="fotoPerfil">
+      <label class="profile-label">Fotografía de perfil:</label>
+      <button mat-raised-button (click)="fileInput.click()" class="margenBoton">
         Seleccionar archivo
       </button>
       <input
@@ -38,6 +41,7 @@
         (change)="uploadFile($event)"
         accept=".jpg"
       />
+    </div>
       <div>
         <button mat-raised-button color="primary" matStepperNext>
           Siguiente

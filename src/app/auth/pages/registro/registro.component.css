@@ -43,3 +43,16 @@
   .terminarError{
     color: red;
   }
+
+  .fotoPerfil{
+    display: inline-block;
+    align-items: center;
+  }
+
+  .profile-label{
+    margin-left: 10px;
+  }
+
+  .margenBoton{
+    margin-left: 10px;
+  }

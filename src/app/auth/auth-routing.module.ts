@@ -29,11 +29,7 @@ const routes: Routes = [
       {
         path: 'restaurante/:id',
         component: RestauranteComponent,
-      },
-      {
-        path: '**',
-        redirectTo: 'error', // TODO configurar pagina de error
-      },
+      }
     ],
   },
 ];

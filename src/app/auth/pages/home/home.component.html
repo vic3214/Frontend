@@ -1,3 +1,6 @@
+<!-- eslint-disable @angular-eslint/template/click-events-have-key-events -->
+<!-- eslint-disable @angular-eslint/template/interactive-supports-focus -->
+<!-- eslint-disable @angular-eslint/template/alt-text -->
 <div class="busqueda">
   <div class="search-container">
     <input
@@ -54,7 +57,7 @@
 >
   <div
     class="results-container"
-    *ngIf="results.length != 0 || busqueda; else mensajeBuscar"
+    *ngIf="results.length !== 0 || busqueda; else mensajeBuscar"
   >
     <form [formGroup]="busquedaForm" class="filtros">
       <mat-form-field class="inputBusqueda">

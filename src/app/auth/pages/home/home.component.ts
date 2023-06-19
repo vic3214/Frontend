@@ -1,15 +1,20 @@
+/* eslint-disable @angular-eslint/component-selector */
+/* eslint-disable @typescript-eslint/no-empty-function */
+/* eslint-disable @typescript-eslint/no-non-null-assertion */
+/* eslint-disable @typescript-eslint/no-unused-vars */
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { Component, Inject, OnInit, inject } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { DateAdapter } from '@angular/material/core';
 import {
-    MAT_DIALOG_DATA,
-    MatDialog,
-    MatDialogRef,
+  MAT_DIALOG_DATA,
+  MatDialog,
+  MatDialogRef,
 } from '@angular/material/dialog';
 import {
-    MAT_SNACK_BAR_DATA,
-    MatSnackBar,
-    MatSnackBarRef,
+  MAT_SNACK_BAR_DATA,
+  MatSnackBar,
+  MatSnackBarRef,
 } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
 import * as L from 'leaflet';
@@ -34,8 +39,6 @@ export class HomeComponent implements OnInit {
   ) {
     date.getFirstDayOfWeek = () => 1;
   }
-
-  // TODO: Implementar paginacion en los resultados
 
   searchTerm!: string;
   searchCityTerm!: string;
@@ -66,7 +69,6 @@ export class HomeComponent implements OnInit {
       this.searchService
         .getCiudades(this.searchCityTerm)
         .subscribe((resp: any) => {
-          this.res = [];
           this.res = [...resp];
         });
     });
@@ -344,8 +346,6 @@ export class HomeComponent implements OnInit {
       });
     }
 
-    console.log(this.searchCityTerm);
-    console.log(this.searchTerm);
     this.searchService
       .getRestaurantesPorCiudadYNombre(this.searchTerm, this.searchCityTerm)
       .subscribe((restaurantes: any) => {
@@ -375,7 +375,7 @@ export class HomeComponent implements OnInit {
             marker.addTo(this.map!);
 
             // Geolocalizacion
-            let marjerGeo;
+            let markerGeo;
             console.log('check');
             console.log(this.checkGeolocation);
             if (this.checkGeolocation) {
@@ -386,12 +386,12 @@ export class HomeComponent implements OnInit {
                   browserLat = position.coords.latitude;
                   browserLong = position.coords.longitude;
 
-                  marjerGeo = L.marker([browserLat, browserLong]).addTo(
+                  markerGeo = L.marker([browserLat, browserLong]).addTo(
                     this.map!
                   );
-                  marjerGeo.bindPopup('Estás aquí').openPopup();
+                  markerGeo.bindPopup('Estás aquí').openPopup();
                   this.map!.setView([browserLat, browserLong], 15);
-                  marjerGeo.addTo(this.map!);
+                  markerGeo.addTo(this.map!);
                 },
                 function (err) {
                   console.error('Error', err);
