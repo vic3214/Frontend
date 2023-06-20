@@ -1,8 +1,13 @@
+<!-- eslint-disable @angular-eslint/template/alt-text -->
 <mat-toolbar class="toolbar">
   <span>
     <h1 class="color">¡Bienvenido {{ getUsuario.nombre }}!</h1></span
   >
-  <img [src]="imagenUrl" *ngIf="imagenUrl" />
+  <img [src]="imagenUrl" *ngIf="imagenUrl; else defaultImage" />
+  <ng-template #defaultImage>
+    <img src="assets/default-user.jfif" />
+  </ng-template>
+  
   <span class="toolbar_spacer"></span>
   <button
     mat-fab
@@ -90,6 +95,9 @@
           <mat-card-content>
             <h3>
               <b>Nombre de la reserva: {{ result.reserva.usuario }}</b>
+            </h3>
+            <h3>
+              <b>Día: {{ result.reserva.fecha | formateoFechas }}</b>
             </h3>
             <h3>
               <b>Hora: {{ result.reserva.hora }}</b>

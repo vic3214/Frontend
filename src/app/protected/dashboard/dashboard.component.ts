@@ -1,8 +1,15 @@
+/* eslint-disable @angular-eslint/component-class-suffix */
+/* eslint-disable @angular-eslint/component-selector */
+/* eslint-disable @typescript-eslint/no-empty-function */
+/* eslint-disable @typescript-eslint/no-unused-vars */
+/* eslint-disable @typescript-eslint/no-non-null-assertion */
+/* eslint-disable @typescript-eslint/no-explicit-any */
+/* eslint-disable @typescript-eslint/ban-types */
 import { Component, Inject, OnInit } from '@angular/core';
 import {
-    MAT_DIALOG_DATA,
-    MatDialog,
-    MatDialogRef,
+  MAT_DIALOG_DATA,
+  MatDialog,
+  MatDialogRef,
 } from '@angular/material/dialog';
 import { Router } from '@angular/router';
 import { AuthService } from 'src/app/services/auth.service';

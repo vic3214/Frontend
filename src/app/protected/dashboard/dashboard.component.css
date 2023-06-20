@@ -98,18 +98,15 @@ mat-card-subtitle {
   border-radius: 40%;
 }
 
-.example-card.cancelado{
-  background-color: lightgray;
 
-}
+.cancelado::after {
+  content: "Cancelado";
 
-.example-card.cancelado::after {
-  content: "Cancelado por el restaurante";
   position: absolute;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
   font-weight: bold;
-  font-size: 24px;
+  font-size: 23px;
   color: red;
 }
