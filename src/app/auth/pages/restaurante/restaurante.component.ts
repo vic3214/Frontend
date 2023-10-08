@@ -39,6 +39,7 @@ export class RestauranteComponent implements OnInit {
   imagenUrlPrimeros: any[] = [];
   imagenUrlSegundos: any[] = [];
   numerosGenerados: string[] = [];
+  loader=false;
   constructor(
     private activatedRoute: ActivatedRoute,
     private _snackBar: MatSnackBar,
@@ -53,7 +54,7 @@ export class RestauranteComponent implements OnInit {
 
   ngOnInit(): void {
     this.id = this.activatedRoute.snapshot.paramMap.get('id') || '';
-
+    this.loader=true;
     this.searchService.getRestaurantePorId(this.id).subscribe((res: any) => {
       this.restaurante = res.restaurante;
       if (this.restaurante.valoracion.length !== 0) {
@@ -79,7 +80,9 @@ export class RestauranteComponent implements OnInit {
           };
           reader.readAsDataURL(resp);
         });
-      });
+      }).finally(() => {
+        this.loader=false;
+      });;
 
       const primerosPlatosConImagenes = this.restaurante.carta.primerosPlatos.filter(
         (plato:any) => plato.fotografiaPlato !== undefined && plato.fotografiaPlato !== null && plato.fotografiaPlato !== ''
@@ -132,7 +135,7 @@ export class RestauranteComponent implements OnInit {
       const postresConImagenes = this.restaurante.carta.postres.filter(
         (plato:any)  => plato.fotografiaPlato !== undefined && plato.fotografiaPlato !== null && plato.fotografiaPlato !== ''
       );
-      
+
       Promise.all(
         postresConImagenes.map((plato:any)  => this.authService.recuperarImagen(plato.fotografiaPlato))
       ).then(respuestas => {
@@ -143,7 +146,7 @@ export class RestauranteComponent implements OnInit {
           };
           reader.readAsDataURL(resp);
         });
-      });
+      })
 
     });
     this.authService.obtenerDatosToken().subscribe((res: any) => {
@@ -170,7 +173,6 @@ export class RestauranteComponent implements OnInit {
     return this.numeroValoraciones;
   }
   reservasGroup: FormGroup = this._formBuilder.group({
-    nombre: new FormControl([], [Validators.required]),
     fecha: new FormControl([], [Validators.required]),
     hora: new FormControl([], [Validators.required]),
     personas: new FormControl([], [Validators.required]),
@@ -307,10 +309,10 @@ export class RestauranteComponent implements OnInit {
     const dia1 = this.reservasGroup.controls['fecha'].value.getDate();
     const fecha = `${year}-${mes.toString().padStart(2, '0')}-${dia1
       .toString()
-      .padStart(2, '0')}T00:00:00Z`;
+      .padStart(2, '0')}T05:00:00Z`;
     
     const date = new Date(fecha);
-    date.setHours(0)
+    date.setHours(12)
 console.log('date',date);
     // Comprobamos que el restaurante abre ese dia y a esa hora
     const diaSemana = date.getDay();
@@ -388,7 +390,6 @@ console.log('date',date);
       uidUsuario: this.usuario._id,
       uidRestaurante: this.restaurante._id,
       uidReserva: this.generarNumeroUnico(),
-      nombre: this.reservasGroup.controls['nombre'].value,
       fecha: date,
       hora: this.reservasGroup.controls['hora'].value,
       personas: this.reservasGroup.controls['personas'].value,

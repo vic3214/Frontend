@@ -165,22 +165,20 @@ export class DashboardComponent implements OnInit {
   }
 
   eliminarReserva(i:any){
-    this.authService.editaUsuario(this.usuario).subscribe((res: any) => {});
-    const indiceReserva = this.resultsReservas[
-      i
-    ].restaurante.reservas.findIndex(
-      (reserva: any) =>
-        reserva.uidReserva === this.resultsReservas[i].reserva.uidReserva
-    );
-    this.resultsReservas[i].restaurante.reservas.splice(indiceReserva, 1);
-    this.authService
-      .editarRestaurante(this.resultsReservas[i].restaurante)
-      .subscribe((resp) => {
-        this.usuario.reservas.splice(i, 1);
-        this.authService.editaUsuario(this.usuario).subscribe((res) => {
-          this.resultsReservas.splice(i, 1);
-        });
-      });
+    this.usuario.reservas.splice(i, 1);
+    this.authService.editaUsuario(this.usuario).subscribe((res) => {
+      this.resultsReservas.splice(i, 1);
+      this.resultsReservas[i].restaurante.reservas.splice(
+        this.resultsReservas[i].restaurante.reservas.indexOf(
+          this.resultsReservas[i].reserva
+        ),
+        1
+      );
+      this.authService
+        .editarRestaurante(this.resultsReservas[i].restaurante)
+        .subscribe((resp: any) => {});
+    });
+
   }
 
   eliminaCuenta() {

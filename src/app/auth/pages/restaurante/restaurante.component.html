@@ -4,7 +4,10 @@
     <span>{{ restaurante?.nombre }}</span>
   </mat-toolbar-row>
 </mat-toolbar>
-<div>
+<div *ngIf="loader" style="display: flex; justify-content: center;align-items: center;">
+  <mat-spinner></mat-spinner>
+</div>
+<div *ngIf="!loader">
   <h2 style="color: white;">Cocina de temática {{ restaurante?.tematica }}</h2>
   <div>
     <mat-tab-group dynamicHeight >
