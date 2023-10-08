@@ -111,7 +111,24 @@ export class DashboardComponent implements OnInit {
     this.favoritos = true;
   }
 
-  eliminarFavorito(i: number) {
+  async eliminarFavorito(i: number) {
+
+        // Popup para confirmar cancelación de reserva
+        const dialogRef = this.dialog.open(DialogOverviewExampleDialog, {
+          width: '400px',
+          data: { mensaje: '¿Estás seguro de que quieres eliminar este restaurante de favoritos?' },
+        });
+    
+        // Si pulsa si sobre el popup cancelarla sino dejarla
+       await dialogRef.afterClosed().subscribe((result: any) => {
+          if (result) {
+            this.eliminarFavoritoPopUp(i);
+          }
+        });
+
+  }
+
+  eliminarFavoritoPopUp(i: number){
     this.usuario.listaRestaurantesFavoritos.splice(i, 1);
     this.authService.editaUsuario(this.usuario).subscribe((res) => {
       this.results.splice(i, 1);
@@ -129,8 +146,25 @@ export class DashboardComponent implements OnInit {
       });
   }
 
-  cancelarReserva(i: number) {
-    this.usuario.reservas[i].estado = true;
+  async cancelarReserva(i: number) {
+
+    // Popup para confirmar cancelación de reserva
+    const dialogRef = this.dialog.open(DialogOverviewExampleDialog, {
+      width: '400px',
+      data: { mensaje: '¿Estás seguro de que quieres cancelar la reserva?' },
+    });
+
+    // Si pulsa si sobre el popup cancelarla sino dejarla
+   await dialogRef.afterClosed().subscribe((result: any) => {
+      if (result) {
+        this.eliminarReserva(i);
+      }
+    });
+
+
+  }
+
+  eliminarReserva(i:any){
     this.authService.editaUsuario(this.usuario).subscribe((res: any) => {});
     const indiceReserva = this.resultsReservas[
       i
@@ -138,16 +172,15 @@ export class DashboardComponent implements OnInit {
       (reserva: any) =>
         reserva.uidReserva === this.resultsReservas[i].reserva.uidReserva
     );
-    this.resultsReservas[i].restaurante.reservas[indiceReserva].estado = true;
+    this.resultsReservas[i].restaurante.reservas.splice(indiceReserva, 1);
     this.authService
       .editarRestaurante(this.resultsReservas[i].restaurante)
-      .subscribe((resp) => {});
-  }
-
-  eliminarReserva(i: number) {
-    this.resultsReservas.splice(i, 1);
-    this.usuario.reservas.splice(i, 1);
-    this.authService.editaUsuario(this.usuario).subscribe((res: any) => {});
+      .subscribe((resp) => {
+        this.usuario.reservas.splice(i, 1);
+        this.authService.editaUsuario(this.usuario).subscribe((res) => {
+          this.resultsReservas.splice(i, 1);
+        });
+      });
   }
 
   eliminaCuenta() {

@@ -1,3 +1,4 @@
+/* eslint-disable no-prototype-builtins */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 import { HttpClient, HttpHeaders } from '@angular/common/http';
@@ -133,17 +134,11 @@ export class AuthService {
   }
 
   editaUsuario(usuario: any) {
-    const headers = new HttpHeaders().set(
-      'x-token',
-      localStorage.getItem('token') || ''
-    );
+
 
     return this.http.put<any>(
       `${this.baseUrl}/editar-usuario/${usuario._id}`,
-      usuario,
-      {
-        headers,
-      }
+      usuario
     );
   }
 
@@ -396,6 +391,8 @@ export class AuthService {
         bodyCarta[tipo].push(plato);
       }
     }
+
+    console.log('bodycarta', bodyCarta);
 
     return bodyCarta;
   }

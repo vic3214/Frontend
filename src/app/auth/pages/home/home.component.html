@@ -22,14 +22,15 @@
     <button class="search-button" (click)="search()">
       <i class="fas fa-search"></i>
     </button>
-    <mat-checkbox
-      class="example-margin"
-      [(ngModel)]="checkGeolocation"
-      [labelPosition]="'after'"
-    >
-      Buscar cercanos
-    </mat-checkbox>
+
   </div>
+  <mat-checkbox
+  class="example-margin"
+  [(ngModel)]="checkGeolocation"
+  [labelPosition]="'after'"
+>
+  Buscar cercanos
+</mat-checkbox>
 </div>
 
 <div class="resCont" *ngIf="res.length > 0">
@@ -145,6 +146,10 @@
             <h3>
               Número máximo de personas por reserva:
               {{ result.maximoPersonasPorReserva }}
+            </h3>
+            <h3>
+              Precio medio de la carta:
+              {{ precioMedioRestaurante(result) }} €
             </h3>
             <li
               *ngFor="let comentario of getRandomComments(result.comentarios)"

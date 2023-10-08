@@ -1,15 +1,18 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+/* eslint-disable @typescript-eslint/ban-types */
 import { Component, OnInit } from '@angular/core';
 import {
-    AbstractControl,
-    FormArray,
-    FormBuilder,
-    FormGroup,
-    ValidationErrors,
-    ValidatorFn,
+  AbstractControl,
+  FormArray,
+  FormBuilder,
+  FormGroup,
+  ValidationErrors,
+  ValidatorFn,
 } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
+import { switchMap, tap } from 'rxjs/operators';
 import { ComentarioAnnotatedComponent } from 'src/app/auth/pages/home/home.component';
 import { AuthService } from 'src/app/services/auth.service';
 import { SearchService } from 'src/app/services/search.service';
@@ -49,7 +52,7 @@ export class DashboardRestauranteComponent implements OnInit {
     'Hora y fecha más próxima',
     'Hora y fecha más lejana',
   ];
-  estados = ['No Cancelada', 'Cancelada'];
+
   busquedaForm: FormGroup = this._formBuilder.group({
     fechaAntes: [],
     fechaDespues: [],
@@ -58,7 +61,7 @@ export class DashboardRestauranteComponent implements OnInit {
     comensalesMin: [],
     comensalesMax: [],
     ordenado: [],
-    estado: [],
+
   });
 
   horario: FormGroup = this._formBuilder.group({
@@ -80,6 +83,8 @@ export class DashboardRestauranteComponent implements OnInit {
         nombrePlato: [],
         precio: [],
         tipo: [],
+        alergenos: [[]],
+        descripcion: [],
         fotografiaPlato: ['', this.checkFileSize()],
       }),
     ]),
@@ -93,8 +98,8 @@ export class DashboardRestauranteComponent implements OnInit {
     };
   }
 
-  hide: boolean = true;
-  hideRepetida: boolean = true;
+  hide = true;
+  hideRepetida = true;
   imagenUrl: any = '';
 
   ngOnInit(): void {
@@ -107,6 +112,17 @@ export class DashboardRestauranteComponent implements OnInit {
         .subscribe(async (res: any) => {
           this.restaurante = res.restaurante;
           this.reservasRestaurante = res.restaurante.reservas;
+          // Buscar nombre de usuario de cada reserva y añadirlo al objeto reserva
+          for (let i = 0; i < this.reservasRestaurante.length; i++) {
+            await this.searchService
+              .getUsuarioPorId(this.reservasRestaurante[i].uidUsuario)
+              .subscribe((resp: any) => {
+                this.reservasRestaurante[i].nombreUsuario =
+                  resp.usuario.nombre;
+              });
+          }
+
+
           this.copiaReservas = res.restaurante.reservas;
           if (
             this.restaurante.fotografia !== undefined &&
@@ -123,7 +139,7 @@ export class DashboardRestauranteComponent implements OnInit {
               });
           }
 
-          let horarios: any[] = [];
+          const horarios: any[] = [];
 
           for (let i = 0; i < this.restaurante.horario.length; i++) {
             const formBuilder = this._formBuilder.group({
@@ -140,7 +156,7 @@ export class DashboardRestauranteComponent implements OnInit {
             horario: this._formBuilder.array(horarios),
           });
 
-          let platos: any[] = [];
+          const platos: any[] = [];
 
           const categorias = [
             this.restaurante.carta.bebidas,
@@ -150,7 +166,7 @@ export class DashboardRestauranteComponent implements OnInit {
             this.restaurante.carta.postres,
           ];
 
-          for (let categoria of categorias) {
+          for (const categoria of categorias) {
             for (let i = 0; i < categoria.length; i++) {
               let imagen: any;
               this.showImage.push(false);
@@ -195,6 +211,10 @@ export class DashboardRestauranteComponent implements OnInit {
                 ),
                 precio: this._formBuilder.control(categoria[i].precio),
                 tipo: this._formBuilder.control(categoria[i].tipo),
+                alergenos: this._formBuilder.control(categoria[i].alergenos),
+                descripcion: this._formBuilder.control(
+                  categoria[i].descripcion
+                ),
                 fotografiaPlato: this._formBuilder.control(
                   categoria[i].fotografiaPlato
                 ),
@@ -260,9 +280,7 @@ export class DashboardRestauranteComponent implements OnInit {
             this.busquedaForm.controls['comensalesMin'].value) &&
         (this.busquedaForm.controls['comensalesMax'].value === null ||
           reserva.personas <=
-            this.busquedaForm.controls['comensalesMax'].value) &&
-        (this.busquedaForm.controls['estado'].value === null ||
-          reserva.estado === this.compruebaCancelada())
+            this.busquedaForm.controls['comensalesMax'].value) 
       );
     });
 
@@ -358,14 +376,7 @@ export class DashboardRestauranteComponent implements OnInit {
 
     return 0;
   }
-
-  compruebaCancelada() {
-    if (this.busquedaForm.controls['estado'].value === 'Cancelada') {
-      return true;
-    }
-    return false;
-  }
-
+  
   agregarHorario() {
     this.horarios.push(
       this._formBuilder.group({
@@ -387,6 +398,8 @@ export class DashboardRestauranteComponent implements OnInit {
         nombrePlato: [],
         precio: [],
         tipo: [],
+        alergenos: [[]],
+        descripcion: [],
         fotografiaPlato: [],
       })
     );
@@ -564,31 +577,36 @@ export class DashboardRestauranteComponent implements OnInit {
   }
 
   cancelarReserva(i: number) {
-    this.restaurante.reservas[i].estado = true;
-    this.searchService
-      .getUsuarioPorId(this.restaurante.reservas[i].uidUsuario)
-      .subscribe((resp: any) => {
-        for (let j = 0; j < resp.usuario.reservas.length; j++) {
-          if (
-            resp.usuario.reservas[j].uidReserva ===
-            this.restaurante.reservas[i]._id
-          ) {
-            resp.usuario.reservas[j].estado = true;
-          }
-        }
-        this.authService.editaUsuario(resp.usuario).subscribe((resp) => {
-          this.authService
-            .editarRestaurante(this.restaurante)
-            .subscribe((resp) => {});
-        });
-      });
+
+    // Popup de confirmacion
+    const dialogRef = this.dialog.open(DialogOverviewExampleDialog, {
+      width: '400px',
+      data: { mensaje: '¿Estás seguro de que quieres cancelar la reserva?' },
+    });
+
+    dialogRef.afterClosed().subscribe((result: any) => {
+      if (result) {
+        this.eliminarReserva(i);
+      }
+    });
+
+
   }
 
   eliminarReserva(i: number) {
-    this.restaurante.reservas.splice(i, 1);
-    this.authService
-      .editarRestaurante(this.restaurante)
-      .subscribe((resp) => {});
+    console.log('i', i);
+    const reserva = this.restaurante.reservas[i];
+    this.searchService.getUsuarioPorId(reserva.uidUsuario).pipe(
+      tap((resp: any) => {
+        resp.usuario.reservas = resp.usuario.reservas.filter((r:any) => r.uidReserva !== reserva.uidReserva);
+        this.restaurante.reservas.splice(i, 1);
+        console.log('a');
+      }),
+      switchMap(resp => this.authService.editaUsuario(resp.usuario)),
+      switchMap(() => this.authService.editarRestaurante(this.restaurante))
+    ).subscribe(() => {
+
+    });
   }
 
   onFileChange(event: any, index: number) {
@@ -627,8 +645,18 @@ export class DashboardRestauranteComponent implements OnInit {
       };
       reader.readAsDataURL(blob);
     } else {
-      //TODO: Aviso de archivo pesado
-      console.log('Archivo muy pesado');
+      //Alerar al usuario de archivo muy pesado mediante un snackbar
+      const dialogRef = this.dialog.open(DialogOverviewExampleDialog, {
+        width: '400px',
+        data: { mensaje: 'El archivo es demasiado pesado' },
+      });
+    }
+
+
     }
   }
-}
+
+
+
+
+

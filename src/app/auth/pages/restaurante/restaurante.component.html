@@ -1,29 +1,29 @@
+<!-- eslint-disable @angular-eslint/template/alt-text -->
 <mat-toolbar color="accent">
   <mat-toolbar-row class="center">
     <span>{{ restaurante?.nombre }}</span>
   </mat-toolbar-row>
 </mat-toolbar>
 <div>
-  <h2>Cocina de temática {{ restaurante?.tematica }}</h2>
+  <h2 style="color: white;">Cocina de temática {{ restaurante?.tematica }}</h2>
   <div>
-    <mat-tab-group>
+    <mat-tab-group dynamicHeight >
       <mat-tab label="Nuestro Menú">
         <div>
-          <div>
-            <mat-tab-group #myTabGroup>
+            <mat-tab-group dynamicHeight #myTabGroup>
               <mat-tab label="Entrantes">
+                <div style="transform: none;
+                display: flex;
+                align-items: start;
+                justify-content: start;
+                margin-top: 5px;
+                height: 100%;">
                 <mat-card
                   class="example-card"
-                  style="
-                    display: inline-block;
-                    width: 300px;
-                    height: 300px;
-                    margin-top: 5px;
-                  "
                   *ngFor="let plato of restaurante?.carta.entrantes; index as i"
                 >
                   <mat-card-header>
-                    <mat-card-title>{{ plato.nombrePlato }} </mat-card-title>
+                    <mat-card-title>{{ plato.nombrePlato }} - {{plato.precio}}€</mat-card-title>
                     <mat-card-subtitle>{{ plato.tipo }}</mat-card-subtitle>
                   </mat-card-header>
                   <mat-card-content>
@@ -35,19 +35,29 @@
                     <ng-template #defaultImage class="header-image">
                       <img src="assets/default-plato.jpg" />
                     </ng-template>
-
-                    <p>Descripcion</p>
+                    <h3>Descripción del plato:</h3>
+                    <p>{{plato.descripcion}}</p>
+                    <h3>Alérgenos:</h3>
+                    <p>{{plato.alergenos}}</p>
                   </mat-card-content>
                 </mat-card>
+              </div>
               </mat-tab>
-              <mat-tab label="Primeros platos">
+              <mat-tab label="Primeros platos" >
+                <div style="transform: none;
+                display: flex;
+                align-items: start;
+                justify-content: start;
+                margin-top: 5px;
+                height: 100%;">
                 <mat-card
                   class="example-card"
                   style="
                     display: inline-block;
                     width: 300px;
-                    height: 300px;
+                    height: fit-content;
                     margin-top: 5px;
+                    
                   "
                   *ngFor="
                     let plato of restaurante?.carta.primerosPlatos;
@@ -55,7 +65,7 @@
                   "
                 >
                   <mat-card-header>
-                    <mat-card-title>{{ plato.nombrePlato }} </mat-card-title>
+                    <mat-card-title>{{ plato.nombrePlato }} - {{plato.precio}}€ </mat-card-title>
                     <mat-card-subtitle>{{ plato.tipo }}</mat-card-subtitle>
                   </mat-card-header>
                   <mat-card-content>
@@ -67,10 +77,13 @@
                     <ng-template #defaultImage class="header-image">
                       <img src="assets/default-plato.jpg" />
                     </ng-template>
-
-                    <p>Descripcion</p>
+                    <h3>Descripción del plato:</h3>
+                    <p>{{plato.descripcion}}</p>
+                    <h3>Alérgenos:</h3>
+                    <p>{{plato.alergenos}}</p>
                   </mat-card-content>
                 </mat-card>
+                </div>
               </mat-tab>
               <mat-tab label="Segundos platos">
                 <mat-card
@@ -78,7 +91,7 @@
                   style="
                     display: inline-block;
                     width: 300px;
-                    height: 300px;
+                    height: fit-content;
                     margin-top: 5px;
                   "
                   *ngFor="
@@ -87,7 +100,7 @@
                   "
                 >
                   <mat-card-header>
-                    <mat-card-title>{{ plato.nombrePlato }} </mat-card-title>
+                    <mat-card-title>{{ plato.nombrePlato }} - {{plato.precio}}€ </mat-card-title>
                     <mat-card-subtitle>{{ plato.tipo }}</mat-card-subtitle>
                   </mat-card-header>
                   <mat-card-content>
@@ -99,8 +112,10 @@
                     <ng-template #defaultImage class="header-image">
                       <img src="assets/default-plato.jpg" />
                     </ng-template>
-
-                    <p>Descripcion</p>
+                    <h3>Descripción del plato:</h3>
+                    <p>{{plato.descripcion}}</p>
+                    <h3>Alérgenos:</h3>
+                    <p>{{plato.alergenos}}</p>
                   </mat-card-content>
                 </mat-card>
               </mat-tab>
@@ -110,13 +125,13 @@
                   style="
                     display: inline-block;
                     width: 300px;
-                    height: 300px;
+                    height: fit-content;
                     margin-top: 5px;
                   "
                   *ngFor="let plato of restaurante?.carta.postres; index as i"
                 >
                   <mat-card-header>
-                    <mat-card-title>{{ plato.nombrePlato }} </mat-card-title>
+                    <mat-card-title>{{ plato.nombrePlato }} - {{plato.precio}}€ </mat-card-title>
                     <mat-card-subtitle>{{ plato.tipo }}</mat-card-subtitle>
                   </mat-card-header>
                   <mat-card-content>
@@ -128,24 +143,26 @@
                     <ng-template #defaultImage class="header-image">
                       <img src="assets/default-plato.jpg" />
                     </ng-template>
-
-                    <p>Descripcion</p>
+                    <h3>Descripción del plato:</h3>
+                    <p>{{plato.descripcion}}</p>
+                    <h3>Alérgenos:</h3>
+                    <p>{{plato.alergenos}}</p>
                   </mat-card-content>
                 </mat-card>
               </mat-tab>
-              <mat-tab label="Bebidas">
+              <mat-tab label="Bebidas" >
                 <mat-card
                   class="example-card"
                   style="
                     display: inline-block;
                     width: 300px;
-                    height: 300px;
+                    height: fit-content;
                     margin-top: 5px;
                   "
                   *ngFor="let plato of restaurante?.carta.bebidas; index as i"
                 >
                   <mat-card-header>
-                    <mat-card-title>{{ plato.nombrePlato }} </mat-card-title>
+                    <mat-card-title>{{ plato.nombrePlato }} - {{plato.precio}}€ </mat-card-title>
                     <mat-card-subtitle>{{ plato.tipo }}</mat-card-subtitle>
                   </mat-card-header>
                   <mat-card-content>
@@ -157,13 +174,15 @@
                     <ng-template #defaultImage class="header-image">
                       <img src="assets/default-plato.jpg" />
                     </ng-template>
-
-                    <p>Descripcion</p>
+                    <h3>Descripción del plato:</h3>
+                    <p>{{plato.descripcion}}</p>
+                    <h3>Alérgenos:</h3>
+                    <p>{{plato.alergenos}}</p>
                   </mat-card-content>
                 </mat-card>
               </mat-tab>
             </mat-tab-group>
-          </div>
+        
         </div>
       </mat-tab>
       <mat-tab label="Horario de atención">

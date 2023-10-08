@@ -69,7 +69,11 @@
     margin-right: 5px;
   }
   .example-card{
-    margin-right: 10px;
+    margin-right: 20px;
+    color:white;
+    width: fit-content;
+    margin-top: 5px;
+
   }
   
   .example-card img {

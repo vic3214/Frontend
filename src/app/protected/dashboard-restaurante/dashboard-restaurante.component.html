@@ -1,3 +1,5 @@
+<!-- eslint-disable @angular-eslint/template/alt-text -->
+<!-- eslint-disable @angular-eslint/template/mouse-events-have-key-events -->
 <mat-toolbar class="toolbar">
   <span>
     <h1>¡Bienvenido {{ getRestaurante.nombre }}!</h1></span
@@ -40,7 +42,6 @@
 <div *ngIf="reservas">
   <h2>Reservas de los usuarios:</h2>
 
-  <div *ngIf="reservasRestaurante.length > 0; else mensajeVacio">
     <form [formGroup]="busquedaForm" class="filtros">
       <mat-form-field class="inputBusqueda">
         <mat-label>Antes de</mat-label>
@@ -100,14 +101,6 @@
           formControlName="comensalesMax"
         />
       </mat-form-field>
-      <mat-form-field class="inputBusqueda">
-        <mat-label>Estado de la reserva</mat-label>
-        <mat-select formControlName="estado">
-          <mat-option *ngFor="let estado of estados" [value]="estado">{{
-            estado
-          }}</mat-option>
-        </mat-select>
-      </mat-form-field>
 
       <mat-form-field class="inputBusqueda">
         <mat-label>Ordenar por</mat-label>
@@ -134,11 +127,14 @@
         Quitar Filtros
       </button>
     </form>
+  
+      
+  <div *ngIf="reservasRestaurante.length > 0; else mensajeVacio">
     <ul>
       <li *ngFor="let result of reservasRestaurante; index as i">
         <mat-card class="example-card" [ngClass]="{ cancelado: result.estado }">
           <mat-card-header class="header">
-            <mat-card-title>Reserva de {{ result.usuario }}</mat-card-title>
+            <mat-card-title>Reserva de {{ result.nombreUsuario }}</mat-card-title>
             <mat-card-subtitle><h3>Datos de la reserva:</h3></mat-card-subtitle>
           </mat-card-header>
           <mat-card-content class="content">
@@ -150,16 +146,7 @@
             <button
               mat-flat-button
               color="primary"
-              (click)="eliminarReserva(i)"
-              *ngIf="result.estado"
-            >
-              Eliminar
-            </button>
-            <button
-              mat-flat-button
-              color="primary"
               (click)="cancelarReserva(i)"
-              *ngIf="!result.estado"
             >
               Cancelar reserva
             </button>
@@ -170,7 +157,7 @@
   </div>
 </div>
 <div *ngIf="editar">
-  <mat-tab-group>
+  <mat-tab-group dynamicHeight>
     <mat-tab label="Carta y temática">
       <form [formGroup]="carta" class="formCarta">
         <mat-form-field class="fieldCarta">
@@ -209,6 +196,28 @@
                   type="number"
                   step="0.01"
                   pattern="\d+(\.\d{1,2})?"
+                  required
+                />
+              </mat-form-field>
+              <mat-form-field class="fieldCarta">
+                <mat-label>Descripción del plato</mat-label>
+                <!-- limitar el tamaño del text area -->
+
+                <textarea
+                rows="5"
+                cols="50"
+                matInput="Descripción"
+                formControlName="descripcion"
+                required
+              ></textarea>
+              </mat-form-field>
+              <mat-form-field class="fieldCarta">
+                <mat-label>Alérgenos</mat-label>
+                <input
+                  autocomplete="off"
+                  matInput="Alérgenos"
+                  formControlName="alergenos"
+                  type="textArea"
                   required
                 />
               </mat-form-field>

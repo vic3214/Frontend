@@ -39,7 +39,7 @@ export class HomeComponent implements OnInit {
   ) {
     date.getFirstDayOfWeek = () => 1;
   }
-
+  
   searchTerm!: string;
   searchCityTerm!: string;
   results: any[] = [];
@@ -107,11 +107,10 @@ export class HomeComponent implements OnInit {
           return (
             comprobacionFechaYHora &&
             (this.busquedaForm.controls['personas'].value === null ||
-              result.maximoPersonasPorReserva ===
+              result.maximoPersonasPorReserva >=
                 this.busquedaForm.controls['personas'].value) &&
             (this.busquedaForm.controls['tematica'].value === null ||
-              result.tematica ===
-                this.busquedaForm.controls['tematica'].value) &&
+              result.tematica.includes(this.busquedaForm.controls['tematica'].value)) &&
             (this.busquedaForm.controls['precioMin'].value === null ||
               precioMedio >= this.busquedaForm.controls['precioMin'].value) &&
             (this.busquedaForm.controls['precioMax'].value === null ||
@@ -224,7 +223,14 @@ export class HomeComponent implements OnInit {
   quitarFiltros() {
     this.results = [...this.resultsAux];
     this.imagenUrl = [...this.imagenUrlAux];
-    this.busquedaForm.reset();
+    this.busquedaForm.reset({
+      fecha: null,
+      personas: null,
+      tematica: null,
+      precioMin: null,
+      precioMax: null,
+      ordenado: null,
+    });
   }
 
   compruebaFecha(festivos: any, result: any) {
@@ -525,7 +531,13 @@ export class HomeComponent implements OnInit {
         this.router.navigateByUrl(`/auth/restaurante/${id}`);
       });
   }
+
+  precioMedioRestaurante(rest:any){
+    return this.calculaPrecioMedioCarta(rest).toPrecision(3)
+  }
 }
+
+
 
 @Component({
   selector: 'app-dialog',

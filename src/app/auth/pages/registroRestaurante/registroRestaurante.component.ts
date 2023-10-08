@@ -1,13 +1,13 @@
 import { Component } from '@angular/core';
 import {
-    AbstractControl,
-    FormArray,
-    FormBuilder,
-    FormControl,
-    FormGroup,
-    ValidationErrors,
-    ValidatorFn,
-    Validators,
+  AbstractControl,
+  FormArray,
+  FormBuilder,
+  FormControl,
+  FormGroup,
+  ValidationErrors,
+  ValidatorFn,
+  Validators,
 } from '@angular/forms';
 import { DateAdapter } from '@angular/material/core';
 import { Router } from '@angular/router';
@@ -74,6 +74,8 @@ export class RegistroRestauranteComponent {
         precio: [],
         tipo: [],
         fotografiaPlato: [''],
+        descripcion: [],
+        alergenos: [[]],
       }),
     ]),
   });
@@ -161,6 +163,8 @@ export class RegistroRestauranteComponent {
         precio: [],
         tipo: [],
         fotografiaPlato: [],
+        descripcion: [],
+        alergenos: [[]],
       })
     );
   }

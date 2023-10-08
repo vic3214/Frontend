@@ -93,8 +93,7 @@
             "karmaConfig": "karma.conf.js",
             "assets": [
               "src/favicon.ico",
-              "src/assets",
-              "node_modules/leaflet/dist/images/"
+              "src/assets"
             ],
             "styles": [
               "./node_modules/@angular/material/prebuilt-themes/pink-bluegrey.css",
@@ -104,15 +103,6 @@
             ],
             "scripts": [
               "node_modules/leaflet/dist/leaflet.js"
-            ]
-          }
-        },
-        "lint": {
-          "builder": "@angular-eslint/builder:lint",
-          "options": {
-            "lintFilePatterns": [
-              "src/**/*.ts",
-              "src/**/*.html"
             ]
           }
         }

@@ -94,7 +94,7 @@
           </mat-card-header>
           <mat-card-content>
             <h3>
-              <b>Nombre de la reserva: {{ result.reserva.usuario }}</b>
+              <b>Nombre de la reserva: {{ result.reserva.nombre }}</b>
             </h3>
             <h3>
               <b>Día: {{ result.reserva.fecha | formateoFechas }}</b>
@@ -107,16 +107,8 @@
             <button
               mat-flat-button
               color="primary"
-              (click)="eliminarReserva(i)"
-              *ngIf="result.reserva.estado"
-            >
-              Eliminar
-            </button>
-            <button
-              mat-flat-button
-              color="primary"
               (click)="verRestaurante(i)"
-              *ngIf="!result.reserva.estado"
+              
             >
               Ver Restaurante
             </button>
@@ -125,7 +117,7 @@
               mat-flat-button
               color="primary"
               (click)="cancelarReserva(i)"
-              *ngIf="!result.reserva.estado"
+      
             >
               Cancelar reserva
             </button>

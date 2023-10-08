@@ -1,3 +1,4 @@
+<!-- eslint-disable @angular-eslint/template/label-has-associated-control -->
 <mat-vertical-stepper [linear]="false" #stepper class="relleno">
   <mat-step [stepControl]="datosPersonales">
     <form [formGroup]="datosPersonales">
@@ -178,10 +179,10 @@
   <mat-step [stepControl]="carta">
     <form [formGroup]="carta">
       <ng-template matStepLabel>Añade tus platos</ng-template>
-      <div formGroupName="platos">
+      <div formGroupName="platos" >
         <div
           *ngFor="let plato of getPlatos.controls; let i = index"
-          [formGroupName]="i"
+          [formGroupName]="i" class="contenedorCarta"
         >
           <mat-form-field>
             <mat-label>Nombre</mat-label>
@@ -214,6 +215,25 @@
               >
             </mat-select>
           </mat-form-field>
+          <mat-form-field>
+            <mat-label>Descripción</mat-label>
+            <textarea
+              matInput="Descripción"
+              formControlName="descripcion"
+              required
+            ></textarea>
+          </mat-form-field>
+          <mat-form-field>
+            <mat-label>Alérgenos</mat-label>
+            <input
+              autocomplete="off"
+              matInput="Alérgenos"
+              formControlName="alergenos"
+              required
+            />
+          </mat-form-field>
+ 
+
 
           <div style="display: inline; margin-left: 5px">
             <label>Fotografía del plato: </label>

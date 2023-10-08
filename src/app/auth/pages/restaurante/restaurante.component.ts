@@ -1,9 +1,10 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { Component, OnInit, ViewChild } from '@angular/core';
 import {
-    FormBuilder,
-    FormControl,
-    FormGroup,
-    Validators,
+  FormBuilder,
+  FormControl,
+  FormGroup,
+  Validators,
 } from '@angular/forms';
 import { DateAdapter } from '@angular/material/core';
 import { MatDialog } from '@angular/material/dialog';
@@ -11,8 +12,8 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatTabGroup } from '@angular/material/tabs';
 import { ActivatedRoute } from '@angular/router';
 import {
-    ComentarioAnnotatedComponent,
-    DialogHomeComponent,
+  ComentarioAnnotatedComponent,
+  DialogHomeComponent,
 } from 'src/app/auth/pages/home/home.component';
 import { AuthService } from '../../../services/auth.service';
 import { SearchService } from '../../../services/search.service';
@@ -64,109 +65,86 @@ export class RestauranteComponent implements OnInit {
         this.valoracion = media;
       }
 
-      for (let i = 0; i < this.restaurante.carta.entrantes.length; i++) {
-        console.log(i);
-        if (
-          this.restaurante.carta.entrantes[i].fotografiaPlato !== undefined &&
-          this.restaurante.carta.entrantes[i].fotografiaPlato !== null &&
-          this.restaurante.carta.entrantes[i].fotografiaPlato !== ''
-        ) {
-          console.log('ent', this.restaurante.carta.entrantes[i]);
-          this.authService
-            .recuperarImagen(
-              this.restaurante.carta.entrantes[i].fotografiaPlato
-            )
-            .then((resp) => {
-              const reader = new FileReader();
-              reader.onload = (e) => {
-                this.imagenUrlEntrantes.push(e.target!.result);
-              };
-              reader.readAsDataURL(resp);
-            });
-        }
-      }
-      for (let i = 0; i < this.restaurante.carta.primerosPlatos.length; i++) {
-        if (
-          this.restaurante.carta.primerosPlatos[i].fotografiaPlato !==
-            undefined &&
-          this.restaurante.carta.primerosPlatos[i].fotografiaPlato !== null &&
-          this.restaurante.carta.primerosPlatos[i].fotografiaPlato !== ''
-        ) {
-          console.log('primeros', this.restaurante.carta.primerosPlatos[i]);
-          this.authService
-            .recuperarImagen(
-              this.restaurante.carta.primerosPlatos[i].fotografiaPlato
-            )
-            .then((resp) => {
-              const reader = new FileReader();
-              reader.onload = (e) => {
-                this.imagenUrlPrimeros.push(e.target!.result);
-              };
-              reader.readAsDataURL(resp);
-            });
-        }
-      }
-      for (let i = 0; i < this.restaurante.carta.segundosPlatos.length; i++) {
-        if (
-          this.restaurante.carta.segundosPlatos[i].fotografiaPlato !==
-            undefined &&
-          this.restaurante.carta.segundosPlatos[i].fotografiaPlato !== null &&
-          this.restaurante.carta.segundosPlatos[i].fotografiaPlato !== ''
-        ) {
-          console.log(
-            'segundosPlatos',
-            this.restaurante.carta.segundosPlatos[i]
-          );
-          this.authService
-            .recuperarImagen(
-              this.restaurante.carta.segundosPlatos[i].fotografiaPlato
-            )
-            .then((resp) => {
-              const reader = new FileReader();
-              reader.onload = (e) => {
-                this.imagenUrlSegundos.push(e.target!.result);
-              };
-              reader.readAsDataURL(resp);
-            });
-        }
-      }
+      const entrantesConImagenes = this.restaurante.carta.entrantes.filter(
+        (plato:any) => plato.fotografiaPlato !== undefined && plato.fotografiaPlato !== null && plato.fotografiaPlato !== ''
+      );
+      
+      Promise.all(
+        entrantesConImagenes.map((plato:any) => this.authService.recuperarImagen(plato.fotografiaPlato))
+      ).then(respuestas => {
+        respuestas.forEach((resp, i) => {
+          const reader = new FileReader();
+          reader.onload = (e) => {
+            this.imagenUrlEntrantes[i] = e.target!.result;
+          };
+          reader.readAsDataURL(resp);
+        });
+      });
 
-      for (let i = 0; i < this.restaurante.carta.bebidas.length; i++) {
-        if (
-          this.restaurante.carta.bebidas[i].fotografiaPlato !== undefined &&
-          this.restaurante.carta.bebidas[i].fotografiaPlato !== null &&
-          this.restaurante.carta.bebidas[i].fotografiaPlato !== ''
-        ) {
-          console.log('bebidas', this.restaurante.carta.bebidas[i]);
-          this.authService
-            .recuperarImagen(this.restaurante.carta.bebidas[i].fotografiaPlato)
-            .then((resp) => {
-              const reader = new FileReader();
-              reader.onload = (e) => {
-                this.imagenUrlBebidas.push(e.target!.result);
-              };
-              reader.readAsDataURL(resp);
-            });
-        }
-      }
-      for (let i = 0; i < this.restaurante.carta.postres.length; i++) {
-        if (
-          this.restaurante.carta.postres[i].fotografiaPlato !== undefined &&
-          this.restaurante.carta.postres[i].fotografiaPlato !== null &&
-          this.restaurante.carta.postres[i].fotografiaPlato !== ''
-        ) {
-          console.log('postres', this.restaurante.carta.postres[i]);
-          this.authService
-            .recuperarImagen(this.restaurante.carta.postres[i].fotografiaPlato)
-            .then((resp) => {
-              const reader = new FileReader();
-              reader.onload = (e) => {
-                this.imagenUrlPostres.push(e.target!.result);
-              };
-              reader.readAsDataURL(resp);
-            });
-        }
-      }
+      const primerosPlatosConImagenes = this.restaurante.carta.primerosPlatos.filter(
+        (plato:any) => plato.fotografiaPlato !== undefined && plato.fotografiaPlato !== null && plato.fotografiaPlato !== ''
+      );
+      
+      Promise.all(
+        primerosPlatosConImagenes.map((plato:any) => this.authService.recuperarImagen(plato.fotografiaPlato))
+      ).then(respuestas => {
+        respuestas.forEach((resp, i) => {
+          const reader = new FileReader();
+          reader.onload = (e) => {
+            this.imagenUrlPrimeros[i] = e.target!.result;
+          };
+          reader.readAsDataURL(resp);
+        });
+      });
+
+      const segundosPlatosConImagenes = this.restaurante.carta.segundosPlatos.filter(
+        (plato:any)  => plato.fotografiaPlato !== undefined && plato.fotografiaPlato !== null && plato.fotografiaPlato !== ''
+      );
+      
+      Promise.all(
+        segundosPlatosConImagenes.map((plato:any)  => this.authService.recuperarImagen(plato.fotografiaPlato))
+      ).then(respuestas => {
+        respuestas.forEach((resp, i) => {
+          const reader = new FileReader();
+          reader.onload = (e) => {
+            this.imagenUrlSegundos[i] = e.target!.result;
+          };
+          reader.readAsDataURL(resp);
+        });
+      });
+      
+      const bebidasConImagenes = this.restaurante.carta.bebidas.filter(
+        (plato:any)  => plato.fotografiaPlato !== undefined && plato.fotografiaPlato !== null && plato.fotografiaPlato !== ''
+      );
+      
+      Promise.all(
+        bebidasConImagenes.map((plato:any)  => this.authService.recuperarImagen(plato.fotografiaPlato))
+      ).then(respuestas => {
+        respuestas.forEach((resp, i) => {
+          const reader = new FileReader();
+          reader.onload = (e) => {
+            this.imagenUrlBebidas[i] = e.target!.result;
+          };
+          reader.readAsDataURL(resp);
+        });
+      });
+      
+      const postresConImagenes = this.restaurante.carta.postres.filter(
+        (plato:any)  => plato.fotografiaPlato !== undefined && plato.fotografiaPlato !== null && plato.fotografiaPlato !== ''
+      );
+      
+      Promise.all(
+        postresConImagenes.map((plato:any)  => this.authService.recuperarImagen(plato.fotografiaPlato))
+      ).then(respuestas => {
+        respuestas.forEach((resp, i) => {
+          const reader = new FileReader();
+          reader.onload = (e) => {
+            this.imagenUrlPostres[i] = e.target!.result;
+          };
+          reader.readAsDataURL(resp);
+        });
+      });
+
     });
     this.authService.obtenerDatosToken().subscribe((res: any) => {
       this.searchService.getUsuarioPorId(res.uid).subscribe((res: any) => {
@@ -254,6 +232,7 @@ export class RestauranteComponent implements OnInit {
         this.comentarioGroup.get('comentario')!.reset();
         this.authService
           .editarRestaurante(this.restaurante)
+          // eslint-disable-next-line @typescript-eslint/no-empty-function
           .subscribe((resp) => {});
       });
     } else {
@@ -321,45 +300,114 @@ export class RestauranteComponent implements OnInit {
       return;
     }
     // Controlamos fecha local para que se guarde en mongo correctamente la fecha seleccionada
-    const year = this.reservasGroup.controls['fecha'].value.getFullYear();
-    const mes = this.reservasGroup.controls['fecha'].value.getMonth() + 1;
-    const dia = this.reservasGroup.controls['fecha'].value.getDate();
-    const fecha = `${year}-${mes.toString().padStart(2, '0')}-${dia
+
+
+    const year = this.reservasGroup.controls['fecha'].value.getUTCFullYear();
+    const mes = this.reservasGroup.controls['fecha'].value.getUTCMonth() + 1;
+    const dia1 = this.reservasGroup.controls['fecha'].value.getDate();
+    const fecha = `${year}-${mes.toString().padStart(2, '0')}-${dia1
       .toString()
       .padStart(2, '0')}T00:00:00Z`;
-
+    
     const date = new Date(fecha);
+    date.setHours(0)
+console.log('date',date);
+    // Comprobamos que el restaurante abre ese dia y a esa hora
+    const diaSemana = date.getDay();
+    console.log(diaSemana);
+    const horario = this.restaurante.horario.find((obj: any) => {
+      const dias = obj.dias.map((dia: string) => {
+        console.log('dia',dia);
+        if (dia === 'Domingo') {
+          return 0;
+        } else if (dia === 'Lunes') {
+          return 1;
+        } else if (dia === 'Martes') {
+          return 2;
+        } else if (dia === 'Miércoles') {
+          return 3;
+        } else if (dia === 'Jueves') {
+          return 4;
+        } else if (dia === 'Viernes') {
+          return 5;
+        } else if (dia === 'Sábado') {
+          return 6;
+        }
+        else{return -1}
+      });
+      return dias.includes(diaSemana);
+    });
 
-    if (this.reservasGroup.valid && localStorage.getItem('token') != null) {
-      const reserva: any = {
-        uidReserva: this.generarNumeroUnico(),
-        uidUsuario: this.usuario._id,
-        usuario: this.reservasGroup.controls['nombre'].value,
-        personas: this.reservasGroup.controls['personas'].value,
-        hora: this.reservasGroup.controls['hora'].value,
-        fecha: date,
-        estado: false,
-      };
-      this.restaurante.reservas.push(reserva);
-      this.restaurante.vecesReservado += 1;
-      this.authService.editarRestaurante(this.restaurante).subscribe((resp) => {
-        reserva['uidRestaurante'] = resp.restaurante._id;
+    if (horario === undefined) {
+      // Pasa el dia de la semana a español
+      let diaString = '';
+      if (diaSemana === 0) {
+        diaString = 'Domingo';
+      } else if (diaSemana === 1) {
+        diaString = 'Lunes';
+      } else if (diaSemana === 2) {
+        diaString = 'Martes';
+      } else if (diaSemana === 3) {
+        diaString = 'Miércoles';
+      } else if (diaSemana === 4) {
+        diaString = 'Jueves';
+      } else if (diaSemana === 5) {
+        diaString = 'Viernes';
+      } else if (diaSemana === 6) {
+        diaString = 'Sábado';
+      }
+      this.dialog.open(DialogHomeComponent, {
+        width: '400px',
+        data: {
+          err: `El restaurante no abre el ${diaString}`,
+        },
+      });
 
-        this.usuario.reservas.push(reserva);
-        this.authService.editaUsuario(this.usuario).subscribe({
-          error: (error: Error) => {
-            this.openSnackBar(
-              'Hubo un problema al realizar la reserva: ' + error.message
-            );
-          },
-          complete: () => {
-            this.openSnackBar('¡Reserva realizada con éxito!');
+      return;
+    }
+    const horaApertura = horario.horas[0];
+    const horaCierre = horario.horas[1];
+    const horaReserva = this.reservasGroup.controls['hora'].value;
+    if (
+      (horaApertura > horaCierre &&
+        (horaReserva < horaApertura && horaReserva > horaCierre)) ||
+      (horaApertura < horaCierre &&
+        (horaReserva < horaApertura || horaReserva > horaCierre))
+    ) {
+      this.dialog.open(DialogHomeComponent, {
+        width: '400px',
+        data: {
+          err: `El restaurante no abre a las ${this.reservasGroup.controls['hora'].value}`,
+        },
+      });
+
+      return;
+    }
+
+    const reserva = {
+      uidUsuario: this.usuario._id,
+      uidRestaurante: this.restaurante._id,
+      uidReserva: this.generarNumeroUnico(),
+      nombre: this.reservasGroup.controls['nombre'].value,
+      fecha: date,
+      hora: this.reservasGroup.controls['hora'].value,
+      personas: this.reservasGroup.controls['personas'].value,
+    };
+    this.restaurante.reservas.push(reserva);
+    this.restaurante.vecesReservado++;
+    this.authService.editarRestaurante(this.restaurante).subscribe((resp) => {
+      this.usuario.reservas.push(reserva);
+      this.authService.editaUsuario(this.usuario).subscribe((resp) => {
+        this.dialog.open(DialogHomeComponent, {
+          width: '400px',
+          data: {
+            err: `¡Reserva realizada con éxito!`,
           },
         });
       });
-    } else {
-      this.openSnackBar('¡Debes iniciar sesión para hacer una reserva!');
-    }
+
+
+    });
   }
 
   getNumeroPersonasPorHora(horaIntervalo: string) {
@@ -369,7 +417,6 @@ export class RestauranteComponent implements OnInit {
         personas: reserva.personas,
       };
     });
-    console.log(horas);
     const horasIgualIntervalo = horas.filter((horaArray: any) => {
       return horaArray.horaReserva === horaIntervalo;
     });

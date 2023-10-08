@@ -13,7 +13,7 @@ const routes: Routes = [
     loadChildren: () =>
       import('./protected/protected.module').then((m) => m.ProtectedModule),
   },
-  { path: '**', redirectTo: '/home', pathMatch: 'full' },
+  { path: '**', redirectTo: '/home' },
 ];
 
 @NgModule({

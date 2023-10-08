@@ -105,6 +105,7 @@ li {
   border-radius: 5px;
   box-shadow: 2px 2px 5px gray;
   background-color: #605454;
+  color:white
 }
 
 .mensaje {
@@ -173,3 +174,4 @@ overflow-y: auto;
   margin-left: 10px;
   color: white;
 }
+
